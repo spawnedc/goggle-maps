@@ -6,8 +6,16 @@
 ## LoadOnDemand: 0
 
 environment.lua
+constants.lua
+
+components\Map.lua
+data\Map.Area.lua
+data\Map.Hotspots.lua
+data\Map.Overlay.lua
+data\Map.MinimapBlocks.lua
 
 libs\VanillaUI.lua
 utils.lua
+debug.lua
 
 spwmap-playground.lua

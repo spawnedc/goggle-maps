@@ -1,8 +1,10 @@
-setfenv(1, SP)
+setfenv(1, SpwMap)
 
 VanillaUI = {
   name = 'VanillaUI'
 }
+
+local INSET = 4
 
 -- simple backdrop you can customize
 local BACKDROP = {
@@ -11,7 +13,7 @@ local BACKDROP = {
   tile = true,
   tileSize = 16,
   edgeSize = 16,
-  insets = { left = 4, right = 4, top = 4, bottom = 4 },
+  insets = { left = INSET, right = INSET, top = INSET, bottom = INSET },
 }
 
 --- Create a movable window frame with a titlebar and clipper
@@ -27,18 +29,14 @@ local function CreateBaseWindow(name, width, height, parent)
   frame:SetWidth(width);
   frame:SetHeight(height)
   frame:SetBackdrop(BACKDROP)
-  frame:SetBackdropColor(0, 0, 0, 0.75)
-  -- frame:EnableMouse(true)
+  frame:SetBackdropColor(0, 0, 0, 0.9)
   frame:SetMovable(true)
-  frame:RegisterForDrag("LeftButton")
-  frame:SetScript("OnDragStart", function() frame:StartMoving() end)
-  frame:SetScript("OnDragStop", function() frame:StopMovingOrSizing() end)
   frame:SetClampedToScreen(true)
 
   -- title bar (drag handle)
   local title = CreateFrame("Frame", name and (name .. "TitleBar") or nil, frame)
-  title:SetPoint("TopLeft", frame, "TopLeft", 6, -6)
-  title:SetPoint("TopRight", frame, "TopRight", -6, -6)
+  title:SetPoint("TopLeft", frame, "TopLeft", INSET, -INSET)
+  title:SetPoint("TopRight", frame, "TopRight", -INSET, -INSET)
   title:SetHeight(18)
   title:EnableMouse(true)
   title:SetScript("OnMouseDown", function() frame:StartMoving() end)
@@ -53,7 +51,9 @@ local function CreateBaseWindow(name, width, height, parent)
   titleText:SetText(name or "Window")
 
   -- client area inset (inside the border + below title)
-  local insetLeft, insetRight, insetTop, insetBottom = 8, 8, 28, 8
+  local baseInset = INSET + 1
+
+  local insetLeft, insetRight, insetTop, insetBottom = baseInset, baseInset, title:GetHeight() + baseInset, baseInset
 
   -- SCROLLFRAME as a clipper = "overflow: hidden"
   local clip = CreateFrame("ScrollFrame", name and (name .. "Clip") or nil, frame)
@@ -83,7 +83,8 @@ local function CreateBaseWindow(name, width, height, parent)
     self:SetWidth(w); self:SetHeight(h)
     local cw = w - (insetLeft + insetRight)
     local ch = h - (insetTop + insetBottom)
-    self.Content:SetWidth(cw); self.Content:SetHeight(ch)
+    self.Content:SetWidth(cw);
+    self.Content:SetHeight(ch)
   end
 
   -- api: set title text
@@ -157,9 +158,8 @@ end
 ---@param name string
 ---@param width number
 ---@param height number
----@param clampToParentBounds boolean
 ---@return Frame
-function VanillaUI:CreateNestedWindow(parentWindow, name, width, height, clampToParentBounds)
+function VanillaUI:CreateNestedWindow(parentWindow, name, width, height)
   -- Outer holder frame (visual container)
   local holder = CreateFrame("Frame", name, parentWindow.Content)
   holder:SetWidth(width)
@@ -179,46 +179,6 @@ function VanillaUI:CreateNestedWindow(parentWindow, name, width, height, clampTo
   -- lock scroll so it behaves like overflow:hidden
   clip:SetHorizontalScroll(0)
   clip:SetVerticalScroll(0)
-
-  -- Make draggable relative to parent content
-  holder:SetMovable(false)
-  holder:EnableMouse(true)
-  holder:RegisterForDrag("LeftButton")
-
-  holder:SetScript("OnDragStart", function()
-    holder.isDragging = true
-    local cursorX, cursorY = GetCursorPosition()
-    holder.dragOffsetX = cursorX / UIParent:GetScale() - holder:GetLeft()
-    holder.dragOffsetY = cursorY / UIParent:GetScale() - holder:GetTop()
-  end)
-
-  holder:SetScript("OnDragStop", function()
-    holder.isDragging = false
-  end)
-
-  holder:SetScript("OnUpdate", function()
-    if holder.isDragging then
-      local cursorX, cursorY = GetCursorPosition()
-      local parent = holder:GetParent()
-      local scale = UIParent:GetScale()
-      local newX = (cursorX / scale) - parent:GetLeft() - holder.dragOffsetX
-      local newY = (cursorY / scale) - parent:GetTop() - holder.dragOffsetY
-
-      if clampToParentBounds == true then
-        -- Clamp to parent content bounds
-        local maxX = parent:GetWidth() - holder:GetWidth()
-        if newX > 0 then newX = 0 end
-        if newX < maxX then newX = maxX end
-
-        local maxY = parent:GetHeight() - holder:GetHeight()
-        if newY < 0 then newY = 0 end
-        if newY > -maxY then newY = -maxY end
-      end
-
-      holder:ClearAllPoints()
-      holder:SetPoint("TopLeft", parent, "TopLeft", newX, newY)
-    end
-  end)
 
   -- Public references
   holder.Clip = clip
