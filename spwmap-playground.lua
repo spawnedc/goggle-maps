@@ -17,13 +17,12 @@ SP = {
 }
 
 function SP:Init()
-  Utils.log('BOK')
-  self.frame = ui:CreateWindow("MyAddonMain", FRAME_WIDTH, FRAME_HEIGHT, UIParent)
+  self.frame = ui:CreateWindow("SpwMapMain", FRAME_WIDTH, FRAME_HEIGHT, UIParent)
   self.frame:SetPoint("Center", 0, 0)
-  self.frame:SetTitle("MyAddon")
+  self.frame:SetTitle("SpwMap")
 
-  self.mapFrame = ui:CreateNestedWindow(self.frame, "MapFrame", MAP_WIDTH, MAP_HEIGHT, true)
-  self.mapFrame:SetPoint("TopLeft", self.frame.Content, "TopLeft", 20, -40)
+  self.mapFrame = ui:CreateNestedWindow(self.frame, "MapFrame", MAP_WIDTH, MAP_HEIGHT)
+  self.mapFrame:SetPoint("Center", self.frame.Content, "Center", 0, 0)
   self.mapFrame:SetBackdrop({ bgFile = 'Interface\\Tooltips\\UI-Tooltip-Background' })
   self.mapFrame:SetBackdropColor(1, 0, 0, 1)
 

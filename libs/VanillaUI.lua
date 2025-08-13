@@ -164,15 +164,6 @@ function VanillaUI:CreateNestedWindow(parentWindow, name, width, height, clampTo
   local holder = CreateFrame("Frame", name, parentWindow.Content)
   holder:SetWidth(width)
   holder:SetHeight(height)
-  holder:SetBackdrop({
-    bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
-    edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-    tile = true,
-    tileSize = 16,
-    edgeSize = 16,
-    insets = { left = 4, right = 4, top = 4, bottom = 4 },
-  })
-  holder:SetBackdropColor(0, 0, 0, 0.6)
 
   -- ScrollFrame for clipping
   local clip = CreateFrame("ScrollFrame", name .. "Clip", holder)
