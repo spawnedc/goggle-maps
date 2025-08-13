@@ -102,6 +102,32 @@ local function CreateBaseWindow(name, width, height, parent)
   return frame
 end
 
+---Creates a resizer
+---@param frame Frame
+---@param point FramePoint
+---@param onResizeFinished function
+local function createResizer(frame, point, onResizeFinished)
+  local resizer = CreateFrame("Button", nil, frame)
+  resizer:SetPoint(point, frame, point, 0, 0)
+  resizer:SetWidth(16)
+  resizer:SetHeight(16)
+
+  resizer:SetScript("OnMouseDown", function()
+    frame:StartSizing(point)
+  end)
+
+  resizer:SetScript("OnMouseUp", function()
+    frame:StopMovingOrSizing()
+    onResizeFinished()
+
+    local content = frame.Content
+    -- Update content size after resize
+    local w, h = frame:GetWidth(), frame:GetHeight()
+    content:SetWidth(w - 16)
+    content:SetHeight(h - 36)
+  end)
+end
+
 -----------------------------------------------------------------------
 -- Library public API
 -----------------------------------------------------------------------
@@ -109,6 +135,19 @@ end
 -- Create a clipping window (acts like overflow:hidden for its children)
 function VanillaUI:CreateWindow(name, width, height, parent)
   local win = CreateBaseWindow(name, width, height, parent)
+  local onResizeFinished = function()
+    local content = win.Content
+    -- Update content size after resize
+    local w, h = win:GetWidth(), win:GetHeight()
+    content:SetWidth(w - 16)
+    content:SetHeight(h - 36)
+  end
+  win:SetResizable(true)
+  -- Resize handle
+  createResizer(win, "BottomRight", onResizeFinished)
+  createResizer(win, "BottomLeft", onResizeFinished)
+  createResizer(win, "TopLeft", onResizeFinished)
+  createResizer(win, "TopRight", onResizeFinished)
   return win
 end
 
