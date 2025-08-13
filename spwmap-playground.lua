@@ -70,7 +70,7 @@ function SpwMap:Init()
   SpwDebug:AddItem("PlayerPos", string.format("%.2f, %.2f", x, y))
 
   self.frame = UI:CreateWindow("SpwMapMain", SpwMap.Map.size.width, SpwMap.Map.size.height, UIParent)
-  self.frame:SetPoint("Center", 0, 0)
+  self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
   self.frame:SetTitle("SpwMap")
   self.frame:SetScript("OnSizeChanged", function()
     SpwMap.Map.size.width = self.frame:GetWidth()
@@ -169,7 +169,7 @@ function SpwMap:MoveZoneTiles(continentIndex, zoneId, frames)
       if baseWidth <= 0 or baseHeight <= 0 then
         frame:Hide()
       else
-        frame:SetPoint("TopLeft", frameX, -frameY)
+        frame:SetPoint("TopLeft", self.mapFrame, "TopLeft", frameX, -frameY)
         frame:SetWidth(baseWidth)
         frame:SetHeight(baseHeight)
 
