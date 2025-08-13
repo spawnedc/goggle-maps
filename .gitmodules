@@ -1,0 +1,3 @@
+[submodule "defs/wow-api-type-definitions"]
+	path = defs/wow-api-type-definitions
+	url = https://github.com/SabineWren/wow-api-type-definitions.git

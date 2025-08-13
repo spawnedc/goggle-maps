@@ -1,0 +1,13 @@
+## Interface: 11200
+## Title: SpwMap Playground
+## Author: spawnedc
+## Version: 0.0.1
+## DefaultState: Enabled
+## LoadOnDemand: 0
+
+environment.lua
+
+libs\VanillaUI.lua
+utils.lua
+
+spwmap-playground.lua
