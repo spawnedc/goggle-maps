@@ -49,9 +49,10 @@ local function buildlist()
 end
 
 function GMapsDebug:CreateDebugWindow()
+  local title = GetAddOnMetadata(GoggleMaps.name, "Title")
   local debugFrame = UI:CreateWindow("GMapsDebug", 300, 500, UIParent)
   debugFrame:SetPoint("TopLeft", 0, 0)
-  debugFrame:SetTitle("Debug")
+  debugFrame:SetTitle(title .. " Debug")
 
   local debugContent = debugFrame.Content
 
