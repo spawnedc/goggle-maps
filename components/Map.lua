@@ -43,8 +43,8 @@ GoggleMaps.Map = {
   minScale = 0.1,
   effectiveScale = 0.5,
   position = {
-    x = 0,
-    y = 0
+    x = 800,
+    y = 500
   },
   size = {
     width = DETAIL_FRAME_WIDTH,

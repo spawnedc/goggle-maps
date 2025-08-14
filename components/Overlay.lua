@@ -8,7 +8,7 @@ GoggleMaps.Overlay = {
   },
   --- The list of zone mapIds to draw. Shouldn't exceed options.maxZonesToDraw
   zonesToDraw = {
-    1025,
+    1026,
     1009
   }
 }

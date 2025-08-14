@@ -15,15 +15,16 @@ function GoggleMaps:Init()
   self.frame = UI:CreateWindow(ADDON_NAME .. "Main", self.Map.size.width, self.Map.size.height, UIParent)
   self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
   self.frame:SetTitle(title .. " v" .. version)
+
+  self.Map:Init(self.frame)
+  self.Overlay:Init()
+
   self.frame:SetScript("OnUpdate", function() self:handleUpdate() end)
   self.frame:SetScript("OnSizeChanged", function()
     self.Map.size.width = self.frame:GetWidth()
     self.Map.size.height = self.frame:GetHeight()
-    self.Map:MoveMap()
+    self.Map:MoveMap(self.Map.position.x, self.Map.position.y)
   end)
-
-  self.Map:Init(self.frame)
-  self.Overlay:Init()
 end
 
 function GoggleMaps:onEvent()
