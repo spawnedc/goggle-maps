@@ -1,8 +1,6 @@
 setfenv(1, SpwMap)
 
-VanillaUI = {
-  name = 'VanillaUI'
-}
+SpwMap.UI.Window = {}
 
 local INSET = 4
 
@@ -135,7 +133,7 @@ end
 -----------------------------------------------------------------------
 
 -- Create a clipping window (acts like overflow:hidden for its children)
-function VanillaUI:CreateWindow(name, width, height, parent)
+function SpwMap.UI.Window:CreateWindow(name, width, height, parent)
   local win = CreateBaseWindow(name, width, height, parent)
   local onResizeFinished = function()
     local content = win.Content
@@ -160,7 +158,7 @@ end
 ---@param width number
 ---@param height number
 ---@return Frame
-function VanillaUI:CreateNestedWindow(parentWindow, name, width, height)
+function SpwMap.UI.Window:CreateNestedWindow(parentWindow, name, width, height)
   -- Outer holder frame (visual container)
   local holder = CreateFrame("Frame", name, parentWindow.Content)
   holder:SetWidth(width)

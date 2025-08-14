@@ -1,6 +1,6 @@
 setfenv(1, SpwMap)
 
-local UI = VanillaUI
+local UI = SpwMap.UI.Window
 
 local LINE_HEIGHT = 16
 

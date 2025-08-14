@@ -34,12 +34,12 @@ end
 function Utils.GetWorldZoneInfo(continentIndex, zoneId)
   local worldInfo = SpwMap.Map.MapInfo[continentIndex]
   if not worldInfo then
-    return '?', 1, 0, 0, SPWMAP_DETAIL_FRAME_WIDTH, SPWMAP_DETAIL_FRAME_HEIGHT
+    return '?', 1, 0, 0, 1024, 768
   end
 
   local zoneInfo = SpwMap.Map.Area[zoneId]
   if not zoneInfo then
-    return '?', 1, 0, 0, SPWMAP_DETAIL_FRAME_WIDTH, SPWMAP_DETAIL_FRAME_HEIGHT
+    return '?', 1, 0, 0, 1024, 768
   end
 
   local x = worldInfo.X + zoneInfo.x

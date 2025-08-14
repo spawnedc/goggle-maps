@@ -1,5 +1,5 @@
 setfenv(1, SpwMap)
-local UI = VanillaUI
+local UI = SpwMap.UI.Window
 
 local FRAME_WIDTH = 1024
 local FRAME_HEIGHT = 768
