@@ -35,6 +35,37 @@ function Utils.GetContinents()
   return { GetMapContinents() }
 end
 
+---Constructs the zone name to mapId table
+---@return table<number> zoneNameToMapId
+---@return table<table<number>> continentZoneToMapId
+function Utils.GetZoneNameToMapId()
+  local continents = Utils.GetContinents()
+  local zoneNameToMapId = {}
+  local continentZoneToMapId = {}
+
+  for continentIndex, continentName in ipairs(continents) do
+    local mapNames = { GetMapZones(continentIndex) }
+    continentZoneToMapId[continentIndex] = {}
+
+    for n = 1, 99 do
+      local mapId = continentIndex * 1000 + n
+      local zoneInfo = GoggleMaps.Map.Area[mapId]
+      if zoneInfo then
+        for i, mapName in ipairs(mapNames) do
+          if mapName == zoneInfo.name then
+            zoneNameToMapId[mapName] = mapId
+            zoneInfo.Zone = i
+            continentZoneToMapId[continentIndex][i] = mapId
+            break
+          end
+        end
+      end
+    end
+  end
+
+  return zoneNameToMapId, continentZoneToMapId
+end
+
 ---Returns the continent id for a zoneId
 ---@param zoneId number
 ---@return integer
@@ -139,7 +170,7 @@ function Utils.ClipFrame(frame, x, y, baseWidth, baseHeight, clipW, clipH)
   local clippedW, clippedH = Utils.GetClippedSize(x, y, baseWidth, baseHeight, clipW, clipH)
 
   if clippedW < .3 or clippedH < .3 then
-    Utils.print("Hiding %s", frame:GetName())
+    -- Utils.print("Hiding %s", frame:GetName())
     frame:Hide()
     return false
   end

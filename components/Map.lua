@@ -54,6 +54,17 @@ GoggleMaps.Map = {
     x = 0,
     y = 0
   },
+
+  --- Map id of the current zone. This changes when mouse moves through the map.
+  mapId = 0,
+  --- Map id of the zone that player is in.
+  realMapId = 0,
+  --- For easy access to map ids from a zone name. This is useful when getting the player's zone's map id using GetRealZoneText()
+  --- @type table<number>
+  zoneNameToMapId = {},
+  --- Used for getting a zone's mapId from continent id and its index
+  --- @type table<table<number>>
+  continentZoneToMapId = {}
 }
 
 ---Initialises the map
@@ -76,9 +87,16 @@ function GoggleMaps.Map:Init(parentFrame)
   self.frame:SetScript("OnMouseUp", function() self.isDragging = false end)
   -- self.frame:SetScript("OnUpdate", function() self:handleUpdate() end)
 
+  self:InitTables()
+
   self:InitContinents()
 
   self:MoveMap(self.position.x, self.position.y)
+end
+
+function GoggleMaps.Map:InitTables()
+  Utils.log("SpwMap:InitTables")
+  self.zoneNameToMapId, self.continentZoneToMapId = Utils.GetZoneNameToMapId()
 end
 
 function GoggleMaps.Map:handleZoom()

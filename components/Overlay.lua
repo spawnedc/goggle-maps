@@ -7,13 +7,19 @@ GoggleMaps.Overlay = {
 
 function GoggleMaps.Overlay:Init()
   Utils.print("Overlay init")
-  self:UpdateOverlay(1026)
-  self:UpdateOverlay(1009)
+  self:UpdateOverlays()
 end
 
 function GoggleMaps.Overlay:handleUpdate()
-  self:UpdateOverlay(1026)
-  self:UpdateOverlay(1009)
+  self:UpdateOverlays()
+end
+
+function GoggleMaps.Overlay:UpdateOverlays()
+  for _, zones in pairs(GoggleMaps.Map.continentZoneToMapId) do
+    for _, mapId in pairs(zones) do
+      self:UpdateOverlay(mapId)
+    end
+  end
 end
 
 ---Gets the next available overlay frames
@@ -38,10 +44,6 @@ function GoggleMaps.Overlay:GetAvailableOverlayFrame(mapId, overlayName, levelAd
     overlayFrame.texture = t
     self.frames[mapId][overlayName] = overlayFrame
   end
-
-  -- local add = levelAdd or 0
-  -- local level = SpwMap.Map.frameLevel
-  -- overlayFrame:SetFrameLevel(level + add)
 
   return overlayFrame
 end
