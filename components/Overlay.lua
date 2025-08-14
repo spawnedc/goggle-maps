@@ -4,13 +4,11 @@ GoggleMaps.Overlay = {
   ---@type table<table<Frame>>
   frames = {},
   options = {
-    maxZonesToDraw = 15,
+    maxZonesToDraw = 1,
   },
   --- The list of zone mapIds to draw. Shouldn't exceed options.maxZonesToDraw
-  zonesToDraw = {
-    1026,
-    1009
-  }
+  zonesToDraw = {},
+  zonesToClear = {}
 }
 
 function GoggleMaps.Overlay:Init()
@@ -23,8 +21,41 @@ function GoggleMaps.Overlay:handleUpdate()
 end
 
 function GoggleMaps.Overlay:UpdateOverlays()
+  for _, mapId in ipairs(self.zonesToClear) do
+    local overlays = self.frames[mapId]
+    if overlays then
+      for overlayName, overlayFrame in pairs(overlays) do
+        overlayFrame:Hide()
+      end
+    end
+    self.frames[mapId] = nil
+  end
+  self.zonesToClear = {}
+
   for _, mapId in pairs(self.zonesToDraw) do
     self:UpdateOverlay(mapId)
+  end
+end
+
+---Adds a mapId to be drawn on the map as an overlay
+---@param mapId number
+function GoggleMaps.Overlay:AddMapIdToZonesToDraw(mapId)
+  local idList = self.zonesToDraw
+  -- Remove if already present
+  for i = 1, table.getn(idList) do
+    if idList[i] == mapId then
+      table.remove(idList, i)
+      return
+    end
+  end
+
+  -- Insert at the front
+  table.insert(idList, 1, mapId)
+
+  -- If list exceeds limit, remove last
+  if table.getn(idList) > self.options.maxZonesToDraw then
+    local removedMapId = table.remove(idList) -- removes last by default
+    table.insert(self.zonesToClear, removedMapId)
   end
 end
 

@@ -1,26 +1,28 @@
 setfenv(1, GoggleMaps)
 
 local UI = GoggleMaps.UI.Window
+local ADDON_NAME = GoggleMaps.name
 
 ---@type Frame
 GoggleMaps.frame = nil
 
 function GoggleMaps:Start()
-  GMapsDebug:CreateDebugWindow()
-
-  local ADDON_NAME = GoggleMaps.name
-  local version = GetAddOnMetadata(ADDON_NAME, "Version")
-  local title = GetAddOnMetadata(ADDON_NAME, "Title")
-
   self.frame = UI:CreateWindow(ADDON_NAME .. "Main", self.Map.size.width, self.Map.size.height, UIParent)
-  self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
-  self.frame:SetTitle(title .. " v" .. version)
   self.frame:RegisterEvent("ADDON_LOADED")
+
   self.frame:SetScript("OnEvent", function() GoggleMaps:OnEvent() end)
   self.frame:Hide()
 end
 
 function GoggleMaps:Init()
+  GMapsDebug:CreateDebugWindow()
+
+  local version = GetAddOnMetadata(ADDON_NAME, "Version")
+  local title = GetAddOnMetadata(ADDON_NAME, "Title")
+
+  self.frame:SetTitle(title .. " v" .. version)
+  self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
+
   self.Map:Init(self.frame)
   self.Overlay:Init()
 

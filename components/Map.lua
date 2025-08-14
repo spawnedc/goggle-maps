@@ -82,14 +82,21 @@ function GoggleMaps.Map:Init(parentFrame)
   self.frame:EnableMouse(true)
   self.frame:EnableMouseWheel(true)
 
+  self.frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+  self.frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+
   self.frame:SetScript("OnMouseWheel", function() self:handleZoom() end)
   self.frame:SetScript("OnMouseDown", function() self:handleMouseDown() end)
   self.frame:SetScript("OnMouseUp", function() self.isDragging = false end)
-  -- self.frame:SetScript("OnUpdate", function() self:handleUpdate() end)
+  self.frame:SetScript("OnEvent", function() self:handleEvent() end)
 
   self:InitTables()
+
+  self.mapId = self.zoneNameToMapId[GetRealZoneText()]
+  self.realMapId = self.mapId
   GMapsDebug:AddItem("Current zone", GetRealZoneText())
-  GMapsDebug:AddItem("Current mapId", self.zoneNameToMapId[GetRealZoneText()])
+  GMapsDebug:AddItem("Current mapId", self.realMapId)
+  GMapsDebug:AddItem("Fake mapId", self.mapId)
 
   self:InitContinents()
 
@@ -147,6 +154,16 @@ function GoggleMaps.Map:handleMouseDown()
   self.scroll.x = x
   self.scroll.y = y
   self.isDragging = true
+end
+
+function GoggleMaps.Map:handleEvent()
+  if event == "ZONE_CHANGED_NEW_AREA" or event == "PLAYER_ENTERING_WORLD" then
+    self.realMapId = self.zoneNameToMapId[GetRealZoneText()]
+    GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
+    GMapsDebug:UpdateItem("Current zone", GetRealZoneText())
+    GMapsDebug:UpdateItem("Current mapId", self.realMapId)
+    GMapsDebug:UpdateItem("Fake mapId", self.mapId)
+  end
 end
 
 function GoggleMaps.Map:InitContinents()
