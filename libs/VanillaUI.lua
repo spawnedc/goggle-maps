@@ -95,7 +95,8 @@ local function CreateBaseWindow(name, width, height, parent)
     frameType = frameType or "Frame"
     local child = CreateFrame(frameType, childName, self.Content)
     if w and h then
-      child:SetWidth(w); child:SetHeight(h)
+      child:SetWidth(w)
+      child:SetHeight(h)
     end
     return child
   end

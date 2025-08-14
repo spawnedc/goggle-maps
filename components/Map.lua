@@ -1,4 +1,19 @@
 setfenv(1, SpwMap)
+local UI = VanillaUI
+
+local FRAME_WIDTH = 1024
+local FRAME_HEIGHT = 768
+
+local DETAIL_FRAME_WIDTH = 1002
+local DETAIL_FRAME_HEIGHT = 668
+
+-- These represent continents and their blocks (4x3 in a 1-dimentional array)
+-- Only blocks with 1s will be rendered, 0s will be ignored
+local CONTINENT_BLOCKS = {
+  [1] = { 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0 },
+  [2] = { 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0 },
+}
+
 SpwMap.Map = {
   Area = {},
   Overlay = {},
@@ -16,6 +31,10 @@ SpwMap.Map = {
       Y = -200,
     },
   },
+  ---@type Frame
+  frame = nil,
+  ---@type table<table<Frame>>
+  continentFrames = {},
   initialised = false,
   isDragging = false,
   isZooming = false,
@@ -28,11 +47,200 @@ SpwMap.Map = {
     y = 0
   },
   size = {
-    width = SPWMAP_DETAIL_FRAME_WIDTH,
-    height = SPWMAP_DETAIL_FRAME_HEIGHT
+    width = DETAIL_FRAME_WIDTH,
+    height = DETAIL_FRAME_HEIGHT
   },
   scroll = {
     x = 0,
     y = 0
   },
 }
+
+---Initialises the map
+---@param parentFrame Frame
+function SpwMap.Map:Init(parentFrame)
+  SpwDebug:AddItem("zoom", self.scale)
+  SpwDebug:AddItem("MapX", self.position.x)
+  SpwDebug:AddItem("MapY", self.position.y)
+  SpwDebug:AddItem("MapWidth", self.size.width)
+  SpwDebug:AddItem("MapHeight", self.size.height)
+
+  local name = parentFrame:GetName() .. "MapFrame"
+  self.frame = UI:CreateNestedWindow(parentFrame, name, self.size.width, self.size.height)
+  self.frame:SetAllPoints(parentFrame)
+  self.frame:EnableMouse(true)
+  self.frame:EnableMouseWheel(true)
+
+  self.frame:SetScript("OnMouseWheel", function() self:handleZoom() end)
+  self.frame:SetScript("OnMouseDown", function() self:handleMouseDown() end)
+  self.frame:SetScript("OnMouseUp", function() self.isDragging = false end)
+  -- self.frame:SetScript("OnUpdate", function() self:handleUpdate() end)
+
+  self:InitContinents()
+
+  self:MoveMap(self.position.x, self.position.y)
+end
+
+function SpwMap.Map:handleZoom()
+  self:handleMouseDown()
+  self.isDragging = false
+
+  -- scroll.x and scroll.y are calculated in HandleMouseDown()
+  local x = self.scroll.x
+  local y = self.scroll.y
+
+  local left = this:GetLeft()
+  local top = this:GetTop()
+  local map = self
+
+  local originalX = map.position.x + (x - left - map.size.width / 2) / map.scale
+  local originalY = map.position.y + (top - y - map.size.height / 2) / map.scale
+
+  local value = arg1
+  local scale = self.scale
+  if value < 0 then
+    value = value * .76923
+  end
+
+  self.scale = math.max(scale + value * scale * .3, self.minScale)
+  self.scale = math.min(self.scale, self.maxScale)
+
+  local newX = map.position.x + (x - left - map.size.width / 2) / map.scale
+  local newY = map.position.y + (top - y - map.size.height / 2) / map.scale
+
+  map.position.x = map.position.x + originalX - newX
+  map.position.y = map.position.y + originalY - newY
+
+  SpwDebug:UpdateItem("zoom", scale)
+
+  self:MoveMap()
+end
+
+function SpwMap.Map:handleMouseDown()
+  local effectiveScale = self.frame:GetEffectiveScale()
+  self.effectiveScale = effectiveScale
+
+  local x, y = GetCursorPosition()
+  x = x / effectiveScale
+  y = y / effectiveScale
+
+  self.scroll.x = x
+  self.scroll.y = y
+  self.isDragging = true
+end
+
+function SpwMap.Map:InitContinents()
+  Utils.print('InitContinents')
+
+  local texturePath
+
+  for continentIndex in ipairs(Utils.GetContinents()) do
+    local continentBlocks = CONTINENT_BLOCKS[continentIndex]
+    self.continentFrames[continentIndex] = {}
+
+    local mapInfo = self.MapInfo[continentIndex]
+    local mapFileName = mapInfo.FileName
+
+    for blockIndex, block in ipairs(continentBlocks) do
+      if block ~= 0 then
+        texturePath = "Interface\\WorldMap\\" .. mapFileName .. "\\" .. mapFileName .. blockIndex
+        local continentFrame = CreateFrame("Frame", nil, self.frame)
+        local t = continentFrame:CreateTexture(nil, "ARTWORK")
+        t:SetAllPoints(continentFrame)
+        t:SetTexture(texturePath)
+        self.continentFrames[continentIndex][blockIndex] = continentFrame
+      end
+    end
+  end
+end
+
+---Handles the map movement
+---@param xPos? number
+---@param yPos? number
+function SpwMap.Map:MoveMap(xPos, yPos)
+  if xPos and yPos then
+    self.position.x = xPos
+    self.position.y = yPos
+  else
+    self.effectiveScale = self.frame:GetEffectiveScale()
+
+    local cursorX, cursorY = GetCursorPosition()
+
+    cursorX = cursorX / self.effectiveScale
+    cursorY = cursorY / self.effectiveScale
+
+    local x = cursorX - self.scroll.x
+    local y = cursorY - self.scroll.y
+
+    self.scroll.x = cursorX
+    self.scroll.y = cursorY
+
+    local mx = x / self.scale
+    local my = y / self.scale
+
+    self.position.x = self.position.x - mx
+    self.position.y = self.position.y + my
+
+    SpwDebug:UpdateItem("MapX", self.position.x)
+    SpwDebug:UpdateItem("MapY", self.position.y)
+  end
+
+  self:MoveContinents()
+end
+
+function SpwMap.Map:MoveContinents()
+  for continentIndex in ipairs(Utils.GetContinents()) do
+    self:MoveZoneTiles(continentIndex, continentIndex * 1000, self.continentFrames[continentIndex])
+  end
+end
+
+---Moves zone tiles
+---@param continentIndex number
+---@param zoneId number
+---@param frames Frame[]
+function SpwMap.Map:MoveZoneTiles(continentIndex, zoneId, frames)
+  local row, col = 0, 0
+  local frameX, frameY
+  local scale = self.scale
+  local clipW = self.size.width
+  local clipH = self.size.height
+  local NUM_COLUMNS = 4
+  local NUM_ROWS = 3
+
+  local zname, xPos, yPos, zoneWidth, zoneHeight = Utils.GetWorldZoneInfo(continentIndex, zoneId)
+
+  local baseWidth = zoneWidth * FRAME_WIDTH / DETAIL_FRAME_WIDTH / NUM_COLUMNS * scale
+  local baseHeight = zoneHeight * FRAME_HEIGHT / DETAIL_FRAME_HEIGHT / NUM_ROWS * scale
+
+  local x = (xPos - self.position.x) * scale + clipW / 2
+  local y = (yPos - self.position.y) * scale + clipH / 2
+
+  for i = 1, NUM_COLUMNS * NUM_ROWS do
+    local frame = frames[i]
+    if frame then
+      row = Utils.mod(i - 1, NUM_COLUMNS)
+      col = math.floor((i - 1) / NUM_COLUMNS)
+
+      frameX = row * baseWidth + x
+      frameY = col * baseHeight + y
+
+      if baseWidth <= 0 or baseHeight <= 0 then
+        frame:Hide()
+      else
+        frame:SetPoint("TopLeft", self.frame, "TopLeft", frameX, -frameY)
+        frame:SetWidth(baseWidth)
+        frame:SetHeight(baseHeight)
+
+        frame:Show()
+      end
+    end
+  end
+end
+
+function SpwMap.Map:handleUpdate()
+  if self.isDragging then
+    self:MoveMap()
+  end
+  SpwDebug:UpdateItem("MapWidth", self.size.width)
+  SpwDebug:UpdateItem("MapHeight", self.size.height)
+end
