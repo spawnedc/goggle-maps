@@ -4,12 +4,25 @@ local UI = GoggleMaps.UI.Window
 
 local LINE_HEIGHT = 16
 
+---@class DebugItem
+---@field key string
+---@field button Button
+---@field value string | number | boolean
+---@field valueFormatter function?
+
 GMapsDebug = {
+  ---@type table<DebugItem>
   items = {},
   contentFrame = nil
 }
 
-local function createButton(key, value, anchorItem)
+---Creates a button the list items
+---@param key string
+---@param value string | number | boolean
+---@param anchorItem Button|Frame|nil
+---@param valueFormatter function?
+---@return Button
+local function createButton(key, value, anchorItem, valueFormatter)
   local btn = CreateFrame("Button", key, GMapsDebug.contentFrame)
   btn:SetWidth(160)
   btn:SetHeight(LINE_HEIGHT)
@@ -24,34 +37,50 @@ local function createButton(key, value, anchorItem)
   btn.label:SetText(key)
 
   btn.text = btn:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-  btn.text:SetPoint("Left", btn, "Left", 82, 0)
-  btn.text:SetText(value)
+  btn.text:SetPoint("Left", btn, "Left", 92, 0)
+  local label = tostring(value)
+
+  if valueFormatter then
+    label = valueFormatter(value)
+  end
+
+  btn.text:SetText(label)
 
   return btn
 end
 
 local function buildlist()
   local items = GMapsDebug.items
-  for i = 1, table.getn(items) do
-    local item = items[i]
-
+  local numItems = 0
+  for i, thing in pairs(items) do
+    ---@type DebugItem
+    local item = thing
     if item.button then
       item.button:Hide()
       item.button = nil
     end
 
-    local anchorItem = i > 1 and items[i - 1].button or GMapsDebug.contentFrame
+    local anchorItem = GMapsDebug.contentFrame
+
+    if i > 1 then
+      ---@type DebugItem
+      local lastItem = items[i - 1]
+      anchorItem = lastItem.button
+    end
+
     item.button = createButton(item.key, item.value, anchorItem)
+
+    numItems = numItems + 1
   end
 
   -- Adjust content height so scroll works
-  GMapsDebug.contentFrame:SetHeight(table.getn(items) * LINE_HEIGHT)
+  GMapsDebug.contentFrame:SetHeight(numItems * LINE_HEIGHT)
 end
 
 function GMapsDebug:CreateDebugWindow()
   local title = GetAddOnMetadata(GoggleMaps.name, "Title")
   local debugFrame = UI:CreateWindow("GMapsDebug", 300, 500, UIParent)
-  debugFrame:SetPoint("TopLeft", 0, 0)
+  debugFrame:SetPoint("Right", 0, 0)
   debugFrame:SetTitle(title .. " Debug")
 
   local debugContent = debugFrame.Content
@@ -69,14 +98,23 @@ function GMapsDebug:CreateDebugWindow()
   return debugFrame
 end
 
-function GMapsDebug:AddItem(name, value)
+---Adds an item to the watch list
+---@param name string
+---@param value string | number | boolean
+---@param valueFormatter function?
+function GMapsDebug:AddItem(name, value, valueFormatter)
   local numItems = table.getn(GMapsDebug.items)
   local anchorItem = numItems > 0 and GMapsDebug.items[numItems].button or GMapsDebug.contentFrame
-  table.insert(GMapsDebug.items, {
+  ---@type DebugItem
+  local newItem = {
     key = name,
     value = value or '',
     button = createButton(name, value, anchorItem)
-  })
+  }
+  if valueFormatter then
+    newItem.valueFormatter = valueFormatter
+  end
+  table.insert(GMapsDebug.items, newItem)
 
   GMapsDebug.contentFrame:SetHeight((numItems + 1) * LINE_HEIGHT)
 end
@@ -102,7 +140,15 @@ function GMapsDebug:UpdateItem(name, value)
   local items = GMapsDebug.items
   for i = 1, table.getn(items) do
     if items[i].key == name then
-      items[i].button.text:SetText(value)
+      ---@type DebugItem
+      local item = items[i]
+      local label = tostring(value)
+
+      if item.valueFormatter then
+        label = item.valueFormatter(value)
+      end
+
+      item.button.text:SetText(label)
     end
   end
 end

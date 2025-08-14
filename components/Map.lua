@@ -70,11 +70,11 @@ GoggleMaps.Map = {
 ---Initialises the map
 ---@param parentFrame Frame
 function GoggleMaps.Map:Init(parentFrame)
-  GMapsDebug:AddItem("zoom", self.scale)
-  GMapsDebug:AddItem("MapX", self.position.x)
-  GMapsDebug:AddItem("MapY", self.position.y)
-  GMapsDebug:AddItem("MapWidth", self.size.width)
-  GMapsDebug:AddItem("MapHeight", self.size.height)
+  GMapsDebug:AddItem("zoom", self.scale, Utils.numberFormatter(2))
+  GMapsDebug:AddItem("MapX", self.position.x, Utils.numberFormatter(2))
+  GMapsDebug:AddItem("MapY", self.position.y, Utils.numberFormatter(2))
+  GMapsDebug:AddItem("MapWidth", self.size.width, Utils.numberFormatter(2))
+  GMapsDebug:AddItem("MapHeight", self.size.height, Utils.numberFormatter(2))
 
   local name = parentFrame:GetName() .. "MapFrame"
   self.frame = UI:CreateNestedWindow(parentFrame, name, self.size.width, self.size.height)
@@ -88,6 +88,8 @@ function GoggleMaps.Map:Init(parentFrame)
   -- self.frame:SetScript("OnUpdate", function() self:handleUpdate() end)
 
   self:InitTables()
+  GMapsDebug:AddItem("Current zone", GetRealZoneText())
+  GMapsDebug:AddItem("Current mapId", self.zoneNameToMapId[GetRealZoneText()])
 
   self:InitContinents()
 

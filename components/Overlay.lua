@@ -2,7 +2,15 @@ setfenv(1, GoggleMaps)
 
 GoggleMaps.Overlay = {
   ---@type table<table<Frame>>
-  frames = {}
+  frames = {},
+  options = {
+    maxZonesToDraw = 15,
+  },
+  --- The list of zone mapIds to draw. Shouldn't exceed options.maxZonesToDraw
+  zonesToDraw = {
+    1025,
+    1009
+  }
 }
 
 function GoggleMaps.Overlay:Init()
@@ -15,10 +23,8 @@ function GoggleMaps.Overlay:handleUpdate()
 end
 
 function GoggleMaps.Overlay:UpdateOverlays()
-  for _, zones in pairs(GoggleMaps.Map.continentZoneToMapId) do
-    for _, mapId in pairs(zones) do
-      self:UpdateOverlay(mapId)
-    end
+  for _, mapId in pairs(self.zonesToDraw) do
+    self:UpdateOverlay(mapId)
   end
 end
 
@@ -28,6 +34,7 @@ end
 ---@param levelAdd number?
 ---@return Frame
 function GoggleMaps.Overlay:GetAvailableOverlayFrame(mapId, overlayName, levelAdd)
+  local parentFrame = GoggleMaps.Map.frame
   if not self.frames[mapId] then
     self.frames[mapId] = {}
   end
@@ -35,7 +42,7 @@ function GoggleMaps.Overlay:GetAvailableOverlayFrame(mapId, overlayName, levelAd
   local overlayFrame = self.frames[mapId][overlayName]
   if not overlayFrame then
     local frameName = string.format("Overlay-%s-%s", mapId, overlayName)
-    overlayFrame = CreateFrame("Frame", frameName, GoggleMaps.Map.frame)
+    overlayFrame = CreateFrame("Frame", frameName, parentFrame)
 
     local t = overlayFrame:CreateTexture()
     t:SetVertexColor(1, 1, 1, 1)

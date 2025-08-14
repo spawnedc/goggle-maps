@@ -31,6 +31,16 @@ function Utils.splitString(input, separator)
   return unpack(t)
 end
 
+function Utils.numberFormat(num, precision)
+  return string.format("%." .. precision .. "f", num)
+end
+
+function Utils.numberFormatter(precision)
+  return function(value)
+    return Utils.numberFormat(value, precision)
+  end
+end
+
 function Utils.GetContinents()
   return { GetMapContinents() }
 end
