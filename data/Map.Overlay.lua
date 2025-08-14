@@ -1,5 +1,5 @@
-setfenv(1, SpwMap)
-SpwMap.Map.Overlay = {
+setfenv(1, GoggleMaps)
+GoggleMaps.Map.Overlay = {
 	teldrassil = {
 		banethilhollow = "382,281,160,210",
 		darnassus = "101,247,315,256",

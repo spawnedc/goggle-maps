@@ -8,14 +8,16 @@ allowing us to have our own global variables isolated from the rest of the game.
 
 This accomplishes several goals:
 1. Prevents addon-specific "globals" from leaking to game-wide global namespace _G
-2. Optionally retains the ability to access these "globals" via the only exposed global variable "SpwMap"
+2. Optionally retains the ability to access these "globals" via the only exposed global variable "GoggleMaps"
 3. Allows us to make overrides for WoW API's global functions and variables without actually touching
    the real global namespace, making these overrides visible only to this addon.
    This will be useful mainly for adding backwards-compatibility with older WoW clients.
 
-setfenv(1, SpwMap) must be added to every .lua file to allow it to work within this environment,
+setfenv(1, GoggleMaps) must be added to every .lua file to allow it to work within this environment,
 and this Environment file must be loaded before all others
 ]]
 
 local _G = getfenv(0)
-SpwMap = setmetatable({ _G = _G }, { __index = _G })
+GoggleMaps = setmetatable({ _G = _G }, { __index = _G })
+
+GoggleMaps.name = "GoggleMaps"

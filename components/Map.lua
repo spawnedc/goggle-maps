@@ -1,5 +1,5 @@
-setfenv(1, SpwMap)
-local UI = SpwMap.UI.Window
+setfenv(1, GoggleMaps)
+local UI = GoggleMaps.UI.Window
 
 local FRAME_WIDTH = 1024
 local FRAME_HEIGHT = 768
@@ -14,7 +14,7 @@ local CONTINENT_BLOCKS = {
   [2] = { 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0 },
 }
 
-SpwMap.Map = {
+GoggleMaps.Map = {
   Area = {},
   Overlay = {},
   MapInfo = {
@@ -58,12 +58,12 @@ SpwMap.Map = {
 
 ---Initialises the map
 ---@param parentFrame Frame
-function SpwMap.Map:Init(parentFrame)
-  SpwDebug:AddItem("zoom", self.scale)
-  SpwDebug:AddItem("MapX", self.position.x)
-  SpwDebug:AddItem("MapY", self.position.y)
-  SpwDebug:AddItem("MapWidth", self.size.width)
-  SpwDebug:AddItem("MapHeight", self.size.height)
+function GoggleMaps.Map:Init(parentFrame)
+  GMapsDebug:AddItem("zoom", self.scale)
+  GMapsDebug:AddItem("MapX", self.position.x)
+  GMapsDebug:AddItem("MapY", self.position.y)
+  GMapsDebug:AddItem("MapWidth", self.size.width)
+  GMapsDebug:AddItem("MapHeight", self.size.height)
 
   local name = parentFrame:GetName() .. "MapFrame"
   self.frame = UI:CreateNestedWindow(parentFrame, name, self.size.width, self.size.height)
@@ -81,7 +81,7 @@ function SpwMap.Map:Init(parentFrame)
   self:MoveMap(self.position.x, self.position.y)
 end
 
-function SpwMap.Map:handleZoom()
+function GoggleMaps.Map:handleZoom()
   self:handleMouseDown()
   self.isDragging = false
 
@@ -111,12 +111,12 @@ function SpwMap.Map:handleZoom()
   map.position.x = map.position.x + originalX - newX
   map.position.y = map.position.y + originalY - newY
 
-  SpwDebug:UpdateItem("zoom", scale)
+  GMapsDebug:UpdateItem("zoom", scale)
 
   self:MoveMap()
 end
 
-function SpwMap.Map:handleMouseDown()
+function GoggleMaps.Map:handleMouseDown()
   local effectiveScale = self.frame:GetEffectiveScale()
   self.effectiveScale = effectiveScale
 
@@ -129,7 +129,7 @@ function SpwMap.Map:handleMouseDown()
   self.isDragging = true
 end
 
-function SpwMap.Map:InitContinents()
+function GoggleMaps.Map:InitContinents()
   Utils.print('InitContinents')
 
   local texturePath
@@ -157,7 +157,7 @@ end
 ---Handles the map movement
 ---@param xPos? number
 ---@param yPos? number
-function SpwMap.Map:MoveMap(xPos, yPos)
+function GoggleMaps.Map:MoveMap(xPos, yPos)
   if xPos and yPos then
     self.position.x = xPos
     self.position.y = yPos
@@ -181,14 +181,14 @@ function SpwMap.Map:MoveMap(xPos, yPos)
     self.position.x = self.position.x - mx
     self.position.y = self.position.y + my
 
-    SpwDebug:UpdateItem("MapX", self.position.x)
-    SpwDebug:UpdateItem("MapY", self.position.y)
+    GMapsDebug:UpdateItem("MapX", self.position.x)
+    GMapsDebug:UpdateItem("MapY", self.position.y)
   end
 
   self:MoveContinents()
 end
 
-function SpwMap.Map:MoveContinents()
+function GoggleMaps.Map:MoveContinents()
   for continentIndex in ipairs(Utils.GetContinents()) do
     self:MoveZoneTiles(continentIndex, continentIndex * 1000, self.continentFrames[continentIndex])
   end
@@ -198,7 +198,7 @@ end
 ---@param continentIndex number
 ---@param zoneId number
 ---@param frames Frame[]
-function SpwMap.Map:MoveZoneTiles(continentIndex, zoneId, frames)
+function GoggleMaps.Map:MoveZoneTiles(continentIndex, zoneId, frames)
   local row, col = 0, 0
   local frameX, frameY
   local scale = self.scale
@@ -237,10 +237,10 @@ function SpwMap.Map:MoveZoneTiles(continentIndex, zoneId, frames)
   end
 end
 
-function SpwMap.Map:handleUpdate()
+function GoggleMaps.Map:handleUpdate()
   if self.isDragging then
     self:MoveMap()
   end
-  SpwDebug:UpdateItem("MapWidth", self.size.width)
-  SpwDebug:UpdateItem("MapHeight", self.size.height)
+  GMapsDebug:UpdateItem("MapWidth", self.size.width)
+  GMapsDebug:UpdateItem("MapHeight", self.size.height)
 end

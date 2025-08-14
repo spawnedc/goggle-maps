@@ -1,5 +1,5 @@
-setfenv(1, SpwMap)
-SpwMap.Map.MinimapBlocks = {
+setfenv(1, GoggleMaps)
+GoggleMaps.Map.MinimapBlocks = {
 	Azeroth = {
 		[2352] = "67ba43d493e62a8fad5de319e6d4cb05",
 		[2353] = "67ba43d493e62a8fad5de319e6d4cb05",

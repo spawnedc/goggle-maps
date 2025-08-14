@@ -1,20 +1,20 @@
-setfenv(1, SpwMap)
+setfenv(1, GoggleMaps)
 
-local UI = SpwMap.UI.Window
+local UI = GoggleMaps.UI.Window
 
 local LINE_HEIGHT = 16
 
-SpwDebug = {
+GMapsDebug = {
   items = {},
   contentFrame = nil
 }
 
 local function createButton(key, value, anchorItem)
-  local btn = CreateFrame("Button", key, SpwDebug.contentFrame)
+  local btn = CreateFrame("Button", key, GMapsDebug.contentFrame)
   btn:SetWidth(160)
   btn:SetHeight(LINE_HEIGHT)
   if not anchorItem then
-    btn:SetPoint("TopLeft", SpwDebug.contentFrame, "TopLeft", 0, 0)
+    btn:SetPoint("TopLeft", GMapsDebug.contentFrame, "TopLeft", 0, 0)
   else
     btn:SetPoint("TopLeft", anchorItem, "BottomLeft", 0, 0)
   end
@@ -31,7 +31,7 @@ local function createButton(key, value, anchorItem)
 end
 
 local function buildlist()
-  local items = SpwDebug.items
+  local items = GMapsDebug.items
   for i = 1, table.getn(items) do
     local item = items[i]
 
@@ -40,16 +40,16 @@ local function buildlist()
       item.button = nil
     end
 
-    local anchorItem = i > 1 and items[i - 1].button or SpwDebug.contentFrame
+    local anchorItem = i > 1 and items[i - 1].button or GMapsDebug.contentFrame
     item.button = createButton(item.key, item.value, anchorItem)
   end
 
   -- Adjust content height so scroll works
-  SpwDebug.contentFrame:SetHeight(table.getn(items) * LINE_HEIGHT)
+  GMapsDebug.contentFrame:SetHeight(table.getn(items) * LINE_HEIGHT)
 end
 
-function SpwDebug:CreateDebugWindow()
-  local debugFrame = UI:CreateWindow("SpwMapDebug", 300, 500, UIParent)
+function GMapsDebug:CreateDebugWindow()
+  local debugFrame = UI:CreateWindow("GMapsDebug", 300, 500, UIParent)
   debugFrame:SetPoint("TopLeft", 0, 0)
   debugFrame:SetTitle("Debug")
 
@@ -61,45 +61,44 @@ function SpwDebug:CreateDebugWindow()
   scrollFrame:SetPoint("BottomRight", debugContent, "BottomRight", -22, 0)
 
   -- Create the content frame that will hold the items
-  SpwDebug.contentFrame = CreateFrame("Frame", "MyListContent", scrollFrame)
-  SpwDebug.contentFrame:SetWidth(160) -- same as visible width inside scroll
-  scrollFrame:SetScrollChild(SpwDebug.contentFrame)
+  GMapsDebug.contentFrame = CreateFrame("Frame", "MyListContent", scrollFrame)
+  GMapsDebug.contentFrame:SetWidth(160) -- same as visible width inside scroll
+  scrollFrame:SetScrollChild(GMapsDebug.contentFrame)
 
   return debugFrame
 end
 
-function SpwDebug:AddItem(name, value)
-  local numItems = table.getn(SpwDebug.items)
-  Utils.log(numItems)
-  local anchorItem = numItems > 0 and SpwDebug.items[numItems].button or SpwDebug.contentFrame
-  table.insert(SpwDebug.items, {
+function GMapsDebug:AddItem(name, value)
+  local numItems = table.getn(GMapsDebug.items)
+  local anchorItem = numItems > 0 and GMapsDebug.items[numItems].button or GMapsDebug.contentFrame
+  table.insert(GMapsDebug.items, {
     key = name,
     value = value or '',
     button = createButton(name, value, anchorItem)
   })
 
-  SpwDebug.contentFrame:SetHeight((numItems + 1) * LINE_HEIGHT)
+  GMapsDebug.contentFrame:SetHeight((numItems + 1) * LINE_HEIGHT)
 end
 
-function SpwDebug:RemoveItem(name)
+function GMapsDebug:RemoveItem(name)
   local indexToRemove
-  local items = SpwDebug.items
+  local items = GMapsDebug.items
   for i = 1, table.getn(items) do
     if items[i].key == name then
       indexToRemove = i
     end
   end
   if indexToRemove then
-    local item = SpwDebug.items[indexToRemove]
+    local item = GMapsDebug.items[indexToRemove]
     item.button:Hide()
     item.button = nil
-    SpwDebug.items[indexToRemove] = nil
+    GMapsDebug.items[indexToRemove] = nil
   end
   buildlist()
 end
 
-function SpwDebug:UpdateItem(name, value)
-  local items = SpwDebug.items
+function GMapsDebug:UpdateItem(name, value)
+  local items = GMapsDebug.items
   for i = 1, table.getn(items) do
     if items[i].key == name then
       items[i].button.text:SetText(value)

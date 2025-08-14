@@ -1,5 +1,5 @@
-setfenv(1, SpwMap)
-SpwMap.Map.Area = {
+setfenv(1, GoggleMaps)
+GoggleMaps.Map.Area = {
 	[1000] = {
 		name = "Kalimdor",
 		scale = 73.5996,

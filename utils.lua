@@ -1,4 +1,4 @@
-setfenv(1, SpwMap)
+setfenv(1, GoggleMaps)
 
 Utils = {}
 
@@ -7,11 +7,9 @@ function Utils.log(msg)
 end
 
 function Utils.print(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
-  local f = DEFAULT_CHAT_FRAME
-  f:AddMessage(
-    "|cffccccffSpwMap: |cffffffff" ..
-    (string.format(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) or "nil"), 1,
-    1, 1)
+  local title = GetAddOnMetadata(GoggleMaps.name, "Title")
+  local formattedMessage = (string.format(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) or "nil")
+  DEFAULT_CHAT_FRAME:AddMessage(title .. ": |cffffffff" .. formattedMessage)
 end
 
 function Utils.mod(a, b)
@@ -32,12 +30,12 @@ end
 ---@return number height height of the zone
 ---@return number zoneScale scale of the zone
 function Utils.GetWorldZoneInfo(continentIndex, zoneId)
-  local worldInfo = SpwMap.Map.MapInfo[continentIndex]
+  local worldInfo = GoggleMaps.Map.MapInfo[continentIndex]
   if not worldInfo then
     return '?', 1, 0, 0, 1024, 768
   end
 
-  local zoneInfo = SpwMap.Map.Area[zoneId]
+  local zoneInfo = GoggleMaps.Map.Area[zoneId]
   if not zoneInfo then
     return '?', 1, 0, 0, 1024, 768
   end

@@ -1,3 +1,3 @@
-setfenv(1, SpwMap)
+setfenv(1, GoggleMaps)
 
-SpwMap.UI = {}
+GoggleMaps.UI = {}
