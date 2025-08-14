@@ -22,6 +22,7 @@ function GoggleMaps:Init()
   end)
 
   self.Map:Init(self.frame)
+  self.Overlay:Init()
 end
 
 function GoggleMaps:onEvent()
@@ -33,6 +34,7 @@ end
 
 function GoggleMaps:handleUpdate()
   self.Map:handleUpdate()
+  self.Overlay:handleUpdate()
 end
 
 GoggleMaps:Init()

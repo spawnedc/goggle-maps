@@ -144,7 +144,8 @@ function GoggleMaps.Map:InitContinents()
     for blockIndex, block in ipairs(continentBlocks) do
       if block ~= 0 then
         texturePath = "Interface\\WorldMap\\" .. mapFileName .. "\\" .. mapFileName .. blockIndex
-        local continentFrame = CreateFrame("Frame", nil, self.frame)
+        local frameName = string.format("Continent-%s-%d", mapFileName, blockIndex)
+        local continentFrame = CreateFrame("Frame", frameName, self.frame)
         local t = continentFrame:CreateTexture(nil, "ARTWORK")
         t:SetAllPoints(continentFrame)
         t:SetTexture(texturePath)
@@ -201,19 +202,19 @@ end
 function GoggleMaps.Map:MoveZoneTiles(continentIndex, zoneId, frames)
   local row, col = 0, 0
   local frameX, frameY
+  local NUM_COLUMNS = 4
+  local NUM_ROWS = 3
+  local _, xPos, yPos, zoneWidth, zoneHeight = Utils.GetWorldZoneInfo(continentIndex, zoneId)
+  local frameWidth = zoneWidth * FRAME_WIDTH / DETAIL_FRAME_WIDTH / NUM_COLUMNS
+  local frameHeight = zoneHeight * FRAME_HEIGHT / DETAIL_FRAME_HEIGHT / NUM_ROWS
+
   local scale = self.scale
   local clipW = self.size.width
   local clipH = self.size.height
-  local NUM_COLUMNS = 4
-  local NUM_ROWS = 3
-
-  local zname, xPos, yPos, zoneWidth, zoneHeight = Utils.GetWorldZoneInfo(continentIndex, zoneId)
-
-  local baseWidth = zoneWidth * FRAME_WIDTH / DETAIL_FRAME_WIDTH / NUM_COLUMNS * scale
-  local baseHeight = zoneHeight * FRAME_HEIGHT / DETAIL_FRAME_HEIGHT / NUM_ROWS * scale
-
   local x = (xPos - self.position.x) * scale + clipW / 2
   local y = (yPos - self.position.y) * scale + clipH / 2
+  local baseWidth = frameWidth * scale
+  local baseHeight = frameHeight * scale
 
   for i = 1, NUM_COLUMNS * NUM_ROWS do
     local frame = frames[i]
@@ -224,15 +225,7 @@ function GoggleMaps.Map:MoveZoneTiles(continentIndex, zoneId, frames)
       frameX = row * baseWidth + x
       frameY = col * baseHeight + y
 
-      if baseWidth <= 0 or baseHeight <= 0 then
-        frame:Hide()
-      else
-        frame:SetPoint("TopLeft", self.frame, "TopLeft", frameX, -frameY)
-        frame:SetWidth(baseWidth)
-        frame:SetHeight(baseHeight)
-
-        frame:Show()
-      end
+      Utils.ClipFrame(frame, frameX, frameY, baseWidth, baseHeight, clipW, clipH)
     end
   end
 end

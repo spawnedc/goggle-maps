@@ -16,8 +16,30 @@ function Utils.mod(a, b)
   return a - (math.floor(a / b) * b)
 end
 
+--- Splits the given string by the given separator
+---@param input string
+---@param separator string
+function Utils.splitString(input, separator)
+  local t = {}
+  -- gfind does not add a nil value if the string starts with the separator.
+  if string.sub(input, 1, string.len(separator)) == separator then
+    table.insert(t, nil)
+  end
+  for part in string.gfind(input, "([^" .. separator .. "]+)") do
+    table.insert(t, part)
+  end
+  return unpack(t)
+end
+
 function Utils.GetContinents()
   return { GetMapContinents() }
+end
+
+---Returns the continent id for a zoneId
+---@param zoneId number
+---@return integer
+function Utils.getContinentId(zoneId)
+  return math.floor(zoneId / 1000)
 end
 
 ---Gets the world zone information
@@ -43,8 +65,90 @@ function Utils.GetWorldZoneInfo(continentIndex, zoneId)
   local x = worldInfo.X + zoneInfo.x
   local y = worldInfo.Y + zoneInfo.y
   local scale = zoneInfo.scale * 100
-  local width = scale * (zoneInfo.ScaleAdjX or 1)
-  local height = scale / 1.5 * (zoneInfo.ScaleAdjY or 1)
+  local width = scale
+  local height = scale / 1.5
 
   return zoneInfo.name, x, y, width, height, zoneInfo.scale
+end
+
+---Gets the world position of the given coordinates of the mapId
+---@param mapId number
+---@param mapX number
+---@param mapY number
+---@return number
+---@return number
+function Utils.GetWorldPos(mapId, mapX, mapY)
+  if not mapId then
+    return 0, 0
+  end
+  local continentIndex = Utils.getContinentId(mapId)
+  local worldInfo = GoggleMaps.Map.MapInfo[continentIndex]
+  if not worldInfo then
+    return 0, 0
+  end
+
+  local zoneInfo = GoggleMaps.Map.Area[mapId]
+  if not zoneInfo then
+    return 0, 0
+  end
+
+  local x = worldInfo.X + zoneInfo.x + mapX * zoneInfo.scale
+  local y = worldInfo.Y + zoneInfo.y + mapY * zoneInfo.scale / 1.5
+
+  return x, y
+end
+
+---Gets the clipped size
+---@param x number
+---@param y number
+---@param baseWidth number
+---@param baseHeight number
+---@param clipW number
+---@param clipH number
+---@return number frameWidth the clipped width
+---@return number frameHeight the clipped height
+function Utils.GetClippedSize(x, y, baseWidth, baseHeight, clipW, clipH)
+  local vx1 = x
+  local vx2 = x + baseWidth
+
+  if vx1 < 0 then vx1 = 0 end
+  if vx2 > clipW then vx2 = clipW end
+
+  local vy1 = y
+  local vy2 = y + baseHeight
+
+  if vy1 < 0 then vy1 = 0 end
+  if vy2 > clipH then vy2 = clipH end
+
+  local frameWidth = vx2 - vx1
+  local frameHeight = vy2 - vy1
+
+  return frameWidth, frameHeight
+end
+
+---Clips a frame, also shows or hides and sets the size
+---@param frame Frame
+---@param x number
+---@param y number
+---@param baseWidth number
+---@param baseHeight number
+---@param clipW number
+---@param clipH number
+---@return boolean isShown
+function Utils.ClipFrame(frame, x, y, baseWidth, baseHeight, clipW, clipH)
+  local clippedW, clippedH = Utils.GetClippedSize(x, y, baseWidth, baseHeight, clipW, clipH)
+
+  if clippedW < .3 or clippedH < .3 then
+    Utils.print("Hiding %s", frame:GetName())
+    frame:Hide()
+    return false
+  end
+
+  frame:SetPoint("TopLeft", x, -y)
+  frame:SetWidth(baseWidth)
+  frame:SetHeight(baseHeight)
+
+  frame:Show()
+
+  return true
 end

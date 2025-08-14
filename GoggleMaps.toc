@@ -18,6 +18,8 @@ data\Map.Hotspots.lua
 data\Map.Overlay.lua
 data\Map.MinimapBlocks.lua
 
+components\Overlay.lua
+
 debug.lua
 
 GoggleMaps.lua
