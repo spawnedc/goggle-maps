@@ -97,7 +97,7 @@ function GoggleMaps.Map:Init(parentFrame)
 end
 
 function GoggleMaps.Map:InitTables()
-  Utils.log("SpwMap:InitTables")
+  Utils.print("InitTables")
   self.zoneNameToMapId, self.continentZoneToMapId = Utils.GetZoneNameToMapId()
 end
 
