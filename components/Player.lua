@@ -41,10 +41,6 @@ function GoggleMaps.Player:Init(parentFrame)
   GMapsDebug:AddItem("Direction", self.direction)
   GMapsDebug:AddItem("PframeX")
   GMapsDebug:AddItem("PframeY")
-  GMapsDebug:AddItem("WorldX", 0, Utils.numberFormatter(2))
-  GMapsDebug:AddItem("WorldY", 0, Utils.numberFormatter(2))
-  GMapsDebug:AddItem("FrameLevel", GoggleMaps.Map.frameLevel)
-  GMapsDebug:AddItem("PFrameLevel", self.frame:GetFrameLevel())
 end
 
 ---Updates the player component
@@ -74,9 +70,6 @@ function GoggleMaps.Player:handleUpdate(isRealMap)
   local x, y = Utils.GetWorldPos(GoggleMaps.Map.realMapId, playerZoneX, playerZoneY)
   local direction = ({ _G['Minimap']:GetChildren() })[9]:GetFacing() * -1
 
-  GMapsDebug:UpdateItem("WorldX", x)
-  GMapsDebug:UpdateItem("WorldY", y)
-
   local scale = GoggleMaps.Map.scale
   local clipW = GoggleMaps.Map.size.width
   local clipH = GoggleMaps.Map.size.height
@@ -95,8 +88,6 @@ function GoggleMaps.Player:handleUpdate(isRealMap)
 
   GMapsDebug:UpdateItem("PframeX", x)
   GMapsDebug:UpdateItem("PframeY", y)
-
-  GMapsDebug:UpdateItem("FrameLevel", GoggleMaps.Map.frameLevel)
 
   Utils.ClipFrame(self.frame, x, y, 30, 30, clipW, clipH)
 
@@ -119,5 +110,4 @@ function GoggleMaps.Player:handleUpdate(isRealMap)
 
   local level = GoggleMaps.Map.frameLevel
   self.frame:SetFrameLevel(level + 1)
-  GMapsDebug:UpdateItem("PFrameLevel", self.frame:GetFrameLevel())
 end
