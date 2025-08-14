@@ -83,6 +83,8 @@ function GoggleMaps.Overlay:GetAvailableOverlayFrame(mapId, overlayName, levelAd
     self.frames[mapId][overlayName] = overlayFrame
   end
 
+  overlayFrame:SetFrameLevel(GoggleMaps.Map.frameLevel)
+
   return overlayFrame
 end
 

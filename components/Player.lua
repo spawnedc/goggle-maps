@@ -22,7 +22,6 @@ function GoggleMaps.Player:Init(parentFrame)
   Utils.print("PlayerInit")
   local frameName = parentFrame:GetName() .. "PlayerFrame"
   local playerFrame = CreateFrame("Frame", frameName, parentFrame)
-  -- playerFrame:SetPoint("Center", self.size.width / 2, self.size.height / 2)
   playerFrame:SetWidth(self.size.width)
   playerFrame:SetHeight(self.size.height)
   playerFrame:SetFrameStrata("TOOLTIP")
@@ -109,5 +108,5 @@ function GoggleMaps.Player:handleUpdate(isRealMap)
   self.frame.texture:SetTexCoord(t1x, t1y, t2x, t2y, t3x, t3y, t4x, t4y)
 
   local level = GoggleMaps.Map.frameLevel
-  self.frame:SetFrameLevel(level + 1)
+  self.frame:SetFrameLevel(level + 10)
 end

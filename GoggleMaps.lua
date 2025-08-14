@@ -27,6 +27,7 @@ function GoggleMaps:Init()
   self.Map:Init(self.frame)
   self.Player:Init(self.Map.frame)
   self.Overlay:Init()
+  self.Minimap:Init(self.Map.frame)
 
   self.frame:SetScript("OnUpdate", function() self:handleUpdate() end)
   self.frame:SetScript("OnSizeChanged", function()
@@ -49,8 +50,9 @@ end
 function GoggleMaps:handleUpdate()
   self.Map.frameLevel = 10
   self.Map:handleUpdate()
-  self.Player:handleUpdate(true)
   self.Overlay:handleUpdate()
+  self.Minimap:handleUpdate()
+  self.Player:handleUpdate(true)
 end
 
 GoggleMaps:Start()
