@@ -25,7 +25,7 @@ function GoggleMaps:Init()
   self.frame:SetFrameStrata("HIGH")
 
   self.Map:Init(self.frame)
-  self.Player:Init(self.Map.frame)
+  self.Player:Init(self.frame)
   self.Overlay:Init()
   self.Minimap:Init(self.Map.frame)
 
