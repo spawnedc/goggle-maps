@@ -280,6 +280,14 @@ end
 function GoggleMaps.Map:handleUpdate()
   if self.isDragging then
     self:MoveMap()
+  else
+    local player = GoggleMaps.Player
+    if player.isMoving then
+      local playerPos = player.position
+      local worldX, worldY = Utils.GetWorldPos(self.realMapId, playerPos.x, playerPos.y)
+
+      self:MoveMap(worldX, worldY)
+    end
   end
   GMapsDebug:UpdateItem("MapWidth", self.size.width)
   GMapsDebug:UpdateItem("MapHeight", self.size.height)
