@@ -33,6 +33,7 @@ GoggleMaps.Map = {
   },
   ---@type Frame
   frame = nil,
+  frameLevel = 10,
   ---@type table<table<Frame>>
   continentFrames = {},
   initialised = false,
@@ -81,6 +82,7 @@ function GoggleMaps.Map:Init(parentFrame)
   self.frame:SetAllPoints(parentFrame)
   self.frame:EnableMouse(true)
   self.frame:EnableMouseWheel(true)
+  self.frame:SetFrameLevel(3)
 
   self.frame:RegisterEvent("PLAYER_ENTERING_WORLD")
   self.frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
@@ -182,7 +184,7 @@ function GoggleMaps.Map:InitContinents()
       if block ~= 0 then
         texturePath = "Interface\\WorldMap\\" .. mapFileName .. "\\" .. mapFileName .. blockIndex
         local frameName = string.format("Continent-%s-%d", mapFileName, blockIndex)
-        local continentFrame = CreateFrame("Frame", frameName, self.frame)
+        local continentFrame = CreateFrame("Frame", frameName, self.frame.Content)
         local t = continentFrame:CreateTexture(nil, "ARTWORK")
         t:SetAllPoints(continentFrame)
         t:SetTexture(texturePath)
@@ -224,6 +226,10 @@ function GoggleMaps.Map:MoveMap(xPos, yPos)
   end
 
   self:MoveContinents()
+
+  local level = self.frameLevel
+
+  self.frameLevel = level + 1
 end
 
 function GoggleMaps.Map:MoveContinents()
@@ -237,6 +243,7 @@ end
 ---@param zoneId number
 ---@param frames Frame[]
 function GoggleMaps.Map:MoveZoneTiles(continentIndex, zoneId, frames)
+  local level = self.frameLevel
   local row, col = 0, 0
   local frameX, frameY
   local NUM_COLUMNS = 4
@@ -263,6 +270,8 @@ function GoggleMaps.Map:MoveZoneTiles(continentIndex, zoneId, frames)
       frameY = col * baseHeight + y
 
       Utils.ClipFrame(frame, frameX, frameY, baseWidth, baseHeight, clipW, clipH)
+
+      frame:SetFrameLevel(level)
     end
   end
 end

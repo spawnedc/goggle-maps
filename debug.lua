@@ -100,7 +100,7 @@ end
 
 ---Adds an item to the watch list
 ---@param name string
----@param value string | number | boolean
+---@param value string | number | boolean?
 ---@param valueFormatter function?
 function GMapsDebug:AddItem(name, value, valueFormatter)
   local numItems = table.getn(GMapsDebug.items)

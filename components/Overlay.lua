@@ -65,7 +65,7 @@ end
 ---@param levelAdd number?
 ---@return Frame
 function GoggleMaps.Overlay:GetAvailableOverlayFrame(mapId, overlayName, levelAdd)
-  local parentFrame = GoggleMaps.Map.frame
+  local parentFrame = GoggleMaps.Map.frame.Content
   if not self.frames[mapId] then
     self.frames[mapId] = {}
   end
@@ -75,7 +75,7 @@ function GoggleMaps.Overlay:GetAvailableOverlayFrame(mapId, overlayName, levelAd
     local frameName = string.format("Overlay-%s-%s", mapId, overlayName)
     overlayFrame = CreateFrame("Frame", frameName, parentFrame)
 
-    local t = overlayFrame:CreateTexture()
+    local t = overlayFrame:CreateTexture(nil, 'BACKGROUND')
     t:SetVertexColor(1, 1, 1, 1)
     t:SetBlendMode("BLEND")
     t:SetAllPoints(overlayFrame)

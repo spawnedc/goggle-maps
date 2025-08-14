@@ -22,8 +22,10 @@ function GoggleMaps:Init()
 
   self.frame:SetTitle(title .. " v" .. version)
   self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
+  self.frame:SetFrameStrata("HIGH")
 
   self.Map:Init(self.frame)
+  self.Player:Init(self.Map.frame)
   self.Overlay:Init()
 
   self.frame:SetScript("OnUpdate", function() self:handleUpdate() end)
@@ -45,7 +47,9 @@ function GoggleMaps:OnEvent()
 end
 
 function GoggleMaps:handleUpdate()
+  self.Map.frameLevel = 10
   self.Map:handleUpdate()
+  self.Player:handleUpdate(true)
   self.Overlay:handleUpdate()
 end
 

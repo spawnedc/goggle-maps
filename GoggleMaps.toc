@@ -19,6 +19,7 @@ data\Map.Overlay.lua
 data\Map.MinimapBlocks.lua
 
 components\Overlay.lua
+components\Player.lua
 
 debug.lua
 
