@@ -161,6 +161,7 @@ end
 function GoggleMaps.Map:handleEvent()
   if event == "ZONE_CHANGED_NEW_AREA" or event == "PLAYER_ENTERING_WORLD" then
     self.realMapId = self.zoneNameToMapId[GetRealZoneText()]
+    Utils.setCurrentMap(self.realMapId)
     GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
     GMapsDebug:UpdateItem("Current zone", GetRealZoneText())
     GMapsDebug:UpdateItem("Current mapId", self.realMapId)

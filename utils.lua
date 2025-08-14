@@ -193,3 +193,19 @@ function Utils.ClipFrame(frame, x, y, baseWidth, baseHeight, clipW, clipH)
 
   return true
 end
+
+---Sets the current map to the given mapId
+---@param mapId number
+---@param reason string|nil
+function Utils.setCurrentMap(mapId, reason)
+  if mapId then
+    local continent = Utils.getContinentId(mapId)
+    local zone = GoggleMaps.Map.Area[mapId].Zone
+    local newZone = Utils.GetWorldZoneInfo(continent, mapId)
+    Utils.log(string.format("Changing map %s (%s) WowZone: %s", newZone, mapId, zone))
+    if reason then
+      Utils.log(string.format("Map change reason: %s", reason))
+    end
+    SetMapZoom(continent, zone)
+  end
+end
