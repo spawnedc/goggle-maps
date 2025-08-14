@@ -22,7 +22,7 @@ function GoggleMaps.Player:Init(parentFrame)
   Utils.print("PlayerInit")
   local frameName = parentFrame:GetName() .. "PlayerFrame"
   local playerFrame = CreateFrame("Frame", frameName, parentFrame)
-  playerFrame:SetPoint("Center", parentFrame, "Center", self.size.width / 2, self.size.height / 2)
+  -- playerFrame:SetPoint("Center", self.size.width / 2, self.size.height / 2)
   playerFrame:SetWidth(self.size.width)
   playerFrame:SetHeight(self.size.height)
   playerFrame:SetFrameStrata("TOOLTIP")
@@ -41,6 +41,8 @@ function GoggleMaps.Player:Init(parentFrame)
   GMapsDebug:AddItem("Direction", self.direction)
   GMapsDebug:AddItem("PframeX")
   GMapsDebug:AddItem("PframeY")
+  GMapsDebug:AddItem("WorldX", 0, Utils.numberFormatter(2))
+  GMapsDebug:AddItem("WorldY", 0, Utils.numberFormatter(2))
   GMapsDebug:AddItem("FrameLevel", GoggleMaps.Map.frameLevel)
   GMapsDebug:AddItem("PFrameLevel", self.frame:GetFrameLevel())
 end
@@ -72,12 +74,14 @@ function GoggleMaps.Player:handleUpdate(isRealMap)
   local x, y = Utils.GetWorldPos(GoggleMaps.Map.realMapId, playerZoneX, playerZoneY)
   local direction = ({ _G['Minimap']:GetChildren() })[9]:GetFacing() * -1
 
+  GMapsDebug:UpdateItem("WorldX", x)
+  GMapsDebug:UpdateItem("WorldY", y)
+
   local scale = GoggleMaps.Map.scale
   local clipW = GoggleMaps.Map.size.width
   local clipH = GoggleMaps.Map.size.height
-  x = (x - GoggleMaps.Map.position.x) * scale + clipW / 2
-  y = (y - GoggleMaps.Map.position.y) * scale + clipH / 2
-
+  x = ((x - GoggleMaps.Map.position.x) * scale + clipW / 2) - self.size.width / 2
+  y = ((y - GoggleMaps.Map.position.y) * scale + clipH / 2) - self.size.height / 2
 
   if not self.isMoving and direction ~= self.direction then
     self.isMoving = true
@@ -113,11 +117,7 @@ function GoggleMaps.Player:handleUpdate(isRealMap)
   t4y = texX2 * -si + texY2 * co + .5
   self.frame.texture:SetTexCoord(t1x, t1y, t2x, t2y, t3x, t3y, t4x, t4y)
 
-  -- -- GoggleMaps:ClipFrame(self.frame, x, y, 30, 30, "Center", direction, false)
-  -- Utils.ClipFrame(self.frame, x, y, self.size.width, self.size.height, GoggleMaps.Map.size.width,
-  --   GoggleMaps.Map.size.height)
-
   local level = GoggleMaps.Map.frameLevel
-  self.frame:SetFrameLevel(level + 100)
+  self.frame:SetFrameLevel(level + 1)
   GMapsDebug:UpdateItem("PFrameLevel", self.frame:GetFrameLevel())
 end
