@@ -48,7 +48,7 @@ function GoggleMaps.Overlay:AddMapIdToZonesToDraw(mapId)
   for i = 1, table.getn(idList) do
     if idList[i] == mapId then
       table.remove(idList, i)
-      return
+      break
     end
   end
 
@@ -86,7 +86,7 @@ function GoggleMaps.Overlay:GetAvailableOverlayFrame(mapId, overlayName, levelAd
     self.frames[mapId][overlayName] = overlayFrame
   end
 
-  overlayFrame:SetFrameLevel(GoggleMaps.Map.frameLevel)
+  overlayFrame:SetFrameLevel(GoggleMaps.Map.frameLevel + 1)
 
   return overlayFrame
 end

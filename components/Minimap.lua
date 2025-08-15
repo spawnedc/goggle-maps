@@ -102,6 +102,7 @@ function GoggleMaps.Minimap:handleUpdate()
           f.texture:SetVertexColor(1, 1, 1, 1)
           txname = "Textures\\Minimap\\" .. txname
           f.texture:SetTexture(txname)
+          f:SetFrameLevel(GoggleMaps.Map.frameLevel + 10)
         end
       else
         f:Hide()

@@ -108,5 +108,5 @@ function GoggleMaps.Player:handleUpdate(isRealMap)
   self.frame.texture:SetTexCoord(t1x, t1y, t2x, t2y, t3x, t3y, t4x, t4y)
 
   local level = GoggleMaps.Map.frameLevel
-  self.frame:SetFrameLevel(level + 10)
+  self.frame:SetFrameLevel(level + 100)
 end
