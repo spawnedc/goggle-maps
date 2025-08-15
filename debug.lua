@@ -84,6 +84,7 @@ function GMapsDebug:CreateDebugWindow()
   debugFrame:SetTitle(title .. " Debug")
 
   local debugContent = debugFrame.Content
+  debugContent:SetAllPoints()
 
   -- Create the scroll frame
   local scrollFrame = CreateFrame("ScrollFrame", "MyListScrollFrame", debugContent, "UIPanelScrollFrameTemplate")
@@ -91,9 +92,12 @@ function GMapsDebug:CreateDebugWindow()
   scrollFrame:SetPoint("BottomRight", debugContent, "BottomRight", -22, 0)
 
   -- Create the content frame that will hold the items
-  GMapsDebug.contentFrame = CreateFrame("Frame", "MyListContent", scrollFrame)
-  GMapsDebug.contentFrame:SetWidth(160) -- same as visible width inside scroll
-  scrollFrame:SetScrollChild(GMapsDebug.contentFrame)
+  self.contentFrame = CreateFrame("Frame", "MyListContent", scrollFrame)
+  self.contentFrame:SetWidth(debugContent:GetWidth() - 20) -- same as visible width inside scroll
+
+  scrollFrame:SetScrollChild(self.contentFrame)
+
+  debugFrame:triggerResize()
 
   return debugFrame
 end
@@ -104,7 +108,7 @@ end
 ---@param valueFormatter function?
 function GMapsDebug:AddItem(name, value, valueFormatter)
   local numItems = table.getn(GMapsDebug.items)
-  local anchorItem = numItems > 0 and GMapsDebug.items[numItems].button or GMapsDebug.contentFrame
+  local anchorItem = numItems > 0 and self.items[numItems].button or nil
   ---@type DebugItem
   local newItem = {
     key = name,
@@ -114,30 +118,30 @@ function GMapsDebug:AddItem(name, value, valueFormatter)
   if valueFormatter then
     newItem.valueFormatter = valueFormatter
   end
-  table.insert(GMapsDebug.items, newItem)
+  table.insert(self.items, newItem)
 
-  GMapsDebug.contentFrame:SetHeight((numItems + 1) * LINE_HEIGHT)
+  self.contentFrame:SetHeight((numItems + 1) * LINE_HEIGHT)
 end
 
 function GMapsDebug:RemoveItem(name)
   local indexToRemove
-  local items = GMapsDebug.items
+  local items = self.items
   for i = 1, table.getn(items) do
     if items[i].key == name then
       indexToRemove = i
     end
   end
   if indexToRemove then
-    local item = GMapsDebug.items[indexToRemove]
+    local item = self.items[indexToRemove]
     item.button:Hide()
     item.button = nil
-    GMapsDebug.items[indexToRemove] = nil
+    self.items[indexToRemove] = nil
   end
   buildlist()
 end
 
 function GMapsDebug:UpdateItem(name, value)
-  local items = GMapsDebug.items
+  local items = self.items
   for i = 1, table.getn(items) do
     if items[i].key == name then
       ---@type DebugItem
