@@ -72,10 +72,8 @@ GoggleMaps.Map = {
 ---@param parentFrame Frame
 function GoggleMaps.Map:Init(parentFrame)
   GMapsDebug:AddItem("zoom", self.scale, Utils.numberFormatter(2))
-  GMapsDebug:AddItem("MapX", self.position.x, Utils.numberFormatter(2))
-  GMapsDebug:AddItem("MapY", self.position.y, Utils.numberFormatter(2))
-  GMapsDebug:AddItem("MapWidth", self.size.width, Utils.numberFormatter(2))
-  GMapsDebug:AddItem("MapHeight", self.size.height, Utils.numberFormatter(2))
+  GMapsDebug:AddItem("Map pos", self.position, Utils.positionFormatter)
+  GMapsDebug:AddItem("Map size", self.size, Utils.sizeFormatter)
 
   local name = parentFrame:GetName() .. "MapFrame"
   self.frame = UI:CreateNestedWindow(parentFrame, name, self.size.width, self.size.height)
@@ -222,8 +220,7 @@ function GoggleMaps.Map:MoveMap(xPos, yPos)
     self.position.x = self.position.x - mx
     self.position.y = self.position.y + my
 
-    GMapsDebug:UpdateItem("MapX", self.position.x)
-    GMapsDebug:UpdateItem("MapY", self.position.y)
+    GMapsDebug:UpdateItem("Map pos", self.position)
   end
 
   self:MoveContinents()
@@ -289,6 +286,5 @@ function GoggleMaps.Map:handleUpdate()
       self:MoveMap(worldX, worldY)
     end
   end
-  GMapsDebug:UpdateItem("MapWidth", self.size.width)
-  GMapsDebug:UpdateItem("MapHeight", self.size.height)
+  GMapsDebug:UpdateItem("Map size", self.size)
 end

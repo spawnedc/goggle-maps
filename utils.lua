@@ -41,6 +41,14 @@ function Utils.numberFormatter(precision)
   end
 end
 
+function Utils.positionFormatter(value)
+  return string.format("%.2f, %.2f", value.x, value.y)
+end
+
+function Utils.sizeFormatter(value)
+  return string.format("%.2f, %.2f", value.width, value.height)
+end
+
 function Utils.GetContinents()
   return { GetMapContinents() }
 end

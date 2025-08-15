@@ -34,12 +34,10 @@ function GoggleMaps.Player:Init(parentFrame)
 
   self.frame = playerFrame
 
-  GMapsDebug:AddItem("Player X", self.position.x, Utils.numberFormatter(2))
-  GMapsDebug:AddItem("Player Y", self.position.y, Utils.numberFormatter(2))
+  GMapsDebug:AddItem("Player pos", self.position, Utils.positionFormatter)
   GMapsDebug:AddItem("Is moving", self.isMoving)
   GMapsDebug:AddItem("Direction", self.direction)
-  GMapsDebug:AddItem("PframeX")
-  GMapsDebug:AddItem("PframeY")
+  GMapsDebug:AddItem("Pframe pos", playerFrame:GetPoint("TopLeft"), Utils.positionFormatter)
 end
 
 ---Updates the player component
@@ -80,13 +78,11 @@ function GoggleMaps.Player:handleUpdate(isRealMap)
     self.direction = direction
   end
 
-  GMapsDebug:UpdateItem("Player X", playerZoneX)
-  GMapsDebug:UpdateItem("Player Y", playerZoneY)
+  GMapsDebug:UpdateItem("Player pos", self.position)
   GMapsDebug:UpdateItem("Is moving", self.isMoving)
   GMapsDebug:UpdateItem("Direction", self.direction)
 
-  GMapsDebug:UpdateItem("PframeX", x)
-  GMapsDebug:UpdateItem("PframeY", y)
+  GMapsDebug:UpdateItem("Pframe pos", { x = x, y = y })
 
   Utils.ClipFrame(self.frame, x, y, 30, 30, clipW, clipH)
 
