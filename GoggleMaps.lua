@@ -26,7 +26,7 @@ function GoggleMaps:Init()
 
   self.Map:Init(self.frame)
   self.Player:Init(self.frame)
-  self.Overlay:Init()
+  self.Overlay:Init(self.Map.frame)
   self.Minimap:Init(self.Map.frame)
 
   self.frame:SetScript("OnUpdate", function() self:handleUpdate() end)

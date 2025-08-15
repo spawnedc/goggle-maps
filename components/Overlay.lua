@@ -1,18 +1,21 @@
 setfenv(1, GoggleMaps)
 
 GoggleMaps.Overlay = {
+  ---@type Frame
+  parentFrame = nil,
   ---@type table<table<Frame>>
   frames = {},
   options = {
-    maxZonesToDraw = 1,
+    maxZonesToDraw = 5,
   },
   --- The list of zone mapIds to draw. Shouldn't exceed options.maxZonesToDraw
   zonesToDraw = {},
   zonesToClear = {}
 }
 
-function GoggleMaps.Overlay:Init()
+function GoggleMaps.Overlay:Init(parentFrame)
   Utils.print("Overlay init")
+  self.parentFrame = parentFrame
   self:UpdateOverlays()
 end
 
@@ -55,6 +58,7 @@ function GoggleMaps.Overlay:AddMapIdToZonesToDraw(mapId)
   -- If list exceeds limit, remove last
   if table.getn(idList) > self.options.maxZonesToDraw then
     local removedMapId = table.remove(idList) -- removes last by default
+    Utils.print("Adding %s to the clear list", removedMapId)
     table.insert(self.zonesToClear, removedMapId)
   end
 end
@@ -65,7 +69,6 @@ end
 ---@param levelAdd number?
 ---@return Frame
 function GoggleMaps.Overlay:GetAvailableOverlayFrame(mapId, overlayName, levelAdd)
-  local parentFrame = GoggleMaps.Map.frame.Content
   if not self.frames[mapId] then
     self.frames[mapId] = {}
   end
@@ -73,7 +76,7 @@ function GoggleMaps.Overlay:GetAvailableOverlayFrame(mapId, overlayName, levelAd
   local overlayFrame = self.frames[mapId][overlayName]
   if not overlayFrame then
     local frameName = string.format("Overlay-%s-%s", mapId, overlayName)
-    overlayFrame = CreateFrame("Frame", frameName, parentFrame)
+    overlayFrame = CreateFrame("Frame", frameName, self.parentFrame)
 
     local t = overlayFrame:CreateTexture(nil, 'BACKGROUND')
     t:SetVertexColor(1, 1, 1, 1)
