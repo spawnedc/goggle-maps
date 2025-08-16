@@ -7,48 +7,41 @@ GoggleMaps.Map.Area = {
 		y = -2559.9801
 	},
 	[1001] = {
-		name = "Amani'Alor",
-		scale = 3.026,
-		x = -622.4,
-		y = -687.4,
-		overlay = "amanialor"
-	},
-	[1002] = {
 		name = "Ashenvale",
 		scale = 11.5333,
 		x = -340,
 		y = -934.584,
 		overlay = "ashenvale"
 	},
-	[1003] = {
+	[1002] = {
 		name = "Azshara",
 		scale = 10.1417,
 		x = 655.416,
 		y = -1068.334,
 		overlay = "aszhara"
 	},
-	[1004] = {
+	[1003] = {
 		name = "Blackstone Island",
 		scale = 4.944,
 		x = 1254.8,
 		y = -159.8,
 		overlay = "blackstoneisland"
 	},
-	[1005] = {
+	[1004] = {
 		name = "Caverns of Time",
 		scale = 2.6965,
 		x = 739.17,
 		y = 1604.618,
 		overlay = "cavernsoftime"
 	},
-	[1006] = {
+	[1005] = {
 		name = "Darkshore",
 		scale = 13.1,
 		x = -588.334,
 		y = -1666.666,
 		overlay = "darkshore"
 	},
-	[1007] = {
+	[1006] = {
 		name = "Darnassus",
 		scale = 2.1167,
 		x = -587.672,
@@ -56,12 +49,19 @@ GoggleMaps.Map.Area = {
 		overlay = "darnassis",
 		isCity = true
 	},
-	[1008] = {
+	[1007] = {
 		name = "Desolace",
 		scale = 8.9917,
 		x = -846.666,
 		y = -90.416,
 		overlay = "desolace"
+	},
+	[1008] = {
+		name = "Dire Maul",
+		scale = 2.648,
+		x = -402.8,
+		y = 680.2,
+		overlay = "diremaulentrance"
 	},
 	[1009] = {
 		name = "Durotar",
@@ -157,9 +157,9 @@ GoggleMaps.Map.Area = {
 	},
 	[1022] = {
 		name = "Stonetalon Mountains",
-		scale = 9.7667,
-		x = -649.166,
-		y = -583.334,
+		scale = 12.036,
+		x = -789.8,
+		y = -688.2,
 		overlay = "stonetalonmountains"
 	},
 	[1023] = {
@@ -262,90 +262,104 @@ GoggleMaps.Map.Area = {
 		overlay = "badlands"
 	},
 	[2005] = {
+		name = "Balor",
+		scale = 6.196,
+		x = -945.6,
+		y = 1515.4,
+		overlay = "balor"
+	},
+	[2006] = {
 		name = "Blackrock Mountain",
 		scale = 1.4231,
 		x = 152.188,
 		y = 1465.564,
 		overlay = "blackrockmountain"
 	},
-	[2006] = {
+	[2007] = {
 		name = "Blasted Lands",
 		scale = 6.7,
 		x = 248.334,
 		y = 2113.334,
 		overlay = "blastedlands"
 	},
-	[2007] = {
+	[2008] = {
 		name = "Burning Steppes",
 		scale = 5.8583,
 		x = 53.334,
 		y = 1406.25,
 		overlay = "burningsteppes"
 	},
-	[2008] = {
+	[2009] = {
 		name = "Deadwind Pass",
 		scale = 5,
 		x = 166.666,
 		y = 1973.334,
 		overlay = "deadwindpass"
 	},
-	[2009] = {
+	[2010] = {
 		name = "Dun Morogh",
 		scale = 9.85,
 		x = -360.416,
 		y = 775.416,
 		overlay = "dunmorogh"
 	},
-	[2010] = {
+	[2011] = {
 		name = "Duskwood",
 		scale = 5.4,
 		x = -166.666,
 		y = 1943.334,
 		overlay = "duskwood"
 	},
-	[2011] = {
+	[2012] = {
 		name = "Eastern Plaguelands",
 		scale = 7.7417,
 		x = 437.084,
 		y = -760,
 		overlay = "easternplaguelands"
 	},
-	[2012] = {
+	[2013] = {
 		name = "Elwynn Forest",
 		scale = 6.9417,
 		x = -307.084,
 		y = 1587.916,
 		overlay = "elwynn"
 	},
-	[2013] = {
+	[2014] = {
 		name = "Gillijim's Isle",
 		scale = 6.1842,
 		x = -887.244,
 		y = 2505.742,
 		overlay = "gillijim"
 	},
-	[2014] = {
+	[2015] = {
 		name = "Gilneas",
 		scale = 7.332,
 		x = -650.6,
 		y = 71.8,
 		overlay = "gilneas"
 	},
-	[2015] = {
+	[2016] = {
 		name = "Gnomeregan",
 		scale = 1.1424,
 		x = -205.528,
 		y = 961.264,
 		overlay = "gnomereganentrance"
 	},
-	[2016] = {
+	[2017] = {
+		name = "Grim Reaches",
+		scale = 10.774,
+		x = 414.4,
+		y = 580.8,
+		overlay = "grimreaches"
+	},
+	[2018] = {
 		name = "Hillsbrad Foothills",
 		scale = 6.4,
 		x = -213.334,
 		y = -80,
 		overlay = "hilsbrad"
 	},
-	[2017] = {
+	[2019] = {
 		name = "Ironforge",
 		scale = 1.5813,
 		x = 142.718,
@@ -353,56 +367,63 @@ GoggleMaps.Map.Area = {
 		overlay = "ironforge",
 		isCity = true
 	},
-	[2018] = {
+	[2020] = {
 		name = "Lapidis Isle",
 		scale = 5.8029,
 		x = -986.666,
 		y = 2208.6961,
 		overlay = "lapidis"
 	},
-	[2019] = {
+	[2021] = {
 		name = "Loch Modan",
 		scale = 5.5167,
 		x = 398.75,
 		y = 897.5,
 		overlay = "lochmodan"
 	},
-	[2020] = {
+	[2022] = {
+		name = "Northwind ",
+		scale = 6.482,
+		x = -451.6,
+		y = 1265.4,
+		overlay = "northwind"
+	},
+	[2023] = {
 		name = "Redridge Mountains",
 		scale = 4.3417,
 		x = 314.166,
 		y = 1715,
 		overlay = "redridge"
 	},
-	[2021] = {
+	[2024] = {
 		name = "Scarlet Enclave",
 		scale = 6.318,
 		x = 810,
 		y = -617.4,
 		overlay = "scarletenclave"
 	},
-	[2022] = {
+	[2025] = {
 		name = "Scarlet Monastery",
 		scale = 0.4073,
 		x = 131.992,
 		y = -589.474,
 		overlay = "scarletmonasteryentrance"
 	},
-	[2023] = {
+	[2026] = {
 		name = "Searing Gorge",
 		scale = 4.4625,
 		x = 64.584,
 		y = 1220,
 		overlay = "searinggorge"
 	},
-	[2024] = {
+	[2027] = {
 		name = "Silverpine Forest",
 		scale = 8.4,
 		x = -690,
 		y = -333.334,
 		overlay = "silverpine"
 	},
-	[2025] = {
+	[2028] = {
 		name = "Stormwind City",
 		scale = 3.475,
 		x = -344.584,
@@ -410,56 +431,56 @@ GoggleMaps.Map.Area = {
 		overlay = "stormwind",
 		isCity = true
 	},
-	[2026] = {
+	[2029] = {
 		name = "Stranglethorn Vale",
 		scale = 12.7625,
 		x = -444.166,
 		y = 2233.75,
 		overlay = "stranglethorn"
 	},
-	[2027] = {
+	[2030] = {
 		name = "Swamp of Sorrows",
 		scale = 4.5875,
 		x = 444.584,
 		y = 1924.166,
 		overlay = "swampofsorrows"
 	},
-	[2028] = {
+	[2031] = {
 		name = "Thalassian Highlands",
 		scale = 6.164,
 		x = 201,
 		y = -990.4,
 		overlay = "thalassianhighlands"
 	},
-	[2029] = {
+	[2032] = {
 		name = "The Deadmines",
 		scale = 0.8998,
 		x = -358.636,
 		y = 2210.9881,
 		overlay = "deadminesentrance"
 	},
-	[2030] = {
+	[2033] = {
 		name = "The Hinterlands",
 		scale = 7.7,
 		x = 315,
 		y = -293.334,
 		overlay = "hinterlands"
 	},
-	[2031] = {
+	[2034] = {
 		name = "Tirisfal Glades",
 		scale = 9.0375,
 		x = -606.666,
 		y = -767.5,
 		overlay = "tirisfal"
 	},
-	[2032] = {
+	[2035] = {
 		name = "Uldaman",
 		scale = 1.1266,
 		x = 549.43,
 		y = 1190.682,
 		overlay = "uldamanentrance"
 	},
-	[2033] = {
+	[2036] = {
 		name = "Undercity",
 		scale = 1.9187,
 		x = -174.638,
@@ -467,21 +488,21 @@ GoggleMaps.Map.Area = {
 		overlay = "undercity",
 		isCity = true
 	},
-	[2034] = {
+	[2037] = {
 		name = "Western Plaguelands",
 		scale = 8.6,
 		x = -83.334,
 		y = -673.334,
 		overlay = "westernplaguelands"
 	},
-	[2035] = {
+	[2038] = {
 		name = "Westfall",
 		scale = 7,
 		x = -603.334,
 		y = 1880,
 		overlay = "westfall"
 	},
-	[2036] = {
+	[2039] = {
 		name = "Wetlands",
 		scale = 8.2708,
 		x = 77.916,
