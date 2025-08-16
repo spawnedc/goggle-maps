@@ -37,7 +37,7 @@ local function createButton(key, value, anchorItem, valueFormatter)
   btn.label:SetText(key)
 
   btn.text = btn:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-  btn.text:SetPoint("Left", btn, "Left", 92, 0)
+  btn.text:SetPoint("Left", btn, "Right", -20, 0)
   local label = tostring(value)
 
   if valueFormatter then

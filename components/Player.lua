@@ -36,7 +36,7 @@ function GoggleMaps.Player:Init(parentFrame)
 
   GMapsDebug:AddItem("Player pos", self.position, Utils.positionFormatter)
   GMapsDebug:AddItem("Is moving", self.isMoving)
-  GMapsDebug:AddItem("Direction", self.direction)
+  GMapsDebug:AddItem("Direction", self.direction, Utils.numberFormatter(2))
   GMapsDebug:AddItem("Pframe pos", playerFrame:GetPoint("TopLeft"), Utils.positionFormatter)
 end
 

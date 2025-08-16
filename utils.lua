@@ -42,10 +42,16 @@ function Utils.numberFormatter(precision)
 end
 
 function Utils.positionFormatter(value)
+  if not value or value.x == nil or value.y == nil then
+    return 'nil, nil'
+  end
   return string.format("%.2f, %.2f", value.x, value.y)
 end
 
 function Utils.sizeFormatter(value)
+  if not value or value.width == nil or value.height == nil then
+    return 'nil, nil'
+  end
   return string.format("%.2f, %.2f", value.width, value.height)
 end
 
