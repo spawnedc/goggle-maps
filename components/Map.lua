@@ -97,6 +97,8 @@ function GoggleMaps.Map:Init(parentFrame)
   GMapsDebug:AddItem("Current zone", GetRealZoneText())
   GMapsDebug:AddItem("Current mapId", self.realMapId)
   GMapsDebug:AddItem("Fake mapId", self.mapId)
+  GMapsDebug:AddItem("Mouse winpos", { x = 0, y = 0 }, Utils.positionFormatter)
+  GMapsDebug:AddItem("Mouse world pos", { x = 0, y = 0 }, Utils.positionFormatter)
 
   self:InitContinents()
 
@@ -285,6 +287,29 @@ function GoggleMaps.Map:handleUpdate()
 
       self:MoveMap(worldX, worldY)
     end
+
+    local winx, winy = Utils.getMouseOverPos(self.frame)
+    if winx and winy then
+      local worldX, worldY = self:FramePosToWorldPos(winx, winy)
+      local newMapId = GoggleMaps.Hotspots:CheckWorldHotspots(worldX, worldY)
+      if newMapId then
+        self.mapId = newMapId
+        Utils.setCurrentMap(self.mapId)
+        GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.mapId)
+      end
+      GMapsDebug:UpdateItem("Mouse winpos", { x = winx, y = winy })
+      GMapsDebug:UpdateItem("Mouse world pos", { x = worldX, y = worldY })
+    end
   end
   GMapsDebug:UpdateItem("Map size", self.size)
+end
+
+--- Convert frame (top left) to world positions
+---@param x number
+---@param y number
+---@return number, number worldPos world positions
+function GoggleMaps.Map:FramePosToWorldPos(x, y)
+  x = self.position.x + (x - self.size.width / 2) / self.scale
+  y = self.position.y + (self.size.height / 2 - y) / self.scale
+  return x, y
 end

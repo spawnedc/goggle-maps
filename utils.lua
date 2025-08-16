@@ -223,3 +223,36 @@ function Utils.setCurrentMap(mapId, reason)
     SetMapZoom(continent, zone)
   end
 end
+
+function Utils.UnpackLocationRect(location)
+  local x, y, w, h, name = Utils.splitString(location, "%^")
+  return tonumber(x), tonumber(y), tonumber(w), tonumber(h), name
+end
+
+---Check if mouse is over a frame
+---Returns XY offsets from bottom left corner or nil if not over
+---@param frame Frame
+---@return number|nil
+---@return number|nil
+function Utils.getMouseOverPos(frame)
+  local x, y = GetCursorPosition()
+  x = x / frame:GetEffectiveScale()
+
+  local left = frame:GetLeft()
+  local right = frame:GetRight()
+
+  if x >= left and x <= right then
+    y = y / frame:GetEffectiveScale()
+
+    local top = frame:GetTop()
+    local bottom = frame:GetBottom()
+
+    if y >= bottom and y <= top then
+      return x - left, y - bottom
+    end
+
+    return nil, nil
+  end
+
+  return nil, nil
+end

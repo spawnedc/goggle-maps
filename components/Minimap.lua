@@ -49,7 +49,7 @@ function GoggleMaps.Minimap:HideMiniFrames()
 end
 
 function GoggleMaps.Minimap:handleUpdate()
-  local mapId = GoggleMaps.Map.realMapId -- TODO: use mapId
+  local mapId = GoggleMaps.Map.mapId
 
   local miniT, basex, basey = self:GetMinimapInfo(mapId)
   if not miniT then

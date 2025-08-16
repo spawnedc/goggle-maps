@@ -14,12 +14,16 @@ components\UI.Window.lua
 
 components\Map.lua
 data\Map.Area.lua
-data\Map.Hotspots.lua
-data\Map.Overlay.lua
-data\Map.MinimapBlocks.lua
 
+data\Map.Overlay.lua
 components\Overlay.lua
+
+data\Map.MinimapBlocks.lua
 components\Minimap.lua
+
+data\Map.Hotspots.lua
+components\Hotspots.lua
+
 components\Player.lua
 
 debug.lua

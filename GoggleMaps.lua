@@ -28,6 +28,7 @@ function GoggleMaps:Init()
   self.Player:Init(self.frame)
   self.Overlay:Init(self.Map.frame.Content)
   self.Minimap:Init(self.Map.frame)
+  self.Hotspots:Init()
 
   self.frame:SetScript("OnUpdate", function() self:handleUpdate() end)
   self.frame:SetScript("OnSizeChanged", function()
