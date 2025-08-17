@@ -35,7 +35,10 @@ function GoggleMaps.Overlay:UpdateOverlays()
   end
   self.zonesToClear = {}
 
-  for _, mapId in pairs(self.zonesToDraw) do
+  local mapId
+  -- looping in reverse, so that the first mapId is updated last, so it appears on top of others
+  for i = table.getn(self.zonesToDraw), 1, -1 do
+    mapId = self.zonesToDraw[i]
     self:UpdateOverlay(mapId)
   end
 end
@@ -47,7 +50,10 @@ function GoggleMaps.Overlay:AddMapIdToZonesToDraw(mapId)
   -- Remove if already present
   for i = 1, table.getn(idList) do
     if idList[i] == mapId then
-      table.remove(idList, i)
+      local removedMapId = table.remove(idList, i)
+      -- This forces the frames to be hidden and re-shown so the mapId we added just now can appear on top.
+      -- SetFrameLevel and/or SetFrameStrata doesn't seem to be working. Send help!
+      table.insert(self.zonesToClear, removedMapId)
       break
     end
   end
@@ -86,7 +92,7 @@ function GoggleMaps.Overlay:GetAvailableOverlayFrame(mapId, overlayName, levelAd
     self.frames[mapId][overlayName] = overlayFrame
   end
 
-  overlayFrame:SetFrameLevel(GoggleMaps.Map.frameLevel + 1)
+  overlayFrame:SetFrameLevel(GoggleMaps.Map.frameLevel + (levelAdd or 0))
 
   return overlayFrame
 end

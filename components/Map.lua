@@ -94,6 +94,10 @@ function GoggleMaps.Map:Init(parentFrame)
 
   self.mapId = self.zoneNameToMapId[GetRealZoneText()]
   self.realMapId = self.mapId
+
+  GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
+  GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.mapId)
+
   GMapsDebug:AddItem("Current zone", GetRealZoneText())
   GMapsDebug:AddItem("Current mapId", self.realMapId)
   GMapsDebug:AddItem("Fake mapId", self.mapId)
@@ -301,6 +305,8 @@ function GoggleMaps.Map:handleUpdate()
       if newMapId then
         self.mapId = newMapId
         Utils.setCurrentMap(self.mapId)
+        GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
+        GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.mapId)
       end
       GMapsDebug:UpdateItem("Mouse winpos", { x = winx, y = winy })
       GMapsDebug:UpdateItem("Mouse world pos", { x = worldX, y = worldY })
@@ -308,11 +314,10 @@ function GoggleMaps.Map:handleUpdate()
       -- User is not hovering over the map. Let's revert to realMapId and move the map
       self.mapId = self.realMapId
       Utils.setCurrentMap(self.mapId)
+      GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
     end
   end
 
-  GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.mapId)
-  GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
 
   GMapsDebug:UpdateItem("Map size", self.size)
   GMapsDebug:UpdateItem("Current zone", GetRealZoneText())
