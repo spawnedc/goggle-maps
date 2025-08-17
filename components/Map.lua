@@ -146,16 +146,18 @@ function GoggleMaps.Map:handleZoom()
 end
 
 function GoggleMaps.Map:handleMouseDown()
-  local effectiveScale = self.frame:GetEffectiveScale()
-  self.effectiveScale = effectiveScale
+  if arg1 == "LeftButton" then
+    local effectiveScale = self.frame:GetEffectiveScale()
+    self.effectiveScale = effectiveScale
 
-  local x, y = GetCursorPosition()
-  x = x / effectiveScale
-  y = y / effectiveScale
+    local x, y = GetCursorPosition()
+    x = x / effectiveScale
+    y = y / effectiveScale
 
-  self.scroll.x = x
-  self.scroll.y = y
-  self.isDragging = true
+    self.scroll.x = x
+    self.scroll.y = y
+    self.isDragging = true
+  end
 end
 
 function GoggleMaps.Map:handleEvent()
