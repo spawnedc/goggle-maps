@@ -1,7 +1,7 @@
 ## Interface: 11200
 ## Title: |cff4285f4G|cffea4335o|cfffbbc05g|cff4285f4g|cff34a853l|cffea4335e|cffffffffMaps
 ## Author: spawnedc
-## Notes: A Google Maps like map replacement
+## Notes: A Google Maps like map replacement addon for World of Warcraft 1.12.1
 ## Version: 0.0.1
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
