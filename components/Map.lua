@@ -111,7 +111,7 @@ function GoggleMaps.Map:InitTables()
 end
 
 function GoggleMaps.Map:handleZoom()
-  self:handleMouseDown()
+  self:handleMouseDown(true)
   self.isDragging = false
 
   -- scroll.x and scroll.y are calculated in HandleMouseDown()
@@ -145,8 +145,10 @@ function GoggleMaps.Map:handleZoom()
   self:MoveMap()
 end
 
-function GoggleMaps.Map:handleMouseDown()
-  if arg1 == "LeftButton" then
+---Handles the mouse down event
+---@param force boolean?
+function GoggleMaps.Map:handleMouseDown(force)
+  if force or arg1 == "LeftButton" then
     local effectiveScale = self.frame:GetEffectiveScale()
     self.effectiveScale = effectiveScale
 
