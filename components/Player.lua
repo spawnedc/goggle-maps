@@ -74,7 +74,6 @@ function GoggleMaps.Player:handleUpdate(isRealMap)
   y = ((y - GoggleMaps.Map.position.y) * scale + clipH / 2) - self.size.height / 2
 
   if not self.isMoving and direction ~= self.direction then
-    self.isMoving = true
     self.direction = direction
   end
 

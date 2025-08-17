@@ -50,10 +50,10 @@ end
 
 function GoggleMaps:handleUpdate()
   self.Map.frameLevel = 10
+  self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
   self.Map:handleUpdate()
   self.Overlay:handleUpdate()
   self.Minimap:handleUpdate()
-  self.Player:handleUpdate(true)
 end
 
 GoggleMaps:Start()
