@@ -23,6 +23,7 @@ function GoggleMaps:Init()
   self.frame:SetTitle(title .. " v" .. version)
   self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
   self.frame:SetFrameStrata("HIGH")
+  self.frame:SetMinResize(300, 300)
 
   self.Map:Init(self.frame)
   self.Player:Init(self.frame)
@@ -50,10 +51,10 @@ end
 
 function GoggleMaps:handleUpdate()
   self.Map.frameLevel = 10
-  self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
   self.Map:handleUpdate()
   self.Overlay:handleUpdate()
   self.Minimap:handleUpdate()
+  self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
 end
 
 GoggleMaps:Start()
