@@ -86,20 +86,20 @@ function GoggleMaps.Hotspots:CheckWorldHotspotsType(worldX, worldY, spots)
     if worldX >= spot.worldX1 and worldX <= spot.worldX2 and worldY >= spot.worldY1 and worldY <= spot.worldY2 then
       local currentMapId = GoggleMaps.Map.mapId
 
+      GMapsDebug:UpdateItem("Current hotspot", spot.mapId)
+      local zoneName = GoggleMaps.Map.Area[spot.mapId].name
+      GMapsDebug:UpdateItem("Zone name", zoneName)
+      GMapsDebug:UpdateItem("Hotspot coords1", string.format("%.2f, %2.f", spot.worldX1, spot.worldY1))
+      GMapsDebug:UpdateItem("Hotspot coords2", string.format("%.2f, %2.f", spot.worldX2, spot.worldY2))
       if spot.mapId ~= currentMapId then
-        GMapsDebug:UpdateItem("Current hotspot", spot.mapId)
-        local zoneName = GoggleMaps.Map.Area[spot.mapId].name
-        GMapsDebug:UpdateItem("Zone name", spot.name)
-        GMapsDebug:UpdateItem("Hotspot coords1", string.format("%.2f, %2.f", spot.worldX1, spot.worldY1))
-        GMapsDebug:UpdateItem("Hotspot coords2", string.format("%.2f, %2.f", spot.worldX2, spot.worldY2))
         return spot.mapId
       end
     end
   end
 
-  GMapsDebug:UpdateItem("Current hotspot", "-")
-  GMapsDebug:UpdateItem("Zone name", "-")
-  GMapsDebug:UpdateItem("Hotspot coords1", "-")
-  GMapsDebug:UpdateItem("Hotspot coords2", "-")
+  -- GMapsDebug:UpdateItem("Current hotspot", "-")
+  -- GMapsDebug:UpdateItem("Zone name", "-")
+  -- GMapsDebug:UpdateItem("Hotspot coords1", "-")
+  -- GMapsDebug:UpdateItem("Hotspot coords2", "-")
   return nil
 end

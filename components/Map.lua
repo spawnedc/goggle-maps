@@ -36,6 +36,8 @@ GoggleMaps.Map = {
   frameLevel = 10,
   ---@type table<table<Frame>>
   continentFrames = {},
+  ---@type table<table<Frame>>
+  zoneFrames = {},
   initialised = false,
   isDragging = false,
   isZooming = false,
@@ -105,6 +107,7 @@ function GoggleMaps.Map:Init(parentFrame)
   GMapsDebug:AddItem("Mouse world pos", { x = 0, y = 0 }, Utils.positionFormatter)
 
   self:InitContinents()
+  self:InitZones()
 
   self:MoveMap(self.position.x, self.position.y)
 end
@@ -193,16 +196,49 @@ function GoggleMaps.Map:InitContinents()
 
     for blockIndex, block in ipairs(continentBlocks) do
       if block ~= 0 then
-        texturePath = "Interface\\WorldMap\\" .. mapFileName .. "\\" .. mapFileName .. blockIndex
+        texturePath = mapFileName .. "\\" .. mapFileName .. blockIndex
         local frameName = string.format("Continent-%s-%d", mapFileName, blockIndex)
-        local continentFrame = CreateFrame("Frame", frameName, self.frame.Content)
-        local t = continentFrame:CreateTexture(nil, "ARTWORK")
-        t:SetAllPoints(continentFrame)
-        t:SetTexture(texturePath)
+        local continentFrame = self:CreateFrameWithTexture(frameName, "BACKGROUND", texturePath)
         self.continentFrames[continentIndex][blockIndex] = continentFrame
       end
     end
   end
+end
+
+function GoggleMaps.Map:InitZones()
+  Utils.print('InitZones')
+  self.zoneFrames = {}
+
+  for i = 1, 12 do
+    self.zoneFrames[i] = self:CreateFrameWithTexture("zone-" .. i, "ARTWORK")
+  end
+end
+
+function GoggleMaps.Map:UpdateZoneTextures()
+  local mapFileName = GetMapInfo()
+  for i = 1, 12 do
+    self.zoneFrames[i].texture:SetTexture("Interface\\WorldMap\\" .. mapFileName .. "\\" .. mapFileName .. i)
+  end
+  self:MoveZones()
+end
+
+---Creates a frame with a texture attached
+---@param frameName string
+---@param drawLayer DrawLayer
+---@param texturePath string?
+---@return Frame
+function GoggleMaps.Map:CreateFrameWithTexture(frameName, drawLayer, texturePath)
+  local frame = CreateFrame("Frame", frameName, self.frame.Content)
+
+  local t = frame:CreateTexture(nil, drawLayer)
+  t:SetAllPoints(frame)
+  if texturePath then
+    t:SetTexture("Interface\\WorldMap\\" .. texturePath)
+  end
+
+  frame.texture = t
+
+  return frame
 end
 
 ---Handles the map movement
@@ -236,6 +272,7 @@ function GoggleMaps.Map:MoveMap(xPos, yPos)
   end
 
   self:MoveContinents()
+  self:MoveZones()
 
   local level = self.frameLevel
 
@@ -245,6 +282,18 @@ end
 function GoggleMaps.Map:MoveContinents()
   for continentIndex in ipairs(Utils.GetContinents()) do
     self:MoveZoneTiles(continentIndex, continentIndex * 1000, self.continentFrames[continentIndex])
+  end
+end
+
+function GoggleMaps.Map:MoveZones()
+  local isCity = GoggleMaps.Map.Area[self.mapId].isCity
+  if isCity then
+    local continentIndex = Utils.getContinentId(self.mapId)
+    self:MoveZoneTiles(continentIndex, self.mapId, self.zoneFrames)
+  else
+    for i = 1, 12 do
+      self.zoneFrames[i]:Hide()
+    end
   end
 end
 
@@ -307,6 +356,8 @@ function GoggleMaps.Map:handleUpdate()
         Utils.setCurrentMap(self.mapId)
         GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
         GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.mapId)
+
+        self:UpdateZoneTextures()
       end
       GMapsDebug:UpdateItem("Mouse winpos", { x = winx, y = winy })
       GMapsDebug:UpdateItem("Mouse world pos", { x = worldX, y = worldY })

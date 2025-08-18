@@ -130,6 +130,9 @@ function GoggleMaps.Overlay:UpdateOverlay(mapId)
     Utils.print("Zone not found: %s", mapId)
     return
   end
+  if zone.isCity then
+    return
+  end
   local overlays = GoggleMaps.Map.Overlay[zone.overlay]
   if overlays == nil then
     Utils.log(string.format("Zone overlay not found: %s %s", zone.name, zone.overlay))
