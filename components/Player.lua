@@ -24,13 +24,14 @@ function GoggleMaps.Player:Init(parentFrame)
   local playerFrame = CreateFrame("Frame", frameName, parentFrame)
   playerFrame:SetWidth(self.size.width)
   playerFrame:SetHeight(self.size.height)
-  playerFrame:SetFrameStrata("TOOLTIP")
 
-  local playerTexture = playerFrame:CreateTexture(frameName .. "Texture", "OVERLAY")
+  local playerTexture = playerFrame:CreateTexture()
   playerTexture:SetAllPoints()
   playerTexture:SetTexture("Interface\\Minimap\\MinimapArrow")
 
   playerFrame.texture = playerTexture
+
+  playerFrame:SetFrameLevel(GoggleMaps.frameLevels.player)
 
   self.frame = playerFrame
 
@@ -101,7 +102,5 @@ function GoggleMaps.Player:handleUpdate(isRealMap)
   t4x = texX2 * co + texY2 * si + .5
   t4y = texX2 * -si + texY2 * co + .5
   self.frame.texture:SetTexCoord(t1x, t1y, t2x, t2y, t3x, t3y, t4x, t4y)
-
-  local level = GoggleMaps.Map.frameLevel
-  self.frame:SetFrameLevel(level + 100)
+  self.frame:SetFrameLevel(GoggleMaps.frameLevels.player)
 end

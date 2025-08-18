@@ -21,14 +21,12 @@ local function getMinimapTexture(block, x, y)
   return block[1][offset]
 end
 
-
 ---Initialises the minimap frames
 ---@param parentFrame Frame
 function GoggleMaps.Minimap:Init(parentFrame)
   for n = 1, self.minimapBlocksToDraw ^ 2 do
     local tf = CreateFrame("Frame", nil, parentFrame)
     self.frames[n] = tf
-
     local t = tf:CreateTexture()
     tf.texture = t
     t:SetAllPoints(tf)
@@ -63,7 +61,6 @@ function GoggleMaps.Minimap:handleUpdate()
   end
 
   local Map = GoggleMaps.Map
-  local level = GoggleMaps.Map.frameLevel
   local f
   local frmNum = 1
 
@@ -98,11 +95,10 @@ function GoggleMaps.Minimap:handleUpdate()
         frameY = col * baseHeight + y
 
         if Utils.ClipFrame(f, frameX, frameY, baseWidth, baseHeight, clipW, clipH) then
-          f:SetFrameLevel(level + 1)
           f.texture:SetVertexColor(1, 1, 1, 1)
           txname = "Textures\\Minimap\\" .. txname
           f.texture:SetTexture(txname)
-          f:SetFrameLevel(GoggleMaps.Map.frameLevel + 10)
+          f:SetFrameLevel(GoggleMaps.frameLevels.minimap)
         end
       else
         f:Hide()

@@ -5,6 +5,7 @@ GoggleMaps.UI.Window = {}
 local INSET = 4
 
 -- simple backdrop you can customize
+---@type Backdrop
 local BACKDROP = {
   bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
   edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
@@ -29,7 +30,6 @@ local function CreateBaseWindow(name, width, height, parent)
   frame:SetBackdrop(BACKDROP)
   frame:SetBackdropColor(0, 0, 0, 0.9)
   frame:SetMovable(true)
-  frame:SetClampedToScreen(true)
 
   -- title bar (drag handle)
   local title = CreateFrame("Frame", name and (name .. "TitleBar") or nil, frame)
@@ -78,7 +78,8 @@ local function CreateBaseWindow(name, width, height, parent)
   -- api: resize window and keep clip/content in sync
   function frame:SetClientSize(w, h)
     -- overall size includes border/title; just resize the frame
-    self:SetWidth(w); self:SetHeight(h)
+    self:SetWidth(w)
+    self:SetHeight(h)
     local cw = w - (insetLeft + insetRight)
     local ch = h - (insetTop + insetBottom)
     self.Content:SetWidth(cw);
@@ -88,10 +89,13 @@ local function CreateBaseWindow(name, width, height, parent)
   -- api: set title text
   function frame:SetTitle(text) self.TitleText:SetText(text or "") end
 
-  -- api: create a child frame inside the clipped content (no clipping by itself)
-  function frame:CreateChildFrame(childName, w, h, frameType)
-    frameType = frameType or "Frame"
-    local child = CreateFrame(frameType, childName, self.Content)
+  ---api: create a child frame inside the clipped content (no clipping by itself)
+  ---@param childName string | nil
+  ---@param w number?
+  ---@param h number?
+  ---@return Frame
+  function frame:CreateChildFrame(childName, w, h)
+    local child = CreateFrame("Frame", childName, self.Content)
     if w and h then
       child:SetWidth(w)
       child:SetHeight(h)
@@ -143,7 +147,11 @@ end
 -- Library public API
 -----------------------------------------------------------------------
 
--- Create a clipping window (acts like overflow:hidden for its children)
+---Create a clipping window (acts like overflow:hidden for its children)
+--- @param name string
+--- @param width number
+--- @param height number
+--- @param parent? Frame
 function GoggleMaps.UI.Window:CreateWindow(name, width, height, parent)
   local win = CreateBaseWindow(name, width, height, parent)
   win:SetResizable(true)
@@ -162,39 +170,4 @@ function GoggleMaps.UI.Window:CreateWindow(name, width, height, parent)
   end
 
   return win
-end
-
----Create a nested window inside a parent window's clipped content.
----The nested window ALSO clips its own children (overflow hidden inside overflow hidden).
----@param parentWindow Frame
----@param name string
----@param width number
----@param height number
----@return Frame
-function GoggleMaps.UI.Window:CreateNestedWindow(parentWindow, name, width, height)
-  -- Outer holder frame (visual container)
-  local holder = CreateFrame("Frame", name, parentWindow.Content)
-  holder:SetWidth(width)
-  holder:SetHeight(height)
-
-  -- ScrollFrame for clipping
-  local clip = CreateFrame("ScrollFrame", name .. "Clip", holder)
-  clip:SetPoint("TopLeft", holder, "TopLeft", 0, 0)
-  clip:SetPoint("BottomRight", holder, "BottomRight", 0, 0)
-
-  -- Content frame inside the ScrollFrame
-  local content = CreateFrame("Frame", name .. "Content", clip)
-  content:SetWidth(width)
-  content:SetHeight(height)
-  clip:SetScrollChild(content)
-
-  -- lock scroll so it behaves like overflow:hidden
-  clip:SetHorizontalScroll(0)
-  clip:SetVerticalScroll(0)
-
-  -- Public references
-  holder.Clip = clip
-  holder.Content = content
-
-  return holder
 end

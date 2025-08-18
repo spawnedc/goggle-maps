@@ -2,7 +2,7 @@ setfenv(1, GoggleMaps)
 
 GoggleMaps.Overlay = {
   ---@type Frame
-  parentFrame = nil,
+  frame = nil,
   ---@type table<table<Frame>>
   frames = {},
   options = {
@@ -15,7 +15,9 @@ GoggleMaps.Overlay = {
 
 function GoggleMaps.Overlay:Init(parentFrame)
   Utils.print("Overlay init")
-  self.parentFrame = parentFrame
+  self.frame = CreateFrame("Frame", "overlayFrame", parentFrame)
+  self.frame:SetAllPoints()
+  self.frame:SetFrameLevel(GoggleMaps.frameLevels.overlay)
   self:UpdateOverlays()
 end
 
@@ -72,9 +74,8 @@ end
 ---Gets the next available overlay frames
 ---@param mapId number
 ---@param overlayName string
----@param levelAdd number?
 ---@return Frame
-function GoggleMaps.Overlay:GetAvailableOverlayFrame(mapId, overlayName, levelAdd)
+function GoggleMaps.Overlay:GetAvailableOverlayFrame(mapId, overlayName)
   if not self.frames[mapId] then
     self.frames[mapId] = {}
   end
@@ -82,17 +83,15 @@ function GoggleMaps.Overlay:GetAvailableOverlayFrame(mapId, overlayName, levelAd
   local overlayFrame = self.frames[mapId][overlayName]
   if not overlayFrame then
     local frameName = string.format("Overlay-%s-%s", mapId, overlayName)
-    overlayFrame = CreateFrame("Frame", frameName, self.parentFrame)
+    overlayFrame = CreateFrame("Frame", frameName, self.frame)
 
-    local t = overlayFrame:CreateTexture(nil, 'BACKGROUND')
+    local t = overlayFrame:CreateTexture()
     t:SetVertexColor(1, 1, 1, 1)
     t:SetBlendMode("BLEND")
     t:SetAllPoints(overlayFrame)
     overlayFrame.texture = t
     self.frames[mapId][overlayName] = overlayFrame
   end
-
-  overlayFrame:SetFrameLevel(GoggleMaps.Map.frameLevel + (levelAdd or 0))
 
   return overlayFrame
 end

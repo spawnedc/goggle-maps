@@ -5,9 +5,18 @@ local ADDON_NAME = GoggleMaps.name
 
 ---@type Frame
 GoggleMaps.frame = nil
+GoggleMaps.frameLevels = {
+  mainFrame = 1,
+  continent = 10,
+  overlay = 20,
+  minimap = 30,
+  player = 40
+}
 
 function GoggleMaps:Start()
   self.frame = UI:CreateWindow(ADDON_NAME .. "Main", self.Map.size.width, self.Map.size.height, UIParent)
+  self.frame:SetFrameLevel(self.frameLevels.mainFrame)
+  self.frame:SetFrameStrata("HIGH")
   self.frame:RegisterEvent("ADDON_LOADED")
 
   self.frame:SetScript("OnEvent", function() GoggleMaps:OnEvent() end)
@@ -22,13 +31,14 @@ function GoggleMaps:Init()
 
   self.frame:SetTitle(title .. " v" .. version)
   self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
-  self.frame:SetFrameStrata("HIGH")
   self.frame:SetMinResize(300, 300)
 
-  self.Map:Init(self.frame)
-  self.Player:Init(self.frame)
-  self.Overlay:Init(self.Map.frame.Content)
-  self.Minimap:Init(self.Map.frame)
+  local parentFrame = self.frame.Content
+
+  self.Map:Init(parentFrame)
+  self.Overlay:Init(parentFrame)
+  self.Minimap:Init(parentFrame)
+  self.Player:Init(parentFrame)
   self.Hotspots:Init()
 
   self.frame:SetScript("OnUpdate", function() self:handleUpdate() end)
@@ -50,7 +60,6 @@ function GoggleMaps:OnEvent()
 end
 
 function GoggleMaps:handleUpdate()
-  self.Map.frameLevel = 10
   self.Map:handleUpdate()
   self.Overlay:handleUpdate()
   self.Minimap:handleUpdate()
