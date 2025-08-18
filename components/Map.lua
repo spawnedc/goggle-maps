@@ -35,6 +35,8 @@ GoggleMaps.Map = {
   frame = nil,
   ---@type table<table<Frame>>
   continentFrames = {},
+  ---@type Frame
+  zoneFrame = nil,
   ---@type table<table<Frame>>
   zoneFrames = {},
   initialised = false,
@@ -103,9 +105,6 @@ function GoggleMaps.Map:Init(parentFrame)
   GMapsDebug:AddItem("Mouse world pos", { x = 0, y = 0 }, Utils.positionFormatter)
 
   self:InitContinents()
-  self:InitZones()
-
-  self:MoveMap(self.position.x, self.position.y)
 end
 
 function GoggleMaps.Map:InitTables()
@@ -204,10 +203,13 @@ end
 
 function GoggleMaps.Map:InitZones()
   Utils.print('InitZones')
+  self.zoneFrame = CreateFrame("Frame", nil, self.frame)
+  self.zoneFrame:SetAllPoints(self.frame)
+  self.zoneFrame:SetFrameLevel(GoggleMaps.frameLevels.city)
   self.zoneFrames = {}
 
   for i = 1, 12 do
-    self.zoneFrames[i] = self:CreateFrameWithTexture("zone-" .. i)
+    self.zoneFrames[i] = self:CreateFrameWithTexture("zone-" .. i, nil, self.zoneFrame)
   end
 end
 
@@ -221,10 +223,12 @@ end
 
 ---Creates a frame with a texture attached
 ---@param frameName string
----@param texturePath string?
+---@param texturePath string | nil
+---@param parentFrame Frame?
 ---@return Frame
-function GoggleMaps.Map:CreateFrameWithTexture(frameName, texturePath)
-  local frame = CreateFrame("Frame", frameName, self.frame)
+function GoggleMaps.Map:CreateFrameWithTexture(frameName, texturePath, parentFrame)
+  parentFrame = parentFrame or self.frame
+  local frame = CreateFrame("Frame", frameName, parentFrame)
 
   local t = frame:CreateTexture()
   t:SetAllPoints(frame)
@@ -356,6 +360,7 @@ function GoggleMaps.Map:handleUpdate()
       Utils.setCurrentMap(self.mapId)
       GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
     end
+    self.zoneFrame:SetFrameLevel(GoggleMaps.frameLevels.city)
   end
 
 

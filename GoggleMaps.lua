@@ -10,7 +10,8 @@ GoggleMaps.frameLevels = {
   continent = 10,
   overlay = 20,
   minimap = 30,
-  player = 40
+  city = 40,
+  player = 100
 }
 
 function GoggleMaps:Start()
@@ -38,6 +39,7 @@ function GoggleMaps:Init()
   self.Map:Init(parentFrame)
   self.Overlay:Init(parentFrame)
   self.Minimap:Init(parentFrame)
+  self.Map:InitZones()
   self.Player:Init(parentFrame)
   self.Hotspots:Init()
 
@@ -49,6 +51,7 @@ function GoggleMaps:Init()
   end)
 
   self.frame:Show()
+  self.Map:MoveMap(self.Map.position.x, self.Map.position.y)
   Utils.print("READY!")
 end
 
