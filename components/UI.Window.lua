@@ -49,7 +49,7 @@ local function CreateBaseWindow(name, width, height, parent)
   titleText:SetText(name or "Window")
 
   -- client area inset (inside the border + below title)
-  local baseInset = INSET + 1
+  local baseInset = INSET
 
   local insetLeft, insetRight, insetTop, insetBottom = baseInset, baseInset, title:GetHeight() + baseInset, baseInset
 
@@ -76,14 +76,15 @@ local function CreateBaseWindow(name, width, height, parent)
   frame.Content   = content
 
   -- api: resize window and keep clip/content in sync
-  function frame:SetClientSize(w, h)
-    -- overall size includes border/title; just resize the frame
-    self:SetWidth(w)
-    self:SetHeight(h)
+  function frame:SetContentSize()
+    local w = self:GetWidth()
+    local h = self:GetHeight()
     local cw = w - (insetLeft + insetRight)
     local ch = h - (insetTop + insetBottom)
-    self.Content:SetWidth(cw);
+    self.Content:SetWidth(cw)
     self.Content:SetHeight(ch)
+
+    return cw, ch
   end
 
   -- api: set title text
@@ -115,15 +116,6 @@ local function createResizer(frame, point)
   resizer:SetWidth(16)
   resizer:SetHeight(16)
 
-  local function resizeContent()
-    local content = frame.Content
-    -- Update content size after resize
-    local w, h = frame:GetWidth(), frame:GetHeight()
-    content:SetWidth(w - 16)
-    content:SetHeight(h - 36)
-  end
-
-
   resizer:SetScript("OnMouseDown", function()
     resizer.isDragging = true
     frame:StartSizing(point)
@@ -131,7 +123,7 @@ local function createResizer(frame, point)
 
   resizer:SetScript("OnUpdate", function()
     if resizer.isDragging then
-      resizeContent()
+      frame:SetContentSize()
     end
   end)
 
@@ -140,7 +132,7 @@ local function createResizer(frame, point)
     frame:StopMovingOrSizing()
   end)
 
-  resizeContent()
+  frame:SetContentSize()
 end
 
 -----------------------------------------------------------------------
@@ -165,8 +157,8 @@ function GoggleMaps.UI.Window:CreateWindow(name, width, height, parent)
     local content = win.Content
     -- Update content size after resize
     local w, h = win:GetWidth(), win:GetHeight()
-    content:SetWidth(w - 16)
-    content:SetHeight(h - 36)
+    content:SetWidth(w - 10)
+    content:SetHeight(h - 22)
   end
 
   return win

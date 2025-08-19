@@ -143,6 +143,7 @@ function GoggleMaps.Map:handleZoom()
   map.position.y = map.position.y + originalY - newY
 
   GMapsDebug:UpdateItem("zoom", scale)
+  GMapsDebug:UpdateItem("Map pos", self.position)
 
   self:MoveMap()
 end
@@ -267,9 +268,8 @@ function GoggleMaps.Map:MoveMap(xPos, yPos)
 
     self.position.x = self.position.x - mx
     self.position.y = self.position.y + my
-
-    GMapsDebug:UpdateItem("Map pos", self.position)
   end
+  GMapsDebug:UpdateItem("Map pos", self.position)
 
   self:MoveContinents()
   self:MoveZones()
@@ -344,7 +344,7 @@ function GoggleMaps.Map:handleUpdate()
     if winx and winy then
       local worldX, worldY = self:FramePosToWorldPos(winx, winy)
       local newMapId = GoggleMaps.Hotspots:CheckWorldHotspots(worldX, worldY)
-      if newMapId then
+      if newMapId and self.mapId ~= newMapId then
         self.mapId = newMapId
         Utils.setCurrentMap(self.mapId)
         GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
@@ -376,6 +376,6 @@ end
 ---@return number, number worldPos world positions
 function GoggleMaps.Map:FramePosToWorldPos(x, y)
   x = self.position.x + (x - self.size.width / 2) / self.scale
-  y = self.position.y + (self.size.height / 2 - y) / self.scale
+  y = self.position.y + (y - self.size.height / 2) / self.scale
   return x, y
 end

@@ -45,8 +45,9 @@ function GoggleMaps:Init()
 
   self.frame:SetScript("OnUpdate", function() self:handleUpdate() end)
   self.frame:SetScript("OnSizeChanged", function()
-    self.Map.size.width = self.frame:GetWidth()
-    self.Map.size.height = self.frame:GetHeight()
+    local width, height = self.frame:SetContentSize()
+    self.Map.size.width = width
+    self.Map.size.height = height
     self.Map:MoveMap(self.Map.position.x, self.Map.position.y)
   end)
 

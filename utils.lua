@@ -248,7 +248,9 @@ function Utils.getMouseOverPos(frame)
     local bottom = frame:GetBottom()
 
     if y >= bottom and y <= top then
-      return x - left, y - bottom
+      y = y - bottom
+      y = frame:GetHeight() - y
+      return x - left, y
     end
 
     return nil, nil
