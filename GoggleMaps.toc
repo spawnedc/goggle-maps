@@ -26,6 +26,8 @@ components\Hotspots.lua
 
 components\Player.lua
 
+components\POI.lua
+
 debug.lua
 
 GoggleMaps.lua

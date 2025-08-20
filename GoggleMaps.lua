@@ -9,6 +9,7 @@ GoggleMaps.frameLevels = {
   mainFrame = 1,
   continent = 10,
   overlay = 20,
+  poi = 25,
   minimap = 30,
   city = 40,
   player = 100
@@ -34,13 +35,14 @@ function GoggleMaps:Init()
   self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
   self.frame:SetMinResize(300, 300)
 
-  local parentFrame = self.frame.Content
+  local contentFrame = self.frame.Content
 
-  self.Map:Init(parentFrame)
-  self.Overlay:Init(parentFrame)
-  self.Minimap:Init(parentFrame)
+  self.Map:Init(contentFrame)
+  self.Overlay:Init(contentFrame)
+  self.POI:Init(contentFrame)
+  self.Minimap:Init(contentFrame)
   self.Map:InitZones()
-  self.Player:Init(parentFrame)
+  self.Player:Init(contentFrame)
   self.Hotspots:Init()
 
   self.frame:SetScript("OnUpdate", function() self:handleUpdate() end)
@@ -68,6 +70,7 @@ end
 function GoggleMaps:handleUpdate()
   self.Map:handleUpdate()
   self.Overlay:handleUpdate()
+  self.POI:handleUpdate()
   self.Minimap:handleUpdate()
   self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
 end

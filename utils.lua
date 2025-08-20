@@ -216,7 +216,6 @@ function Utils.setCurrentMap(mapId, reason)
     local continent = Utils.getContinentId(mapId)
     local zone = GoggleMaps.Map.Area[mapId].Zone
     local newZone = Utils.GetWorldZoneInfo(continent, mapId)
-    Utils.log(string.format("Changing map %s (%s) WowZone: %s", newZone, mapId, zone))
     if reason then
       Utils.log(string.format("Map change reason: %s", reason))
     end
