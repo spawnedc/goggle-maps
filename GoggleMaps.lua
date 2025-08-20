@@ -3,6 +3,11 @@ setfenv(1, GoggleMaps)
 local UI = GoggleMaps.UI.Window
 local ADDON_NAME = GoggleMaps.name
 
+local UNIT_FACTION_TO_FACTION_ID = {
+  Horde = 4,
+  Alliance = 2,
+}
+
 ---@type Frame
 GoggleMaps.frame = nil
 GoggleMaps.frameLevels = {
@@ -14,12 +19,20 @@ GoggleMaps.frameLevels = {
   city = 40,
   player = 100
 }
+---@type FontString
+GoggleMaps.locationLabel = nil
+---@type FontString
+GoggleMaps.positionLabel = nil
 
 function GoggleMaps:Start()
   self.frame = UI:CreateWindow(ADDON_NAME .. "Main", self.Map.size.width, self.Map.size.height, UIParent)
   self.frame:SetFrameLevel(self.frameLevels.mainFrame)
   self.frame:SetFrameStrata("HIGH")
   self.frame:RegisterEvent("ADDON_LOADED")
+  self.locationLabel = self.frame.TitleBar:CreateFontString("location", "OVERLAY", "GameFontNormalSmall")
+  self.positionLabel = self.frame.TitleBar:CreateFontString("position", "OVERLAY", "GameFontNormalSmall")
+  self.locationLabel:SetPoint("Left", self.frame.TitleBar, "Left", 4, 0)
+  self.positionLabel:SetPoint("Left", self.locationLabel, "Right", 4, 0)
 
   self.frame:SetScript("OnEvent", function() GoggleMaps:OnEvent() end)
   self.frame:Hide()
@@ -27,11 +40,6 @@ end
 
 function GoggleMaps:Init()
   GMapsDebug:CreateDebugWindow()
-
-  local version = GetAddOnMetadata(ADDON_NAME, "Version")
-  local title = GetAddOnMetadata(ADDON_NAME, "Title")
-
-  self.frame:SetTitle(title .. " v" .. version)
   self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
   self.frame:SetMinResize(300, 300)
 
@@ -73,6 +81,30 @@ function GoggleMaps:handleUpdate()
   self.POI:handleUpdate()
   self.Minimap:handleUpdate()
   self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
+  self:UpdateLocationText()
+end
+
+function GoggleMaps:UpdateLocationText()
+  if not self.Map.realMapId then
+    return
+  end
+
+  local area = self.Map.Area[self.Map.realMapId]
+  local playerFaction = UnitFactionGroup("player")
+  local playerFactionId = UNIT_FACTION_TO_FACTION_ID[playerFaction]
+  local playerPos = self.Player.position
+  ---@type Font
+  local fontObj
+  if area.faction == 0 then
+    fontObj = "GameFontNormalSmall" -- "|cffff6060"
+  elseif playerFactionId == area.faction then
+    fontObj = "GameFontGreenSmall"  -- "|cff20ff20"
+  else
+    fontObj = "GameFontRedSmall"    -- "|cffffff00"
+  end
+  self.locationLabel:SetFontObject(fontObj)
+  self.locationLabel:SetText(GetRealZoneText())
+  self.positionLabel:SetText(string.format("%.1f, %.1f", playerPos.x, playerPos.y))
 end
 
 GoggleMaps:Start()

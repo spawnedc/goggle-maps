@@ -351,8 +351,6 @@ function GoggleMaps.Map:handleUpdate()
         Utils.setCurrentMap(self.mapId)
         GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
         GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.mapId)
-
-        self:UpdateZoneTextures()
       end
       GMapsDebug:UpdateItem("Mouse winpos", { x = winx, y = winy })
       GMapsDebug:UpdateItem("Mouse world pos", { x = worldX, y = worldY })
@@ -362,6 +360,7 @@ function GoggleMaps.Map:handleUpdate()
       Utils.setCurrentMap(self.mapId)
       GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
     end
+    self:UpdateZoneTextures()
     self.zoneFrame:SetFrameLevel(GoggleMaps.frameLevels.city)
   end
 

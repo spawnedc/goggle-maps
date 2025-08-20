@@ -46,7 +46,6 @@ local function CreateBaseWindow(name, width, height, parent)
 
   local titleText = title:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
   titleText:SetPoint("Left", title, "Left", 4, 0)
-  titleText:SetText(name or "Window")
 
   -- client area inset (inside the border + below title)
   local baseInset = INSET

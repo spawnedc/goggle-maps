@@ -41,7 +41,7 @@ function GoggleMaps.POI:GetIcon(pos, textureIndex, poiName, poiDesc)
 
   f:SetScript("OnEnter", function()
     -- Anchor tooltip to the icon
-    GameTooltip:SetOwner(f, "ANCHOR_RIGHT")
+    GameTooltip:SetOwner(f, "ANCHOR_CURSOR")
 
     -- Fill it with POI info
     GameTooltip:SetText(poiName, 1, 1, 1) -- white text
@@ -106,8 +106,6 @@ function GoggleMaps.POI:ScanPOIs()
           y = y,
           frame = self:GetIcon(mapId + n, textureIndex, name, desc)
         }
-        Utils.print("POI: %s %d, %.2f, %.2f", name, textureIndex, poiX, poiY)
-        Utils.print("POI: %s %d, %.2f, %.2f", name, textureIndex, x, y)
         table.insert(pois, poi)
       end
     end
