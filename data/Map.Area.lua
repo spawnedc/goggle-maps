@@ -12,7 +12,8 @@ GoggleMaps.Map.Area = {
 		scale = 11.5333,
 		x = -340,
 		y = -934.584,
-		overlay = "ashenvale"
+		overlay = "ashenvale",
+		faction = 0
 	},
 	[1002] = {
 		name = "Azshara",
@@ -20,7 +21,8 @@ GoggleMaps.Map.Area = {
 		scale = 10.1417,
 		x = 655.416,
 		y = -1068.334,
-		overlay = "aszhara"
+		overlay = "aszhara",
+		faction = 0
 	},
 	[1003] = {
 		name = "Blackstone Island",
@@ -28,7 +30,8 @@ GoggleMaps.Map.Area = {
 		scale = 4.944,
 		x = 1254.8,
 		y = -159.8,
-		overlay = "blackstoneisland"
+		overlay = "blackstoneisland",
+		faction = 4
 	},
 	[1004] = {
 		name = "Caverns of Time",
@@ -36,7 +39,8 @@ GoggleMaps.Map.Area = {
 		scale = 2.6965,
 		x = 739.17,
 		y = 1604.618,
-		overlay = "cavernsoftime"
+		overlay = "cavernsoftime",
+		faction = 0
 	},
 	[1005] = {
 		name = "Darkshore",
@@ -44,7 +48,8 @@ GoggleMaps.Map.Area = {
 		scale = 13.1,
 		x = -588.334,
 		y = -1666.666,
-		overlay = "darkshore"
+		overlay = "darkshore",
+		faction = 2
 	},
 	[1006] = {
 		name = "Darnassus",
@@ -53,6 +58,7 @@ GoggleMaps.Map.Area = {
 		x = -587.672,
 		y = -2047.6641,
 		overlay = "darnassis",
+		faction = 2,
 		isCity = true
 	},
 	[1007] = {
@@ -61,7 +67,8 @@ GoggleMaps.Map.Area = {
 		scale = 8.9917,
 		x = -846.666,
 		y = -90.416,
-		overlay = "desolace"
+		overlay = "desolace",
+		faction = 0
 	},
 	[1008] = {
 		name = "Dire Maul",
@@ -69,7 +76,8 @@ GoggleMaps.Map.Area = {
 		scale = 2.648,
 		x = -402.8,
 		y = 680.2,
-		overlay = "diremaulentrance"
+		overlay = "diremaulentrance",
+		faction = 0
 	},
 	[1009] = {
 		name = "Durotar",
@@ -77,7 +85,8 @@ GoggleMaps.Map.Area = {
 		scale = 10.575,
 		x = 392.5,
 		y = -361.666,
-		overlay = "durotar"
+		overlay = "durotar",
+		faction = 4
 	},
 	[1010] = {
 		name = "Dustwallow Marsh",
@@ -85,7 +94,8 @@ GoggleMaps.Map.Area = {
 		scale = 10.5,
 		x = 195,
 		y = 406.666,
-		overlay = "dustwallow"
+		overlay = "dustwallow",
+		faction = 0
 	},
 	[1011] = {
 		name = "Felwood",
@@ -93,7 +103,8 @@ GoggleMaps.Map.Area = {
 		scale = 11.5,
 		x = -328.334,
 		y = -1426.666,
-		overlay = "felwood"
+		overlay = "felwood",
+		faction = 0
 	},
 	[1012] = {
 		name = "Feralas",
@@ -101,7 +112,8 @@ GoggleMaps.Map.Area = {
 		scale = 13.9,
 		x = -1088.334,
 		y = 473.334,
-		overlay = "feralas"
+		overlay = "feralas",
+		faction = 0
 	},
 	[1013] = {
 		name = "Gates of Ahn'Qiraj",
@@ -109,7 +121,8 @@ GoggleMaps.Map.Area = {
 		scale = 8.278,
 		x = -786.534,
 		y = 1601.04,
-		overlay = "ahnqirajentrance"
+		overlay = "ahnqirajentrance",
+		faction = 0
 	},
 	[1014] = {
 		name = "GM Island",
@@ -117,7 +130,8 @@ GoggleMaps.Map.Area = {
 		scale = 1.656,
 		x = -3349.6,
 		y = -3305,
-		overlay = "gmisland"
+		overlay = "gmisland",
+		faction = 0
 	},
 	[1015] = {
 		name = "Hyjal",
@@ -125,7 +139,8 @@ GoggleMaps.Map.Area = {
 		scale = 6.412,
 		x = 216,
 		y = -1225,
-		overlay = "hyjal"
+		overlay = "hyjal",
+		faction = 0
 	},
 	[1016] = {
 		name = "Icepoint Rock",
@@ -133,7 +148,8 @@ GoggleMaps.Map.Area = {
 		scale = 3.216,
 		x = 1119,
 		y = -2881,
-		overlay = "icepoint"
+		overlay = "icepoint",
+		faction = 0
 	},
 	[1017] = {
 		name = "Maraudon",
@@ -141,7 +157,8 @@ GoggleMaps.Map.Area = {
 		scale = 1.648,
 		x = -641.6,
 		y = 219.2,
-		overlay = "maraudonentrance"
+		overlay = "maraudonentrance",
+		faction = 0
 	},
 	[1018] = {
 		name = "Moonglade",
@@ -149,7 +166,8 @@ GoggleMaps.Map.Area = {
 		scale = 4.6167,
 		x = 276.25,
 		y = -1698.334,
-		overlay = "moonglade"
+		overlay = "moonglade",
+		faction = 0
 	},
 	[1019] = {
 		name = "Mulgore",
@@ -157,7 +175,8 @@ GoggleMaps.Map.Area = {
 		scale = 10.275,
 		x = -409.584,
 		y = 54.584,
-		overlay = "mulgore"
+		overlay = "mulgore",
+		faction = 4
 	},
 	[1020] = {
 		name = "Orgrimmar",
@@ -166,6 +185,7 @@ GoggleMaps.Map.Area = {
 		x = 736.12,
 		y = -454.776,
 		overlay = "ogrimmar",
+		faction = 4,
 		isCity = true
 	},
 	[1021] = {
@@ -174,7 +194,8 @@ GoggleMaps.Map.Area = {
 		scale = 6.9667,
 		x = -507.5,
 		y = 1191.666,
-		overlay = "silithus"
+		overlay = "silithus",
+		faction = 0
 	},
 	[1022] = {
 		name = "Stonetalon Mountains",
@@ -182,7 +203,8 @@ GoggleMaps.Map.Area = {
 		scale = 12.036,
 		x = -789.8,
 		y = -688.2,
-		overlay = "stonetalonmountains"
+		overlay = "stonetalonmountains",
+		faction = 0
 	},
 	[1023] = {
 		name = "Tanaris",
@@ -190,7 +212,8 @@ GoggleMaps.Map.Area = {
 		scale = 13.8,
 		x = 43.75,
 		y = 1175,
-		overlay = "tanaris"
+		overlay = "tanaris",
+		faction = 0
 	},
 	[1024] = {
 		name = "Tel'Abim",
@@ -198,7 +221,8 @@ GoggleMaps.Map.Area = {
 		scale = 6.454,
 		x = 1035.8,
 		y = 1436.8,
-		overlay = "telabim"
+		overlay = "telabim",
+		faction = 0
 	},
 	[1025] = {
 		name = "Teldrassil",
@@ -206,7 +230,8 @@ GoggleMaps.Map.Area = {
 		scale = 10.1833,
 		x = -762.916,
 		y = -2366.25,
-		overlay = "teldrassil"
+		overlay = "teldrassil",
+		faction = 2
 	},
 	[1026] = {
 		name = "The Barrens",
@@ -214,7 +239,8 @@ GoggleMaps.Map.Area = {
 		scale = 20.2667,
 		x = -524.584,
 		y = -322.5,
-		overlay = "barrens"
+		overlay = "barrens",
+		faction = 4
 	},
 	[1027] = {
 		name = "Thousand Needles",
@@ -222,7 +248,8 @@ GoggleMaps.Map.Area = {
 		scale = 8.8,
 		x = 86.666,
 		y = 793.334,
-		overlay = "thousandneedles"
+		overlay = "thousandneedles",
+		faction = 0
 	},
 	[1028] = {
 		name = "Thunder Bluff",
@@ -231,6 +258,7 @@ GoggleMaps.Map.Area = {
 		x = -103.334,
 		y = 170,
 		overlay = "thunderbluff",
+		faction = 4,
 		isCity = true
 	},
 	[1029] = {
@@ -239,7 +267,8 @@ GoggleMaps.Map.Area = {
 		scale = 7.4,
 		x = -106.666,
 		y = 1193.334,
-		overlay = "ungorocrater"
+		overlay = "ungorocrater",
+		faction = 0
 	},
 	[1030] = {
 		name = "Wailing Caverns",
@@ -247,7 +276,8 @@ GoggleMaps.Map.Area = {
 		scale = 1.1456,
 		x = 380.174,
 		y = 97.728,
-		overlay = "wailingcavernsentrance"
+		overlay = "wailingcavernsentrance",
+		faction = 4
 	},
 	[1031] = {
 		name = "Winterspring",
@@ -255,7 +285,8 @@ GoggleMaps.Map.Area = {
 		scale = 14.2,
 		x = 63.334,
 		y = -1706.666,
-		overlay = "winterspring"
+		overlay = "winterspring",
+		faction = 0
 	},
 	[2000] = {
 		name = "Eastern Kingdoms",
@@ -270,6 +301,7 @@ GoggleMaps.Map.Area = {
 		x = 433.8,
 		y = -981.4,
 		overlay = "alahthalas",
+		faction = 2,
 		isCity = true
 	},
 	[2002] = {
@@ -278,7 +310,8 @@ GoggleMaps.Map.Area = {
 		scale = 5.6,
 		x = -156.666,
 		y = -300,
-		overlay = "alterac"
+		overlay = "alterac",
+		faction = 0
 	},
 	[2003] = {
 		name = "Arathi Highlands",
@@ -286,7 +319,8 @@ GoggleMaps.Map.Area = {
 		scale = 7.2,
 		x = 173.334,
 		y = 26.666,
-		overlay = "arathi"
+		overlay = "arathi",
+		faction = 0
 	},
 	[2004] = {
 		name = "Badlands",
@@ -294,7 +328,8 @@ GoggleMaps.Map.Area = {
 		scale = 4.975,
 		x = 415.834,
 		y = 1177.916,
-		overlay = "badlands"
+		overlay = "badlands",
+		faction = 0
 	},
 	[2005] = {
 		name = "Balor",
@@ -302,7 +337,8 @@ GoggleMaps.Map.Area = {
 		scale = 6.196,
 		x = -945.6,
 		y = 1515.4,
-		overlay = "balor"
+		overlay = "balor",
+		faction = 0
 	},
 	[2006] = {
 		name = "Blackrock Mountain",
@@ -310,7 +346,8 @@ GoggleMaps.Map.Area = {
 		scale = 1.4231,
 		x = 152.188,
 		y = 1465.564,
-		overlay = "blackrockmountain"
+		overlay = "blackrockmountain",
+		faction = 0
 	},
 	[2007] = {
 		name = "Blasted Lands",
@@ -318,7 +355,8 @@ GoggleMaps.Map.Area = {
 		scale = 6.7,
 		x = 248.334,
 		y = 2113.334,
-		overlay = "blastedlands"
+		overlay = "blastedlands",
+		faction = 0
 	},
 	[2008] = {
 		name = "Burning Steppes",
@@ -326,7 +364,8 @@ GoggleMaps.Map.Area = {
 		scale = 5.8583,
 		x = 53.334,
 		y = 1406.25,
-		overlay = "burningsteppes"
+		overlay = "burningsteppes",
+		faction = 0
 	},
 	[2009] = {
 		name = "Deadwind Pass",
@@ -334,7 +373,8 @@ GoggleMaps.Map.Area = {
 		scale = 5,
 		x = 166.666,
 		y = 1973.334,
-		overlay = "deadwindpass"
+		overlay = "deadwindpass",
+		faction = 0
 	},
 	[2010] = {
 		name = "Dun Morogh",
@@ -342,7 +382,8 @@ GoggleMaps.Map.Area = {
 		scale = 9.85,
 		x = -360.416,
 		y = 775.416,
-		overlay = "dunmorogh"
+		overlay = "dunmorogh",
+		faction = 2
 	},
 	[2011] = {
 		name = "Duskwood",
@@ -350,7 +391,8 @@ GoggleMaps.Map.Area = {
 		scale = 5.4,
 		x = -166.666,
 		y = 1943.334,
-		overlay = "duskwood"
+		overlay = "duskwood",
+		faction = 0
 	},
 	[2012] = {
 		name = "Eastern Plaguelands",
@@ -358,7 +400,8 @@ GoggleMaps.Map.Area = {
 		scale = 7.7417,
 		x = 437.084,
 		y = -760,
-		overlay = "easternplaguelands"
+		overlay = "easternplaguelands",
+		faction = 0
 	},
 	[2013] = {
 		name = "Elwynn Forest",
@@ -366,7 +409,8 @@ GoggleMaps.Map.Area = {
 		scale = 6.9417,
 		x = -307.084,
 		y = 1587.916,
-		overlay = "elwynn"
+		overlay = "elwynn",
+		faction = 2
 	},
 	[2014] = {
 		name = "Gillijim's Isle",
@@ -374,7 +418,8 @@ GoggleMaps.Map.Area = {
 		scale = 6.1842,
 		x = -887.244,
 		y = 2505.742,
-		overlay = "gillijim"
+		overlay = "gillijim",
+		faction = 0
 	},
 	[2015] = {
 		name = "Gilneas",
@@ -382,7 +427,8 @@ GoggleMaps.Map.Area = {
 		scale = 7.332,
 		x = -650.6,
 		y = 71.8,
-		overlay = "gilneas"
+		overlay = "gilneas",
+		faction = 0
 	},
 	[2016] = {
 		name = "Gnomeregan",
@@ -390,7 +436,8 @@ GoggleMaps.Map.Area = {
 		scale = 1.1424,
 		x = -205.528,
 		y = 961.264,
-		overlay = "gnomereganentrance"
+		overlay = "gnomereganentrance",
+		faction = 2
 	},
 	[2017] = {
 		name = "Grim Reaches",
@@ -398,7 +445,8 @@ GoggleMaps.Map.Area = {
 		scale = 10.774,
 		x = 414.4,
 		y = 580.8,
-		overlay = "grimreaches"
+		overlay = "grimreaches",
+		faction = 0
 	},
 	[2018] = {
 		name = "Hillsbrad Foothills",
@@ -406,7 +454,8 @@ GoggleMaps.Map.Area = {
 		scale = 6.4,
 		x = -213.334,
 		y = -80,
-		overlay = "hilsbrad"
+		overlay = "hilsbrad",
+		faction = 0
 	},
 	[2019] = {
 		name = "Ironforge",
@@ -415,6 +464,7 @@ GoggleMaps.Map.Area = {
 		x = 142.718,
 		y = 913.848,
 		overlay = "ironforge",
+		faction = 2,
 		isCity = true
 	},
 	[2020] = {
@@ -423,7 +473,8 @@ GoggleMaps.Map.Area = {
 		scale = 5.8029,
 		x = -986.666,
 		y = 2208.6961,
-		overlay = "lapidis"
+		overlay = "lapidis",
+		faction = 0
 	},
 	[2021] = {
 		name = "Loch Modan",
@@ -431,7 +482,8 @@ GoggleMaps.Map.Area = {
 		scale = 5.5167,
 		x = 398.75,
 		y = 897.5,
-		overlay = "lochmodan"
+		overlay = "lochmodan",
+		faction = 2
 	},
 	[2022] = {
 		name = "Northwind ",
@@ -439,7 +491,8 @@ GoggleMaps.Map.Area = {
 		scale = 6.482,
 		x = -451.6,
 		y = 1265.4,
-		overlay = "northwind"
+		overlay = "northwind",
+		faction = 0
 	},
 	[2023] = {
 		name = "Redridge Mountains",
@@ -447,7 +500,8 @@ GoggleMaps.Map.Area = {
 		scale = 4.3417,
 		x = 314.166,
 		y = 1715,
-		overlay = "redridge"
+		overlay = "redridge",
+		faction = 0
 	},
 	[2024] = {
 		name = "Scarlet Enclave",
@@ -455,7 +509,8 @@ GoggleMaps.Map.Area = {
 		scale = 6.318,
 		x = 810,
 		y = -617.4,
-		overlay = "scarletenclave"
+		overlay = "scarletenclave",
+		faction = 0
 	},
 	[2025] = {
 		name = "Scarlet Monastery",
@@ -463,7 +518,8 @@ GoggleMaps.Map.Area = {
 		scale = 0.4073,
 		x = 131.992,
 		y = -589.474,
-		overlay = "scarletmonasteryentrance"
+		overlay = "scarletmonasteryentrance",
+		faction = 4
 	},
 	[2026] = {
 		name = "Searing Gorge",
@@ -471,7 +527,8 @@ GoggleMaps.Map.Area = {
 		scale = 4.4625,
 		x = 64.584,
 		y = 1220,
-		overlay = "searinggorge"
+		overlay = "searinggorge",
+		faction = 0
 	},
 	[2027] = {
 		name = "Silverpine Forest",
@@ -479,7 +536,8 @@ GoggleMaps.Map.Area = {
 		scale = 8.4,
 		x = -690,
 		y = -333.334,
-		overlay = "silverpine"
+		overlay = "silverpine",
+		faction = 4
 	},
 	[2028] = {
 		name = "Stormwind City",
@@ -488,6 +546,7 @@ GoggleMaps.Map.Area = {
 		x = -344.584,
 		y = 1599.166,
 		overlay = "stormwind",
+		faction = 2,
 		isCity = true
 	},
 	[2029] = {
@@ -496,7 +555,8 @@ GoggleMaps.Map.Area = {
 		scale = 12.7625,
 		x = -444.166,
 		y = 2233.75,
-		overlay = "stranglethorn"
+		overlay = "stranglethorn",
+		faction = 0
 	},
 	[2030] = {
 		name = "Swamp of Sorrows",
@@ -504,7 +564,8 @@ GoggleMaps.Map.Area = {
 		scale = 4.5875,
 		x = 444.584,
 		y = 1924.166,
-		overlay = "swampofsorrows"
+		overlay = "swampofsorrows",
+		faction = 0
 	},
 	[2031] = {
 		name = "Thalassian Highlands",
@@ -512,7 +573,8 @@ GoggleMaps.Map.Area = {
 		scale = 6.164,
 		x = 201,
 		y = -990.4,
-		overlay = "thalassianhighlands"
+		overlay = "thalassianhighlands",
+		faction = 2
 	},
 	[2032] = {
 		name = "The Deadmines",
@@ -520,7 +582,8 @@ GoggleMaps.Map.Area = {
 		scale = 0.8998,
 		x = -358.636,
 		y = 2210.9881,
-		overlay = "deadminesentrance"
+		overlay = "deadminesentrance",
+		faction = 2
 	},
 	[2033] = {
 		name = "The Hinterlands",
@@ -528,7 +591,8 @@ GoggleMaps.Map.Area = {
 		scale = 7.7,
 		x = 315,
 		y = -293.334,
-		overlay = "hinterlands"
+		overlay = "hinterlands",
+		faction = 0
 	},
 	[2034] = {
 		name = "Tirisfal Glades",
@@ -536,7 +600,8 @@ GoggleMaps.Map.Area = {
 		scale = 9.0375,
 		x = -606.666,
 		y = -767.5,
-		overlay = "tirisfal"
+		overlay = "tirisfal",
+		faction = 4
 	},
 	[2035] = {
 		name = "Uldaman",
@@ -544,7 +609,8 @@ GoggleMaps.Map.Area = {
 		scale = 1.1266,
 		x = 549.43,
 		y = 1190.682,
-		overlay = "uldamanentrance"
+		overlay = "uldamanentrance",
+		faction = 0
 	},
 	[2036] = {
 		name = "Undercity",
@@ -553,6 +619,7 @@ GoggleMaps.Map.Area = {
 		x = -174.638,
 		y = -375.59,
 		overlay = "undercity",
+		faction = 4,
 		isCity = true
 	},
 	[2037] = {
@@ -561,7 +628,8 @@ GoggleMaps.Map.Area = {
 		scale = 8.6,
 		x = -83.334,
 		y = -673.334,
-		overlay = "westernplaguelands"
+		overlay = "westernplaguelands",
+		faction = 0
 	},
 	[2038] = {
 		name = "Westfall",
@@ -569,7 +637,8 @@ GoggleMaps.Map.Area = {
 		scale = 7,
 		x = -603.334,
 		y = 1880,
-		overlay = "westfall"
+		overlay = "westfall",
+		faction = 2
 	},
 	[2039] = {
 		name = "Wetlands",
@@ -577,6 +646,7 @@ GoggleMaps.Map.Area = {
 		scale = 8.2708,
 		x = 77.916,
 		y = 429.584,
-		overlay = "wetlands"
+		overlay = "wetlands",
+		faction = 0
 	}
 }
