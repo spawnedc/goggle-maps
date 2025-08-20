@@ -41,7 +41,7 @@ function GoggleMaps.POI:GetIcon(pos, textureIndex, poiName, poiDesc)
 
   f:SetScript("OnEnter", function()
     -- Anchor tooltip to the icon
-    GameTooltip:SetOwner(f, "ANCHOR_RIGHT")
+    GameTooltip:SetOwner(f, "ANCHOR_CURSOR")
 
     -- Fill it with POI info
     GameTooltip:SetText(poiName, 1, 1, 1) -- white text
