@@ -1,6 +1,7 @@
 setfenv(1, GoggleMaps)
 
 ---@class Hotspot
+---@field name string
 ---@field mapId number
 ---@field worldX1 number
 ---@field worldX2 number
@@ -22,7 +23,7 @@ function GoggleMaps.Hotspots:Init()
     local hotspotList = { Utils.splitString(hotspotRects, "~") }
 
     for _, hotspot in pairs(hotspotList) do
-      local mapX, mapY, width, height = Utils.UnpackLocationRect(hotspot)
+      local mapX, mapY, width, height, name = Utils.UnpackLocationRect(hotspot)
 
       local zoneInfo = GoggleMaps.Map.Area[mapId]
 
@@ -36,6 +37,7 @@ function GoggleMaps.Hotspots:Init()
 
       --- @type Hotspot
       local spot = {
+        name = name,
         mapId = mapId,
         worldX1 = worldX,
         worldY1 = worldY,
@@ -53,6 +55,7 @@ function GoggleMaps.Hotspots:Init()
 
   GMapsDebug:AddItem("Current hotspot", "-")
   GMapsDebug:AddItem("Zone name", "-")
+  GMapsDebug:AddItem("Hotspot name", "-")
   GMapsDebug:AddItem("Hotspot coords1", "-")
   GMapsDebug:AddItem("Hotspot coords2", "-")
 end
@@ -89,17 +92,22 @@ function GoggleMaps.Hotspots:CheckWorldHotspotsType(worldX, worldY, spots)
       GMapsDebug:UpdateItem("Current hotspot", spot.mapId)
       local zoneName = GoggleMaps.Map.Area[spot.mapId].name
       GMapsDebug:UpdateItem("Zone name", zoneName)
+      GMapsDebug:UpdateItem("Hotspot name", spot.name)
       GMapsDebug:UpdateItem("Hotspot coords1", string.format("%.2f, %2.f", spot.worldX1, spot.worldY1))
       GMapsDebug:UpdateItem("Hotspot coords2", string.format("%.2f, %2.f", spot.worldX2, spot.worldY2))
-      if spot.mapId ~= currentMapId then
-        return spot.mapId
+      if mapId == 1020 then
+        Utils.print("%s, %s - %sx%s", mapX, mapY, mapX + width, mapY + height)
       end
+      -- if spot.mapId ~= currentMapId then
+      return spot.mapId
+      -- end
     end
   end
 
-  -- GMapsDebug:UpdateItem("Current hotspot", "-")
-  -- GMapsDebug:UpdateItem("Zone name", "-")
-  -- GMapsDebug:UpdateItem("Hotspot coords1", "-")
-  -- GMapsDebug:UpdateItem("Hotspot coords2", "-")
+  GMapsDebug:UpdateItem("Current hotspot", "-")
+  GMapsDebug:UpdateItem("Zone name", "-")
+  GMapsDebug:UpdateItem("Hotspot name", "-")
+  GMapsDebug:UpdateItem("Hotspot coords1", "-")
+  GMapsDebug:UpdateItem("Hotspot coords2", "-")
   return nil
 end
