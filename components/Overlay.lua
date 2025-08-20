@@ -66,7 +66,6 @@ function GoggleMaps.Overlay:AddMapIdToZonesToDraw(mapId)
   -- If list exceeds limit, remove last
   if table.getn(idList) > self.options.maxZonesToDraw then
     local removedMapId = table.remove(idList) -- removes last by default
-    Utils.print("Adding %s to the clear list", removedMapId)
     table.insert(self.zonesToClear, removedMapId)
   end
 end

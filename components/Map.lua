@@ -1,5 +1,4 @@
 setfenv(1, GoggleMaps)
-local UI = GoggleMaps.UI.Window
 
 local FRAME_WIDTH = 1024
 local FRAME_HEIGHT = 768
