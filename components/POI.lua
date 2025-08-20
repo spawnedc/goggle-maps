@@ -106,8 +106,6 @@ function GoggleMaps.POI:ScanPOIs()
           y = y,
           frame = self:GetIcon(mapId + n, textureIndex, name, desc)
         }
-        Utils.print("POI: %s %d, %.2f, %.2f", name, textureIndex, poiX, poiY)
-        Utils.print("POI: %s %d, %.2f, %.2f", name, textureIndex, x, y)
         table.insert(pois, poi)
       end
     end
