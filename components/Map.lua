@@ -282,6 +282,9 @@ function GoggleMaps.Map:MoveContinents()
 end
 
 function GoggleMaps.Map:MoveZones()
+  if not self.mapId then
+    return
+  end
   local isCity = GoggleMaps.Map.Area[self.mapId].isCity
   if isCity then
     local continentIndex = Utils.getContinentId(self.mapId)

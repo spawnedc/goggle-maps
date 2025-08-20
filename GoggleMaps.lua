@@ -44,15 +44,10 @@ function GoggleMaps:Init()
   self.Hotspots:Init()
 
   self.frame:SetScript("OnUpdate", function() self:handleUpdate() end)
-  self.frame:SetScript("OnSizeChanged", function()
-    local width, height = self.frame:SetContentSize()
-    self.Map.size.width = width
-    self.Map.size.height = height
-    self.Map:MoveMap(self.Map.position.x, self.Map.position.y)
-  end)
+  self.frame:SetScript("OnSizeChanged", function() self:handleSizeChanged() end)
 
   self.frame:Show()
-  self.Map:MoveMap(self.Map.position.x, self.Map.position.y)
+  self:handleSizeChanged()
   Utils.print("READY!")
 end
 
@@ -61,6 +56,13 @@ function GoggleMaps:OnEvent()
     Utils.print("AddonLoaded")
     self:Init()
   end
+end
+
+function GoggleMaps:handleSizeChanged()
+  local width, height = self.frame:SetContentSize()
+  self.Map.size.width = width
+  self.Map.size.height = height
+  self.Map:MoveMap(self.Map.position.x, self.Map.position.y)
 end
 
 function GoggleMaps:handleUpdate()
