@@ -73,6 +73,8 @@ function GoggleMaps:handleUpdate()
   self.POI:handleUpdate()
   self.Minimap:handleUpdate()
   self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
+  local playerPos = self.Player.position
+  self.frame:SetTitle(string.format("%s %.1f, %.1f", GetRealZoneText(), playerPos.x, playerPos.y))
 end
 
 GoggleMaps:Start()
