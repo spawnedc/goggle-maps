@@ -21,3 +21,13 @@ local _G = getfenv(0)
 GoggleMaps = setmetatable({ _G = _G }, { __index = _G })
 
 GoggleMaps.name = "GoggleMaps"
+
+SLASH_GMAPS1 = "/gmaps"
+
+function SlashCmdList.GMAPS(args)
+  if GoggleMaps.frame:IsVisible() then
+    GoggleMaps.frame:Hide()
+  else
+    GoggleMaps.frame:Show()
+  end
+end
