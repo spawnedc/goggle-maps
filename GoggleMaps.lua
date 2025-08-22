@@ -38,6 +38,14 @@ function GoggleMaps:Start()
   self.frame:Hide()
 end
 
+function GoggleMaps:Toggle()
+  if self.frame:IsVisible() then
+    self.frame:Hide()
+  else
+    self.frame:Show()
+  end
+end
+
 function GoggleMaps:Init()
   GMapsDebug:CreateDebugWindow()
   self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
@@ -56,7 +64,6 @@ function GoggleMaps:Init()
   self.frame:SetScript("OnUpdate", function() self:handleUpdate() end)
   self.frame:SetScript("OnSizeChanged", function() self:handleSizeChanged() end)
 
-  self.frame:Show()
   self:handleSizeChanged()
   Utils.print("READY!")
 end

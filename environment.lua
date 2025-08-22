@@ -21,3 +21,19 @@ local _G = getfenv(0)
 GoggleMaps = setmetatable({ _G = _G }, { __index = _G })
 
 GoggleMaps.name = "GoggleMaps"
+
+SLASH_GMAPS1 = "/gmaps"
+
+--- Used by the bindings
+function GoggleMaps_Toggle()
+  GoggleMaps:Toggle()
+end
+
+--- Used by the bindings
+function GoggleMaps_ToggleBlizzMap()
+  ToggleWorldMap()
+end
+
+function SlashCmdList.GMAPS()
+  GoggleMaps_Toggle()
+end

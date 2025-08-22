@@ -1,0 +1,8 @@
+<Bindings>
+  <Binding name="GOGGLEMAPS_TOGGLEMAP" header="GOGGLEMAPS_HEADER">
+    GoggleMaps_Toggle()
+  </Binding>
+  <Binding name="GOGGLEMAPS_TOGGLE_BLIZZMAP">
+    GoggleMaps_ToggleBlizzMap()
+  </Binding>
+</Bindings>
