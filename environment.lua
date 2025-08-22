@@ -24,10 +24,16 @@ GoggleMaps.name = "GoggleMaps"
 
 SLASH_GMAPS1 = "/gmaps"
 
-function SlashCmdList.GMAPS(args)
-  if GoggleMaps.frame:IsVisible() then
-    GoggleMaps.frame:Hide()
-  else
-    GoggleMaps.frame:Show()
-  end
+--- Used by the bindings
+function GoggleMaps_Toggle()
+  GoggleMaps:Toggle()
+end
+
+--- Used by the bindings
+function GoggleMaps_ToggleBlizzMap()
+  ToggleWorldMap()
+end
+
+function SlashCmdList.GMAPS()
+  GoggleMaps_Toggle()
 end

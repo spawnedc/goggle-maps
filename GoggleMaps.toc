@@ -6,6 +6,7 @@
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 
+Bindings.lua
 environment.lua
 utils.lua
 
