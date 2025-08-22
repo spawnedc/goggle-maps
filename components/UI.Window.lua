@@ -47,6 +47,14 @@ local function CreateBaseWindow(name, width, height, parent)
   local titleText = title:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
   titleText:SetPoint("Left", title, "Left", 4, 0)
 
+  local closeButton = CreateFrame("Button", name and (name .. "CloseButton") or nil, frame, "UIPanelCloseButton")
+  closeButton:SetPoint("TopRight", frame, "TopRight", -1, -1)
+  closeButton:SetFrameStrata("HIGH")
+  closeButton:SetFrameLevel(frame:GetFrameLevel() + 2)
+  closeButton:EnableMouse(true)
+  closeButton:SetWidth(24)
+  closeButton:SetHeight(24)
+
   -- client area inset (inside the border + below title)
   local baseInset = INSET
 
