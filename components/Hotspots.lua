@@ -14,7 +14,7 @@ GoggleMaps.Hotspots = {
 }
 
 function GoggleMaps.Hotspots:Init()
-  Utils.print("InitHotspots")
+  Utils.debug("InitHotspots")
   local hotspots = GoggleMaps.Map.Hotspots
   local spots = self.spots
   local cities = self.cities
@@ -96,7 +96,7 @@ function GoggleMaps.Hotspots:CheckWorldHotspotsType(worldX, worldY, spots)
       GMapsDebug:UpdateItem("Hotspot coords1", string.format("%.2f, %2.f", spot.worldX1, spot.worldY1))
       GMapsDebug:UpdateItem("Hotspot coords2", string.format("%.2f, %2.f", spot.worldX2, spot.worldY2))
       if mapId == 1020 then
-        Utils.print("%s, %s - %sx%s", mapX, mapY, mapX + width, mapY + height)
+        Utils.debug("%s, %s - %sx%s", mapX, mapY, mapX + width, mapY + height)
       end
       -- if spot.mapId ~= currentMapId then
       return spot.mapId

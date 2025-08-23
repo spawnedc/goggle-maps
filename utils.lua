@@ -9,7 +9,15 @@ end
 function Utils.print(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
   local title = GetAddOnMetadata(GoggleMaps.name, "Title")
   local formattedMessage = (string.format(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) or "nil")
-  DEFAULT_CHAT_FRAME:AddMessage(title .. ": |cffffffff" .. formattedMessage)
+  DEFAULT_CHAT_FRAME:AddMessage(title .. ": |r" .. formattedMessage)
+end
+
+function Utils.debug(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
+  if GoggleMaps.DEBUG_MODE then
+    local title = GetAddOnMetadata(GoggleMaps.name, "Title")
+    local formattedMessage = (string.format(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) or "nil")
+    DEFAULT_CHAT_FRAME:AddMessage(title .. " [D]: |r" .. formattedMessage)
+  end
 end
 
 function Utils.mod(a, b)

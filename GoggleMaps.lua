@@ -91,7 +91,7 @@ end
 
 function GoggleMaps:OnEvent()
   if event == "ADDON_LOADED" and arg1 == GoggleMaps.name then
-    Utils.print("AddonLoaded")
+    Utils.debug("AddonLoaded")
     self:Init()
   end
 end

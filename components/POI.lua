@@ -63,7 +63,7 @@ end
 ---Initialised the POIs
 ---@param parentFrame Frame
 function GoggleMaps.POI:Init(parentFrame)
-  Utils.print("POI init")
+  Utils.debug("POI init")
   self.frame = CreateFrame("Frame", "poiFrame", parentFrame)
   self.frame:SetAllPoints()
   self.frame:SetFrameLevel(GoggleMaps.frameLevels.poi)
@@ -109,7 +109,7 @@ function GoggleMaps.POI:ScanPOIs()
         table.insert(pois, poi)
       end
     end
-    Utils.print("Found %d POIs for continent %d", table.getn(pois), continentIndex)
+    Utils.debug("Found %d POIs for continent %d", table.getn(pois), continentIndex)
   end
   -- Restore
   SetMapZoom(oldCont, oldZone)

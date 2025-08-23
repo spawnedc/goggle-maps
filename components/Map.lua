@@ -107,7 +107,7 @@ function GoggleMaps.Map:Init(parentFrame)
 end
 
 function GoggleMaps.Map:InitTables()
-  Utils.print("InitTables")
+  Utils.debug("InitTables")
   self.zoneNameToMapId, self.continentZoneToMapId = Utils.GetZoneNameToMapId()
 end
 
@@ -166,7 +166,7 @@ end
 
 function GoggleMaps.Map:handleEvent()
   if event == "ZONE_CHANGED_NEW_AREA" or event == "PLAYER_ENTERING_WORLD" then
-    Utils.print('ZONE_CHANGED_NEW_AREA')
+    Utils.debug('ZONE_CHANGED_NEW_AREA')
     self.realMapId = self.zoneNameToMapId[GetRealZoneText()]
     self.mapId = self.realMapId
     Utils.setCurrentMap(self.realMapId)
@@ -178,7 +178,7 @@ function GoggleMaps.Map:handleEvent()
 end
 
 function GoggleMaps.Map:InitContinents()
-  Utils.print('InitContinents')
+  Utils.debug('InitContinents')
 
   local texturePath
 
@@ -202,7 +202,7 @@ function GoggleMaps.Map:InitContinents()
 end
 
 function GoggleMaps.Map:InitZones()
-  Utils.print('InitZones')
+  Utils.debug('InitZones')
   self.zoneFrame = CreateFrame("Frame", nil, self.frame)
   self.zoneFrame:SetAllPoints(self.frame)
   self.zoneFrame:SetFrameLevel(GoggleMaps.frameLevels.city)

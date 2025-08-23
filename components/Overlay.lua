@@ -14,7 +14,7 @@ GoggleMaps.Overlay = {
 }
 
 function GoggleMaps.Overlay:Init(parentFrame)
-  Utils.print("Overlay init")
+  Utils.debug("Overlay init")
   self.frame = CreateFrame("Frame", "overlayFrame", parentFrame)
   self.frame:SetAllPoints()
   self.frame:SetFrameLevel(GoggleMaps.frameLevels.overlay)
@@ -125,7 +125,7 @@ function GoggleMaps.Overlay:UpdateOverlay(mapId)
   end
   local zone = GoggleMaps.Map.Area[mapId]
   if zone == nil then
-    Utils.print("Zone not found: %s", mapId)
+    Utils.debug("Zone not found: %s", mapId)
     return
   end
   if zone.isCity then
