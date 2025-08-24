@@ -106,21 +106,21 @@ function Utils.getContinentId(zoneId)
 end
 
 ---Gets the world zone information
----@param continentIndex number
----@param zoneId number
+---@param mapId number
 ---@return string name the zone name
 ---@return number xPos x position of the zone
 ---@return number yPos y position of the zone
 ---@return number width width of the zone
 ---@return number height height of the zone
 ---@return number zoneScale scale of the zone
-function Utils.GetWorldZoneInfo(continentIndex, zoneId)
+function Utils.GetWorldZoneInfo(mapId)
+  local continentIndex = Utils.getContinentId(mapId)
   local worldInfo = GoggleMaps.Map.MapInfo[continentIndex]
   if not worldInfo then
     return '?', 1, 0, 0, 1024, 768
   end
 
-  local zoneInfo = GoggleMaps.Map.Area[zoneId]
+  local zoneInfo = GoggleMaps.Map.Area[mapId]
   if not zoneInfo then
     return '?', 1, 0, 0, 1024, 768
   end
