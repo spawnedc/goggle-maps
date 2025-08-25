@@ -14,13 +14,14 @@ GoggleMaps.Hotspots = {
 }
 
 function GoggleMaps.Hotspots:Init()
-  Utils.print("InitHotspots")
+  Utils.debug("InitHotspots")
   local hotspots = GoggleMaps.Map.Hotspots
   local spots = self.spots
   local cities = self.cities
 
   for mapId, hotspotRects in pairs(hotspots) do
     local hotspotList = { Utils.splitString(hotspotRects, "~") }
+    local contName, contX, contY = Utils.GetWorldContinentInfo(Utils.getContinentId(mapId))
 
     for _, hotspot in pairs(hotspotList) do
       local mapX, mapY, width, height, name = Utils.UnpackLocationRect(hotspot)
@@ -31,9 +32,21 @@ function GoggleMaps.Hotspots:Init()
         break
       end
 
+
+      local worldX, worldY, worldX2, worldY2
+
       -- pre-calculate positions
-      local worldX, worldY = Utils.GetWorldPos(mapId, mapX, mapY)
-      local worldX2, worldY2 = Utils.GetWorldPos(mapId, mapX + width, mapY + height)
+      if zoneInfo.isCity then
+        Utils.debug("%s %sx %s", contName, contX, contY)
+        worldX = mapX + contX
+        worldY = contY - (mapY + height)
+        worldX2 = worldX + width
+        worldY2 = contY - mapY
+        -- GMapsDebug:AddItem(zoneInfo.name, string.format("%s,%s %s,%s", worldX, worldY, worldX2, worldY2))
+      else
+        worldX, worldY = Utils.GetWorldPos(mapId, mapX, mapY)
+        worldX2, worldY2 = Utils.GetWorldPos(mapId, mapX + width, mapY + height)
+      end
 
       --- @type Hotspot
       local spot = {
@@ -96,7 +109,7 @@ function GoggleMaps.Hotspots:CheckWorldHotspotsType(worldX, worldY, spots)
       GMapsDebug:UpdateItem("Hotspot coords1", string.format("%.2f, %2.f", spot.worldX1, spot.worldY1))
       GMapsDebug:UpdateItem("Hotspot coords2", string.format("%.2f, %2.f", spot.worldX2, spot.worldY2))
       if mapId == 1020 then
-        Utils.print("%s, %s - %sx%s", mapX, mapY, mapX + width, mapY + height)
+        Utils.debug("%s, %s - %sx%s", mapX, mapY, mapX + width, mapY + height)
       end
       -- if spot.mapId ~= currentMapId then
       return spot.mapId

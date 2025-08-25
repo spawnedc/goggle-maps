@@ -23,6 +23,7 @@ GoggleMaps = setmetatable({ _G = _G }, { __index = _G })
 GoggleMaps.name = "GoggleMaps"
 
 SLASH_GMAPS1 = "/gmaps"
+SLASH_GMAPSDEBUG1 = "/gmapsdebug"
 
 --- Used by the bindings
 function GoggleMaps_Toggle()
@@ -36,4 +37,8 @@ end
 
 function SlashCmdList.GMAPS()
   GoggleMaps_Toggle()
+end
+
+function SlashCmdList.GMAPSDEBUG()
+  GoggleMaps:ToggleDebug()
 end

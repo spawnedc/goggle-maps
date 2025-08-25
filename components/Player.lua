@@ -19,7 +19,7 @@ GoggleMaps.Player = {
 ---Initialiases the Player component
 ---@param parentFrame Frame
 function GoggleMaps.Player:Init(parentFrame)
-  Utils.print("PlayerInit")
+  Utils.debug("PlayerInit")
   local frameName = parentFrame:GetName() .. "PlayerFrame"
   local playerFrame = CreateFrame("Frame", frameName, parentFrame)
   playerFrame:SetWidth(self.size.width)

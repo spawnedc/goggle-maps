@@ -9,7 +9,15 @@ end
 function Utils.print(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
   local title = GetAddOnMetadata(GoggleMaps.name, "Title")
   local formattedMessage = (string.format(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) or "nil")
-  DEFAULT_CHAT_FRAME:AddMessage(title .. ": |cffffffff" .. formattedMessage)
+  DEFAULT_CHAT_FRAME:AddMessage(title .. ": |r" .. formattedMessage)
+end
+
+function Utils.debug(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
+  if GoggleMaps.DEBUG_MODE then
+    local title = GetAddOnMetadata(GoggleMaps.name, "Title")
+    local formattedMessage = (string.format(msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) or "nil")
+    DEFAULT_CHAT_FRAME:AddMessage(title .. " [D]: |r" .. formattedMessage)
+  end
 end
 
 function Utils.mod(a, b)
@@ -98,21 +106,21 @@ function Utils.getContinentId(zoneId)
 end
 
 ---Gets the world zone information
----@param continentIndex number
----@param zoneId number
+---@param mapId number
 ---@return string name the zone name
 ---@return number xPos x position of the zone
 ---@return number yPos y position of the zone
 ---@return number width width of the zone
 ---@return number height height of the zone
 ---@return number zoneScale scale of the zone
-function Utils.GetWorldZoneInfo(continentIndex, zoneId)
+function Utils.GetWorldZoneInfo(mapId)
+  local continentIndex = Utils.getContinentId(mapId)
   local worldInfo = GoggleMaps.Map.MapInfo[continentIndex]
   if not worldInfo then
     return '?', 1, 0, 0, 1024, 768
   end
 
-  local zoneInfo = GoggleMaps.Map.Area[zoneId]
+  local zoneInfo = GoggleMaps.Map.Area[mapId]
   if not zoneInfo then
     return '?', 1, 0, 0, 1024, 768
   end
@@ -124,6 +132,15 @@ function Utils.GetWorldZoneInfo(continentIndex, zoneId)
   local height = scale / 1.5
 
   return zoneInfo.name, x, y, width, height, zoneInfo.scale
+end
+
+function Utils.GetWorldContinentInfo(continentIndex)
+  local info = GoggleMaps.Map.MapInfo[continentIndex]
+  if not info then
+    return
+  end
+
+  return info.Name, info.X, info.Y
 end
 
 ---Gets the world position of the given coordinates of the mapId

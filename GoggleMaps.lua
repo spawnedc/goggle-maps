@@ -8,6 +8,9 @@ local UNIT_FACTION_TO_FACTION_ID = {
   Alliance = 2,
 }
 
+GoggleMaps.DEBUG_MODE = false
+---@type Frame
+GoggleMaps.debugFrame = nil
 ---@type Frame
 GoggleMaps.frame = nil
 GoggleMaps.frameLevels = {
@@ -41,13 +44,31 @@ end
 function GoggleMaps:Toggle()
   if self.frame:IsVisible() then
     self.frame:Hide()
+    self.debugFrame:Hide()
   else
     self.frame:Show()
+    if self.DEBUG_MODE then
+      self.debugFrame:Show()
+    end
+  end
+end
+
+function GoggleMaps:ToggleDebug()
+  self.DEBUG_MODE = not self.DEBUG_MODE
+
+  if self.DEBUG_MODE then
+    self.debugFrame:Show()
+  else
+    self.debugFrame:Hide()
   end
 end
 
 function GoggleMaps:Init()
-  GMapsDebug:CreateDebugWindow()
+  self.debugFrame = GMapsDebug:CreateDebugWindow()
+  if not self.DEBUG_MODE then
+    self.debugFrame:Hide()
+  end
+  self.debugFrame:Hide()
   self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
   self.frame:SetMinResize(300, 300)
 
@@ -70,7 +91,7 @@ end
 
 function GoggleMaps:OnEvent()
   if event == "ADDON_LOADED" and arg1 == GoggleMaps.name then
-    Utils.print("AddonLoaded")
+    Utils.debug("AddonLoaded")
     self:Init()
   end
 end
