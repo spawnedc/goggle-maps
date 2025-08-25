@@ -134,6 +134,15 @@ function Utils.GetWorldZoneInfo(mapId)
   return zoneInfo.name, x, y, width, height, zoneInfo.scale
 end
 
+function Utils.GetWorldContinentInfo(continentIndex)
+  local info = GoggleMaps.Map.MapInfo[continentIndex]
+  if not info then
+    return
+  end
+
+  return info.Name, info.X, info.Y
+end
+
 ---Gets the world position of the given coordinates of the mapId
 ---@param mapId number
 ---@param mapX number
