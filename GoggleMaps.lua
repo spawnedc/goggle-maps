@@ -39,6 +39,8 @@ function GoggleMaps:Start()
 
   self.frame:SetScript("OnEvent", function() GoggleMaps:OnEvent() end)
   self.frame:Hide()
+
+  table.insert(UISpecialFrames, ADDON_NAME .. "Main")
 end
 
 function GoggleMaps:Toggle()
@@ -70,7 +72,7 @@ function GoggleMaps:Init()
   end
   self.debugFrame:Hide()
   self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
-  self.frame:SetMinResize(300, 300)
+  self.frame:SetMinResize(200, 200)
 
   local contentFrame = self.frame.Content
 
