@@ -21,6 +21,7 @@ local _G = getfenv(0)
 GoggleMaps = setmetatable({ _G = _G }, { __index = _G })
 
 GoggleMaps.name = "GoggleMaps"
+GoggleMaps.compat = {}
 
 SLASH_GMAPS1 = "/gmaps"
 SLASH_GMAPSDEBUG1 = "/gmapsdebug"

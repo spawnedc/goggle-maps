@@ -102,6 +102,7 @@ function GoggleMaps.Map:Init(parentFrame)
   GMapsDebug:AddItem("Fake mapId", self.mapId)
   GMapsDebug:AddItem("Mouse winpos", { x = 0, y = 0 }, Utils.positionFormatter)
   GMapsDebug:AddItem("Mouse world pos", { x = 0, y = 0 }, Utils.positionFormatter)
+  GMapsDebug:AddItem("Mouse zone pos", { x = 0, y = 0 }, Utils.positionFormatter)
 
   self:InitContinents()
 end
@@ -350,8 +351,10 @@ function GoggleMaps.Map:handleUpdate()
         GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
         GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.mapId)
       end
+      local zoneX, zoneY = Utils.GetZonePosFromWorldPos(self.mapId, worldX, worldY)
       GMapsDebug:UpdateItem("Mouse winpos", { x = winx, y = winy })
       GMapsDebug:UpdateItem("Mouse world pos", { x = worldX, y = worldY })
+      GMapsDebug:UpdateItem("Mouse zone pos", { x = zoneX, y = zoneY })
     elseif self.mapId ~= self.realMapId then
       -- User is not hovering over the map. Let's revert to realMapId and move the map
       self.mapId = self.realMapId

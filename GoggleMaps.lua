@@ -8,7 +8,7 @@ local UNIT_FACTION_TO_FACTION_ID = {
   Alliance = 2,
 }
 
-GoggleMaps.DEBUG_MODE = false
+GoggleMaps.DEBUG_MODE = true
 ---@type Frame
 GoggleMaps.debugFrame = nil
 ---@type Frame
@@ -20,6 +20,7 @@ GoggleMaps.frameLevels = {
   poi = 25,
   minimap = 30,
   city = 40,
+  pfQuest = 45,
   player = 100
 }
 ---@type FontString
@@ -92,9 +93,15 @@ function GoggleMaps:Init()
 end
 
 function GoggleMaps:OnEvent()
-  if event == "ADDON_LOADED" and arg1 == GoggleMaps.name then
-    Utils.debug("AddonLoaded")
-    self:Init()
+  if event == "ADDON_LOADED" then
+    if arg1 == GoggleMaps.name then
+      Utils.debug("AddonLoaded")
+      self:Init()
+    end
+
+    if arg1 == "pfQuest" then
+      GoggleMaps.compat.pfQuest:Init(self.frame.Content)
+    end
   end
 end
 
@@ -111,6 +118,9 @@ function GoggleMaps:handleUpdate()
   self.POI:handleUpdate()
   self.Minimap:handleUpdate()
   self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
+  if self.compat.pfQuest.initialised then
+    self.compat.pfQuest:handleUpdate()
+  end
   self:UpdateLocationText()
 end
 

@@ -31,4 +31,6 @@ components\POI.lua
 
 debug.lua
 
+compat\pfQuest.lua
+
 GoggleMaps.lua
