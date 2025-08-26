@@ -40,7 +40,6 @@ function GoggleMaps.compat.pfQuest:UpdateNodes(newPins)
       pin.originalH = pin:GetHeight()
       pin:SetParent(self.frame)
       pin:ClearAllPoints()
-      Utils.print("%s", pin.title)
     end
   end
   self.initialised = true
