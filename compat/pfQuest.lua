@@ -10,11 +10,13 @@ GoggleMaps.compat.pfQuest = {
 }
 
 function GoggleMaps.compat.pfQuest:Init(parentFrame)
-  Utils.debug("Compat:pfQuest")
   self.frame = CreateFrame("Frame", "GoggleMapsCompatpfQuestFrame", parentFrame)
   self.frame:SetAllPoints()
   self.frame:SetFrameLevel(GoggleMaps.frameLevels.pfQuest)
+end
 
+function GoggleMaps.compat.pfQuest:Start()
+  Utils.print("pfQuest module loaded!")
   local oldUpdateMap = pfMap.UpdateNodes
 
   function pfMap:UpdateNodes()
@@ -71,4 +73,5 @@ function GoggleMaps.compat.pfQuest:handleUpdate()
       pin:SetHeight(h)
     end
   end
+  self.frame:SetFrameLevel(GoggleMaps.frameLevels.pfQuest)
 end

@@ -8,7 +8,7 @@ local UNIT_FACTION_TO_FACTION_ID = {
   Alliance = 2,
 }
 
-GoggleMaps.DEBUG_MODE = true
+GoggleMaps.DEBUG_MODE = false
 ---@type Frame
 GoggleMaps.debugFrame = nil
 ---@type Frame
@@ -82,6 +82,9 @@ function GoggleMaps:Init()
   self.POI:Init(contentFrame)
   self.Minimap:Init(contentFrame)
   self.Map:InitZones()
+
+  GoggleMaps.compat.pfQuest:Init(self.frame.Content)
+
   self.Player:Init(contentFrame)
   self.Hotspots:Init()
 
@@ -100,7 +103,7 @@ function GoggleMaps:OnEvent()
     end
 
     if arg1 == "pfQuest" then
-      GoggleMaps.compat.pfQuest:Init(self.frame.Content)
+      GoggleMaps.compat.pfQuest:Start()
     end
   end
 end
@@ -117,10 +120,10 @@ function GoggleMaps:handleUpdate()
   self.Overlay:handleUpdate()
   self.POI:handleUpdate()
   self.Minimap:handleUpdate()
-  self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
   if self.compat.pfQuest.initialised then
     self.compat.pfQuest:handleUpdate()
   end
+  self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
   self:UpdateLocationText()
 end
 
