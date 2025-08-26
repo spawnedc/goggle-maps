@@ -5,7 +5,8 @@ GoggleMaps.compat.pfQuest = {
   frame = nil,
   initialised = false,
   ---@type table<Frame>
-  pins = nil
+  pins = {}
+
 }
 
 function GoggleMaps.compat.pfQuest:Init(parentFrame)
@@ -26,9 +27,6 @@ function GoggleMaps.compat.pfQuest:UpdateNodes(newPins)
   ---@type Frame
   local pin
   local point, relativeTo, relativePoint, pinX, pinY
-  for _, p in ipairs(GoggleMaps.compat.pfQuest) do
-    p:Hide()
-  end
 
   self.pins = newPins
 
@@ -50,7 +48,7 @@ end
 
 function GoggleMaps.compat.pfQuest:handleUpdate()
   local Map = GoggleMaps.Map
-  local mapId = Map.realMapId
+  local mapId = Map.mapId
   local scale = Map.scale
   local clipW = Map.size.width
   local clipH = Map.size.height
@@ -60,15 +58,18 @@ function GoggleMaps.compat.pfQuest:handleUpdate()
   local x, y, w, h
   local worldX, worldY
   for _, p in ipairs(self.pins) do
-    pin            = p
-    worldX, worldY = Utils.GetWorldPos(mapId, pin.originalX, pin.originalY)
+    pin = p
+    if pin:IsShown() then
+      worldX, worldY = Utils.GetWorldPos(mapId, pin.originalX, pin.originalY)
 
-    x              = (worldX - Map.position.x) * scale + clipW / 2
-    y              = (worldY - Map.position.y) * scale + clipH / 2
-    w              = math.min(pin.originalW, pin.originalW * scale)
-    h              = math.min(pin.originalH, pin.originalH * scale)
+      x              = (worldX - Map.position.x) * scale + clipW / 2
+      y              = (worldY - Map.position.y) * scale + clipH / 2
+      w              = math.min(pin.originalW, pin.originalW * scale)
+      h              = math.min(pin.originalH, pin.originalH * scale)
 
-    -- pin:SetPoint("Center", self.frame, "TopLeft", worldX, -worldY)
-    Utils.ClipFrame(pin, x, y, w, h, clipW, clipH)
+      pin:SetPoint("TopLeft", x, -y)
+      pin:SetWidth(w)
+      pin:SetHeight(h)
+    end
   end
 end
