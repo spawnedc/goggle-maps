@@ -151,21 +151,54 @@ end
 ---@return number
 function Utils.GetWorldPos(mapId, mapX, mapY)
   if not mapId then
+    Utils.debug("No map id provided")
     return 0, 0
   end
   local continentIndex = Utils.getContinentId(mapId)
   local worldInfo = GoggleMaps.Map.MapInfo[continentIndex]
   if not worldInfo then
+    Utils.debug("worldInfo not found for" .. mapId)
     return 0, 0
   end
 
   local zoneInfo = GoggleMaps.Map.Area[mapId]
   if not zoneInfo then
+    Utils.debug("zoneInfo not found for" .. mapId)
     return 0, 0
   end
 
   local x = worldInfo.X + zoneInfo.x + mapX * zoneInfo.scale
   local y = worldInfo.Y + zoneInfo.y + mapY * zoneInfo.scale / 1.5
+
+  return x, y
+end
+
+---Gets the zone position of the given world coordinates
+---@param mapId number
+---@param worldX number
+---@param worldY number
+---@return number
+---@return number
+function Utils.GetZonePosFromWorldPos(mapId, worldX, worldY)
+  local continentIndex = Utils.getContinentId(mapId)
+  local worldInfo = GoggleMaps.Map.MapInfo[continentIndex]
+  if not worldInfo then
+    Utils.debug("worldInfo not found for" .. mapId)
+    return 0, 0
+  end
+
+  local zoneInfo = GoggleMaps.Map.Area[mapId]
+  if not zoneInfo then
+    Utils.debug("zoneInfo not found for" .. mapId)
+    return 0, 0
+  end
+
+  local scale = zoneInfo.scale
+  local zoneX = zoneInfo.x
+  local zoneY = zoneInfo.y
+
+  local x = (worldX - worldInfo.X - zoneX) / scale
+  local y = (worldY - worldInfo.Y - zoneY) / scale * 1.5
 
   return x, y
 end
