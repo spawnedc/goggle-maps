@@ -42,7 +42,6 @@ function GoggleMaps.Hotspots:Init()
         worldY = contY - (mapY + height)
         worldX2 = worldX + width
         worldY2 = contY - mapY
-        -- GMapsDebug:AddItem(zoneInfo.name, string.format("%s,%s %s,%s", worldX, worldY, worldX2, worldY2))
       else
         worldX, worldY = Utils.GetWorldPos(mapId, mapX, mapY)
         worldX2, worldY2 = Utils.GetWorldPos(mapId, mapX + width, mapY + height)
@@ -98,22 +97,15 @@ end
 ---@param worldY number
 ---@param spots table<string>
 function GoggleMaps.Hotspots:CheckWorldHotspotsType(worldX, worldY, spots)
-  for n, spot in ipairs(spots) do
+  for _, spot in ipairs(spots) do
     if worldX >= spot.worldX1 and worldX <= spot.worldX2 and worldY >= spot.worldY1 and worldY <= spot.worldY2 then
-      local currentMapId = GoggleMaps.Map.mapId
-
       GMapsDebug:UpdateItem("Current hotspot", spot.mapId)
       local zoneName = GoggleMaps.Map.Area[spot.mapId].name
       GMapsDebug:UpdateItem("Zone name", zoneName)
       GMapsDebug:UpdateItem("Hotspot name", spot.name)
       GMapsDebug:UpdateItem("Hotspot coords1", string.format("%.2f, %2.f", spot.worldX1, spot.worldY1))
       GMapsDebug:UpdateItem("Hotspot coords2", string.format("%.2f, %2.f", spot.worldX2, spot.worldY2))
-      if mapId == 1020 then
-        Utils.debug("%s, %s - %sx%s", mapX, mapY, mapX + width, mapY + height)
-      end
-      -- if spot.mapId ~= currentMapId then
       return spot.mapId
-      -- end
     end
   end
 

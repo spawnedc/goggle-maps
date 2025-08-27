@@ -38,10 +38,37 @@ function GoggleMaps:Start()
   self.locationLabel:SetPoint("Left", self.frame.TitleBar, "Left", 4, 0)
   self.positionLabel:SetPoint("Left", self.locationLabel, "Right", 4, 0)
 
+  self:InitCurrentMapInfo()
+
   self.frame:SetScript("OnEvent", function() GoggleMaps:OnEvent() end)
   self.frame:Hide()
 
   table.insert(UISpecialFrames, ADDON_NAME .. "Main")
+end
+
+function GoggleMaps:InitCurrentMapInfo()
+  local frame = CreateFrame("Frame", nil, self.frame.Clip)
+  frame:SetPoint("TopRight", 0, 1)
+  frame:SetWidth(300)
+  frame:SetHeight(32)
+  local titleTex = frame:CreateTexture(nil, "BACKGROUND")
+  titleTex:SetAllPoints(frame)
+  titleTex:SetTexture(0.1, 0.1, 0.1, 0.9)
+
+  local continentLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+  local locationLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+  local positionLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+  continentLabel:SetPoint("TopLeft", frame, "TopLeft", 4, -4)
+  locationLabel:SetPoint("TopLeft", continentLabel, "TopRight", 0, 0)
+  positionLabel:SetPoint("TopRight", locationLabel, "BottomRight", 0, -4)
+
+  frame.continentLabel = continentLabel
+  frame.locationLabel = locationLabel
+  frame.positionLabel = positionLabel
+
+  frame:Hide()
+
+  self.currentMapInfoFrame = frame
 end
 
 function GoggleMaps:Toggle()
@@ -125,6 +152,7 @@ function GoggleMaps:handleUpdate()
   end
   self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
   self:UpdateLocationText()
+  self:UpdateCurrentMapInfo()
 end
 
 function GoggleMaps:UpdateLocationText()
@@ -132,22 +160,54 @@ function GoggleMaps:UpdateLocationText()
     return
   end
 
-  local area = self.Map.Area[self.Map.realMapId]
-  local playerFaction = UnitFactionGroup("player")
-  local playerFactionId = UNIT_FACTION_TO_FACTION_ID[playerFaction]
-  local playerPos = self.Player.position
-  ---@type Font
-  local fontObj
-  if area.faction == 0 then
-    fontObj = "GameFontNormalSmall" -- "|cffff6060"
-  elseif playerFactionId == area.faction then
-    fontObj = "GameFontGreenSmall"  -- "|cff20ff20"
-  else
-    fontObj = "GameFontRedSmall"    -- "|cffffff00"
-  end
+  local fontObj = Utils.getlocationFontObject(self.Map.realMapId)
   self.locationLabel:SetFontObject(fontObj)
   self.locationLabel:SetText(GetRealZoneText())
+  local playerPos = self.Player.position
   self.positionLabel:SetText(string.format("%.1f, %.1f", playerPos.x, playerPos.y))
+end
+
+function GoggleMaps:UpdateCurrentMapInfo()
+  if self.Map.mapId == self.Map.realMapId then
+    self.currentMapInfoFrame:Hide()
+  else
+    local mapId = self.Map.mapId
+    local frame = self.currentMapInfoFrame
+    --- @type FontString
+    local continentLabel = frame.continentLabel
+    --- @type FontString
+    local locationLabel = frame.locationLabel
+    --- @type FontString
+    local positionLabel = frame.positionLabel
+
+    local continentInfo = self.Map.Area[Utils.getContinentId(mapId) * 1000]
+    local zoneInfo = self.Map.Area[mapId]
+
+    continentLabel:SetText(continentInfo.name .. ", ")
+    continentLabel:SetWidth(continentLabel:GetStringWidth())
+
+    local locationFont = Utils.getlocationFontObject(mapId)
+    locationLabel:SetText(zoneInfo.name)
+    locationLabel:SetFontObject(locationFont)
+    locationLabel:SetWidth(locationLabel:GetStringWidth())
+
+    frame:Show()
+
+    -- local dist = ((wx - map.PlyrX) ^ 2 + (wy - map.PlyrY) ^ 2) ^ .5 * 4.575
+
+    local winx, winy = Utils.getMouseOverPos(self.frame)
+    if winx and winy then
+      local worldX, worldY = Utils.FramePosToWorldPos(winx, winy)
+      local zoneX, zoneY = Utils.GetZonePosFromWorldPos(mapId, worldX, worldY)
+      positionLabel:SetText(string.format("|cff80b080%.1f, %.1f", zoneX, zoneY))
+      if zoneX < 0 or zoneX > 100 or zoneY < 0 or zoneY > 100 then
+        frame:Hide()
+      end
+    end
+
+    local totalWidth = continentLabel:GetWidth() + locationLabel:GetWidth() + 8
+    frame:SetWidth(totalWidth)
+  end
 end
 
 GoggleMaps:Start()

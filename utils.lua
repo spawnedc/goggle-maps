@@ -1,5 +1,10 @@
 setfenv(1, GoggleMaps)
 
+local UNIT_FACTION_TO_FACTION_ID = {
+  Horde = 4,
+  Alliance = 2,
+}
+
 Utils = {}
 
 function Utils.log(msg)
@@ -306,4 +311,32 @@ function Utils.getMouseOverPos(frame)
   end
 
   return nil, nil
+end
+
+function Utils.getlocationFontObject(mapId)
+  local area = GoggleMaps.Map.Area[mapId]
+  local playerFaction = UnitFactionGroup("player")
+  local playerFactionId = UNIT_FACTION_TO_FACTION_ID[playerFaction]
+  ---@type Font
+  local fontObj
+  if area.faction == 0 then
+    fontObj = GameFontNormalSmall -- "|cffff6060"
+  elseif playerFactionId == area.faction then
+    fontObj = GameFontGreenSmall  -- "|cff20ff20"
+  else
+    fontObj = GameFontRedSmall    -- "|cffffff00"
+  end
+
+  return fontObj
+end
+
+--- Convert frame (top left) to world positions
+---@param x number
+---@param y number
+---@return number, number worldPos world positions
+function Utils.FramePosToWorldPos(x, y)
+  local Map = GoggleMaps.Map
+  x = Map.position.x + (x - Map.size.width / 2) / Map.scale
+  y = Map.position.y + (y - Map.size.height / 2) / Map.scale
+  return x, y
 end

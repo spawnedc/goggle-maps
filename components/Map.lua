@@ -343,7 +343,7 @@ function GoggleMaps.Map:handleUpdate()
 
     local winx, winy = Utils.getMouseOverPos(self.frame)
     if winx and winy then
-      local worldX, worldY = self:FramePosToWorldPos(winx, winy)
+      local worldX, worldY = Utils.FramePosToWorldPos(winx, winy)
       local newMapId = GoggleMaps.Hotspots:CheckWorldHotspots(worldX, worldY)
       if newMapId and self.mapId ~= newMapId then
         self.mapId = newMapId
@@ -370,14 +370,4 @@ function GoggleMaps.Map:handleUpdate()
   GMapsDebug:UpdateItem("Current zone", GetRealZoneText())
   GMapsDebug:UpdateItem("Current mapId", self.realMapId)
   GMapsDebug:UpdateItem("Fake mapId", self.mapId)
-end
-
---- Convert frame (top left) to world positions
----@param x number
----@param y number
----@return number, number worldPos world positions
-function GoggleMaps.Map:FramePosToWorldPos(x, y)
-  x = self.position.x + (x - self.size.width / 2) / self.scale
-  y = self.position.y + (y - self.size.height / 2) / self.scale
-  return x, y
 end

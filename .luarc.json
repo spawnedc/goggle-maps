@@ -17,7 +17,7 @@
   ],
   "workspace.library": [
     "defs/wow-api-type-definitions",
-    "defs/TurtleDefs.d.lua"
+    "defs/CustomDefs.d.lua"
   ],
   "type.inferParamType": true,
   "diagnostics.libraryFiles": "Disable",
