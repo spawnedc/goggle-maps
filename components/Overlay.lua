@@ -10,7 +10,8 @@ GoggleMaps.Overlay = {
   },
   --- The list of zone mapIds to draw. Shouldn't exceed options.maxZonesToDraw
   zonesToDraw = {},
-  zonesToClear = {}
+  zonesToClear = {},
+  textureBases = {}
 }
 
 function GoggleMaps.Overlay:Init(parentFrame)
@@ -139,15 +140,11 @@ function GoggleMaps.Overlay:UpdateOverlay(mapId)
   local TEXTURE_SIZE = 256
   local DETAIL_FRAME_WIDTH = 1002
   local DETAIL_FRAME_HEIGHT = 668
-  local textureFolder = zone.overlay
-  local baseTexturePath = "Interface\\WorldMap\\" .. textureFolder .. "\\"
   local textureFileHeight, textureFileWidth, texturePixelHeight, texturePixelWidth
   local zoneScale = zone.scale / 10
 
   for textureName, overlayData in pairs(overlays) do
-    local texturePath = baseTexturePath .. textureName
-
-    local offsetX, offsetY, fullTextureWidth, fullTextureHeight, mode = Utils.splitString(overlayData, ",")
+    local offsetX, offsetY, fullTextureWidth, fullTextureHeight = Utils.splitString(overlayData, ",")
 
     offsetX = tonumber(offsetX) or 0
     offsetY = tonumber(offsetY) or 0
@@ -198,8 +195,8 @@ function GoggleMaps.Overlay:UpdateOverlay(mapId)
         local height = textureFileHeight * zoneScale
 
         if self:ClipFrame(f, wx, wy, width, height) then
-          local finalTexturePath = mode and texturePath or texturePath .. textureIndex
-
+          local finalTexturePath = self.GetFullTexturePath(zone.overlay, textureName, textureIndex)
+          Utils.print(finalTexturePath)
           f.texture:SetTexture(finalTexturePath)
         end
 
@@ -207,4 +204,10 @@ function GoggleMaps.Overlay:UpdateOverlay(mapId)
       end
     end
   end
+end
+
+function GoggleMaps.Overlay.GetFullTexturePath(textureFolder, textureName, textureIndex)
+  local partialTexturePath = textureFolder .. "\\" .. textureName .. textureIndex
+  -- basic implementation. can be overridden by other addons
+  return "Interface\\WorldMap\\" .. partialTexturePath
 end
