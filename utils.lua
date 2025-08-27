@@ -329,3 +329,14 @@ function Utils.getlocationFontObject(mapId)
 
   return fontObj
 end
+
+--- Convert frame (top left) to world positions
+---@param x number
+---@param y number
+---@return number, number worldPos world positions
+function Utils.FramePosToWorldPos(x, y)
+  local Map = GoggleMaps.Map
+  x = Map.position.x + (x - Map.size.width / 2) / Map.scale
+  y = Map.position.y + (y - Map.size.height / 2) / Map.scale
+  return x, y
+end
