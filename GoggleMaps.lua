@@ -3,11 +3,6 @@ setfenv(1, GoggleMaps)
 local UI = GoggleMaps.UI.Window
 local ADDON_NAME = GoggleMaps.name
 
-local UNIT_FACTION_TO_FACTION_ID = {
-  Horde = 4,
-  Alliance = 2,
-}
-
 GoggleMaps.DEBUG_MODE = false
 ---@type Frame
 GoggleMaps.debugFrame = nil
@@ -32,7 +27,7 @@ function GoggleMaps:Start()
   self.frame = UI:CreateWindow(ADDON_NAME .. "Main", self.Map.size.width, self.Map.size.height, UIParent)
   self.frame:SetFrameLevel(self.frameLevels.mainFrame)
   self.frame:SetFrameStrata("HIGH")
-  self.frame:RegisterEvent("ADDON_LOADED")
+  self.frame:RegisterEvent("PLAYER_LOGIN")
   self.locationLabel = self.frame.TitleBar:CreateFontString("location", "OVERLAY", "GameFontNormalSmall")
   self.positionLabel = self.frame.TitleBar:CreateFontString("position", "OVERLAY", "GameFontNormalSmall")
   self.locationLabel:SetPoint("Left", self.frame.TitleBar, "Left", 4, 0)
@@ -123,13 +118,11 @@ function GoggleMaps:Init()
 end
 
 function GoggleMaps:OnEvent()
-  if event == "ADDON_LOADED" then
-    if arg1 == GoggleMaps.name then
-      Utils.debug("AddonLoaded")
-      self:Init()
-    end
+  if event == "PLAYER_LOGIN" then
+    Utils.debug("AddonLoaded")
+    self:Init()
 
-    if arg1 == "pfQuest" then
+    if pfMap then
       GoggleMaps.compat.pfQuest:Start()
     end
   end
