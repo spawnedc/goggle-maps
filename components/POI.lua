@@ -18,25 +18,9 @@ GoggleMaps.POI = {
 }
 
 local ICON_SIZE = 16
-local ATLAS_SIZE = 128
 
 function GoggleMaps.POI:GetIcon(pos, textureIndex, poiName, poiDesc)
   local f = CreateFrame("Frame", "POIIcon" .. pos, self.frame)
-  -- local t = f:CreateTexture()
-  -- f.texture = t
-  -- t:SetTexture("Interface\\Minimap\\POIIcons")
-  -- t:SetVertexColor(1, 1, 1, 1)
-  -- t:SetAllPoints(f)
-  -- local size   = ICON_SIZE / ATLAS_SIZE
-  -- local col    = Utils.mod(textureIndex, ICON_SIZE)
-  -- local row    = math.floor(textureIndex / ICON_SIZE)
-  -- local left   = col * size
-  -- local right  = left + size
-  -- local top    = row * size
-  -- local bottom = top + size
-
-  -- t:SetTexCoord(left, right, top, bottom)
-
   f:EnableMouse(true)
 
   f:SetScript("OnEnter", function()
