@@ -15,7 +15,7 @@ end
 ---Initialises the minimap frames
 ---@param parentFrame Frame
 function GoggleMaps.Minimap:Init(parentFrame)
-  Utils.print("Minimap init")
+  Utils.debug("Minimap init")
   -- Initialiseation has to be done here so other addons can override these
   local KalimdorBlocks = GoggleMaps.Map.MinimapBlocks.Kalimdor
   local AzerothBlocks = GoggleMaps.Map.MinimapBlocks.Azeroth
