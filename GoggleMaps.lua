@@ -48,18 +48,23 @@ end
 
 function GoggleMaps:InitCurrentMapInfo()
   local frame = CreateFrame("Frame", nil, self.frame.Clip)
-  frame:SetPoint("TopLeft", 0, 0)
+  frame:SetPoint("TopRight", 0, 1)
   frame:SetWidth(300)
-  frame:SetHeight(50)
+  frame:SetHeight(32)
   local titleTex = frame:CreateTexture(nil, "BACKGROUND")
   titleTex:SetAllPoints(frame)
   titleTex:SetTexture(0.1, 0.1, 0.1, 0.9)
 
-
+  local continentLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
   local locationLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
   local positionLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-  locationLabel:SetPoint("Left", frame, "Left", 4, 0)
-  positionLabel:SetPoint("TopLeft", locationLabel, "BottomLeft", 4, 0)
+  continentLabel:SetPoint("TopLeft", frame, "TopLeft", 4, -4)
+  locationLabel:SetPoint("TopLeft", continentLabel, "TopRight", 0, 0)
+  positionLabel:SetPoint("TopRight", locationLabel, "BottomRight", 0, -4)
+
+  frame.continentLabel = continentLabel
+  frame.locationLabel = locationLabel
+  frame.positionLabel = positionLabel
 
   frame:Hide()
 
@@ -166,7 +171,42 @@ function GoggleMaps:UpdateCurrentMapInfo()
   if self.Map.mapId == self.Map.realMapId then
     self.currentMapInfoFrame:Hide()
   else
-    self.currentMapInfoFrame:Show()
+    local mapId = self.Map.mapId
+    local frame = self.currentMapInfoFrame
+    --- @type FontString
+    local continentLabel = frame.continentLabel
+    --- @type FontString
+    local locationLabel = frame.locationLabel
+    --- @type FontString
+    local positionLabel = frame.positionLabel
+
+    local continentInfo = self.Map.Area[Utils.getContinentId(mapId) * 1000]
+    local zoneInfo = self.Map.Area[mapId]
+
+    continentLabel:SetText(continentInfo.name .. ", ")
+    continentLabel:SetWidth(continentLabel:GetStringWidth())
+
+    local locationFont = Utils.getlocationFontObject(mapId)
+    locationLabel:SetText(zoneInfo.name)
+    locationLabel:SetFontObject(locationFont)
+    locationLabel:SetWidth(locationLabel:GetStringWidth())
+
+    frame:Show()
+
+    -- local dist = ((wx - map.PlyrX) ^ 2 + (wy - map.PlyrY) ^ 2) ^ .5 * 4.575
+
+    local winx, winy = Utils.getMouseOverPos(self.frame)
+    if winx and winy then
+      local worldX, worldY = Utils.FramePosToWorldPos(winx, winy)
+      local zoneX, zoneY = Utils.GetZonePosFromWorldPos(mapId, worldX, worldY)
+      positionLabel:SetText(string.format("|cff80b080%.1f, %.1f", zoneX, zoneY))
+      if zoneX < 0 or zoneX > 100 or zoneY < 0 or zoneY > 100 then
+        frame:Hide()
+      end
+    end
+
+    local totalWidth = continentLabel:GetWidth() + locationLabel:GetWidth() + 8
+    frame:SetWidth(totalWidth)
   end
 end
 
