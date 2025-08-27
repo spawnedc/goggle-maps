@@ -1,15 +1,6 @@
 setfenv(1, GoggleMaps)
 
-local KalimdorBlocks = GoggleMaps.Map.MinimapBlocks.Kalimdor
-local AzerothBlocks = GoggleMaps.Map.MinimapBlocks.Azeroth
-
 GoggleMaps.Minimap = {
-  -- TODO: Auto-generate this
-  -- TODO: Random numbers, where do they come from?
-  Blocks = {
-    [1] = { KalimdorBlocks, offset = 1908, x = -1387.5660, y = -2060.4561 },
-    [2] = { AzerothBlocks, offset = 2420, x = 2930.591080, y = -1480.211752 }
-  },
   ---@type table<Frame>
   frames = {},
   minimapBlocksToDraw = 10
@@ -24,6 +15,18 @@ end
 ---Initialises the minimap frames
 ---@param parentFrame Frame
 function GoggleMaps.Minimap:Init(parentFrame)
+  Utils.print("Minimap init")
+  -- Initialiseation has to be done here so other addons can override these
+  local KalimdorBlocks = GoggleMaps.Map.MinimapBlocks.Kalimdor
+  local AzerothBlocks = GoggleMaps.Map.MinimapBlocks.Azeroth
+
+  -- TODO: Auto-generate this
+  -- TODO: Random numbers, where do they come from?
+  self.Blocks = {
+    [1] = { KalimdorBlocks, offset = 1908, x = -1387.5660, y = -2060.4561 },
+    [2] = { AzerothBlocks, offset = 2420, x = 2930.591080, y = -1480.211752 }
+  }
+
   for n = 1, self.minimapBlocksToDraw ^ 2 do
     local tf = CreateFrame("Frame", nil, parentFrame)
     self.frames[n] = tf
