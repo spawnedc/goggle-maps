@@ -38,10 +38,32 @@ function GoggleMaps:Start()
   self.locationLabel:SetPoint("Left", self.frame.TitleBar, "Left", 4, 0)
   self.positionLabel:SetPoint("Left", self.locationLabel, "Right", 4, 0)
 
+  self:InitCurrentMapInfo()
+
   self.frame:SetScript("OnEvent", function() GoggleMaps:OnEvent() end)
   self.frame:Hide()
 
   table.insert(UISpecialFrames, ADDON_NAME .. "Main")
+end
+
+function GoggleMaps:InitCurrentMapInfo()
+  local frame = CreateFrame("Frame", nil, self.frame.Clip)
+  frame:SetPoint("TopLeft", 0, 0)
+  frame:SetWidth(300)
+  frame:SetHeight(50)
+  local titleTex = frame:CreateTexture(nil, "BACKGROUND")
+  titleTex:SetAllPoints(frame)
+  titleTex:SetTexture(0.1, 0.1, 0.1, 0.9)
+
+
+  local locationLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+  local positionLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+  locationLabel:SetPoint("Left", frame, "Left", 4, 0)
+  positionLabel:SetPoint("TopLeft", locationLabel, "BottomLeft", 4, 0)
+
+  frame:Hide()
+
+  self.currentMapInfoFrame = frame
 end
 
 function GoggleMaps:Toggle()
@@ -125,6 +147,7 @@ function GoggleMaps:handleUpdate()
   end
   self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
   self:UpdateLocationText()
+  self:UpdateCurrentMapInfo()
 end
 
 function GoggleMaps:UpdateLocationText()
@@ -132,22 +155,19 @@ function GoggleMaps:UpdateLocationText()
     return
   end
 
-  local area = self.Map.Area[self.Map.realMapId]
-  local playerFaction = UnitFactionGroup("player")
-  local playerFactionId = UNIT_FACTION_TO_FACTION_ID[playerFaction]
-  local playerPos = self.Player.position
-  ---@type Font
-  local fontObj
-  if area.faction == 0 then
-    fontObj = "GameFontNormalSmall" -- "|cffff6060"
-  elseif playerFactionId == area.faction then
-    fontObj = "GameFontGreenSmall"  -- "|cff20ff20"
-  else
-    fontObj = "GameFontRedSmall"    -- "|cffffff00"
-  end
+  local fontObj = Utils.getlocationFontObject(self.Map.realMapId)
   self.locationLabel:SetFontObject(fontObj)
   self.locationLabel:SetText(GetRealZoneText())
+  local playerPos = self.Player.position
   self.positionLabel:SetText(string.format("%.1f, %.1f", playerPos.x, playerPos.y))
+end
+
+function GoggleMaps:UpdateCurrentMapInfo()
+  if self.Map.mapId == self.Map.realMapId then
+    self.currentMapInfoFrame:Hide()
+  else
+    self.currentMapInfoFrame:Show()
+  end
 end
 
 GoggleMaps:Start()
