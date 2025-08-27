@@ -196,7 +196,6 @@ function GoggleMaps.Overlay:UpdateOverlay(mapId)
 
         if self:ClipFrame(f, wx, wy, width, height) then
           local finalTexturePath = self.GetFullTexturePath(zone.overlay, textureName, textureIndex)
-          Utils.print(finalTexturePath)
           f.texture:SetTexture(finalTexturePath)
         end
 
