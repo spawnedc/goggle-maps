@@ -14,8 +14,20 @@ GoggleMaps.Overlay = {
   textureBases = {}
 }
 
+function GoggleMaps.Overlay:InitDB()
+  if GoggleMapsDB.Overlay == nil then
+    GoggleMapsDB.Overlay = {
+      maxZonesToDraw = 5
+    }
+  end
+  self.options.maxZonesToDraw = GoggleMapsDB.Overlay.maxZonesToDraw
+end
+
 function GoggleMaps.Overlay:Init(parentFrame)
   Utils.debug("Overlay init")
+
+  self:InitDB()
+
   self.frame = CreateFrame("Frame", "overlayFrame", parentFrame)
   self.frame:SetAllPoints()
   self.frame:SetFrameLevel(GoggleMaps.frameLevels.overlay)

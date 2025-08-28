@@ -70,6 +70,19 @@ GoggleMaps.Map = {
   continentZoneToMapId = {}
 }
 
+function GoggleMaps.Map:InitDB(force)
+  if GoggleMapsDB.Map == nil then
+    GoggleMapsDB.Map = {
+      scale = 0.5,
+    }
+  end
+  self.scale = GoggleMapsDB.Map.scale
+
+  if force then
+    self:MoveToPlayer()
+  end
+end
+
 ---Initialises the map
 ---@param parentFrame Frame
 function GoggleMaps.Map:Init(parentFrame)
@@ -77,9 +90,7 @@ function GoggleMaps.Map:Init(parentFrame)
   GMapsDebug:AddItem("Map pos", self.position, Utils.positionFormatter)
   GMapsDebug:AddItem("Map size", self.size, Utils.sizeFormatter)
 
-  self.scale = GoggleMapsDB.Map.scale
-  self.position = GoggleMapsDB.Map.position
-  self.size = GoggleMapsDB.Map.size
+  self:InitDB()
 
   self.frame = parentFrame
   self.frame:EnableMouse(true)
@@ -276,7 +287,6 @@ function GoggleMaps.Map:MoveMap(xPos, yPos)
   end
   GMapsDebug:UpdateItem("Map pos", self.position)
 
-  GoggleMapsDB.Map.position = self.position
   self:MoveContinents()
   self:MoveZones()
 end
@@ -335,16 +345,21 @@ function GoggleMaps.Map:MoveZoneTiles(mapId, frames)
   end
 end
 
+function GoggleMaps.Map:MoveToPlayer()
+  local player = GoggleMaps.Player
+  local playerPos = player.position
+  local worldX, worldY = Utils.GetWorldPos(self.realMapId, playerPos.x, playerPos.y)
+
+  self:MoveMap(worldX, worldY)
+end
+
 function GoggleMaps.Map:handleUpdate()
   if self.isDragging then
     self:MoveMap()
   else
     local player = GoggleMaps.Player
     if player.isMoving then
-      local playerPos = player.position
-      local worldX, worldY = Utils.GetWorldPos(self.realMapId, playerPos.x, playerPos.y)
-
-      self:MoveMap(worldX, worldY)
+      self:MoveToPlayer()
     end
 
     local winx, winy = Utils.getMouseOverPos(self.frame)

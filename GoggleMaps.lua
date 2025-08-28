@@ -22,39 +22,44 @@ GoggleMaps.locationLabel = nil
 ---@type FontString
 GoggleMaps.positionLabel = nil
 
-function GoggleMaps:InitDB()
+function GoggleMaps:InitDB(force)
   Utils.print("InitDB")
-  local Map = self.Map
-  local Overlay = self.Overlay
   local DB = _G.GoggleMapsDB
-  if not DB then
-    Utils.print("skjadhfa")
+  if not DB or force then
     DB = {
-      DEBUG_MODE = false
+      DEBUG_MODE = false,
+      position = { -- center
+        x = 0,
+        y = 0,
+      },
+      size = {
+        width = 1024,
+        height = 768
+      }
     }
     _G.GoggleMapsDB = DB
   end
 
-  GoggleMaps.DEBUG_MODE = DB.DEBUG_MODE
-
-  -- Per‑character defaults
-  if GoggleMapsDB.Map == nil then
-    GoggleMapsDB.Map = {
-      scale = Map.scale,
-      position = Map.position,
-      size = Map.size,
-    }
+  if force then
+    self.frame:ClearAllPoints()
+    self.frame:SetPoint("Center", UIParent, "Center", DB.position.x, DB.position.y)
+    self.frame:SetWidth(DB.size.width)
+    self.frame:SetHeight(DB.size.height)
   end
 
-  if GoggleMapsDB.Overlay == nil then
-    GoggleMapsDB.Overlay = {
-      maxZonesToDraw = Overlay.options.maxZonesToDraw
-    }
-  end
+  self.DEBUG_MODE = DB.DEBUG_MODE
+end
+
+function GoggleMaps:ResetDB()
+  _G.GoggleMapsDB = nil
+
+  self:InitDB(true)
+  self.Map:InitDB(true)
+  self.Overlay:InitDB()
 end
 
 function GoggleMaps:Start()
-  self.frame = UI:CreateWindow(ADDON_NAME .. "Main", self.Map.size.width, self.Map.size.height, UIParent)
+  self.frame = UI:CreateWindow(ADDON_NAME .. "Main", 1024, 768, UIParent)
   self.frame:SetFrameLevel(self.frameLevels.mainFrame)
   self.frame:SetFrameStrata("HIGH")
   self.frame:RegisterEvent("PLAYER_LOGIN")
@@ -125,6 +130,7 @@ function GoggleMaps:Init()
 
   self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
   self.frame:SetMinResize(200, 200)
+  self.frame:SetClampedToScreen(true)
 
   local contentFrame = self.frame.Content
 
@@ -158,10 +164,11 @@ function GoggleMaps:OnEvent()
 end
 
 function GoggleMaps:handleSizeChanged()
+  GoggleMapsDB.size.width = self.frame:GetWidth()
+  GoggleMapsDB.size.height = self.frame:GetHeight()
   local width, height = self.frame:SetContentSize()
   self.Map.size.width = width
   self.Map.size.height = height
-  GoggleMapsDB.Map.size = self.Map.size
   self.Map:MoveMap(self.Map.position.x, self.Map.position.y)
 end
 

@@ -24,7 +24,21 @@ GoggleMaps.name = "GoggleMaps"
 GoggleMaps.compat = {}
 
 SLASH_GMAPS1 = "/gmaps"
-SLASH_GMAPSDEBUG1 = "/gmapsdebug"
+
+--- Splits the given string by the given separator
+---@param input string
+---@param separator string
+local function splitString(input, separator)
+  local t = {}
+  -- gfind does not add a nil value if the string starts with the separator.
+  if string.sub(input, 1, string.len(separator)) == separator then
+    table.insert(t, nil)
+  end
+  for part in string.gfind(input, "([^" .. separator .. "]+)") do
+    table.insert(t, part)
+  end
+  return unpack(t)
+end
 
 --- Used by the bindings
 function GoggleMaps_Toggle()
@@ -36,10 +50,14 @@ function GoggleMaps_ToggleBlizzMap()
   ToggleWorldMap()
 end
 
-function SlashCmdList.GMAPS()
-  GoggleMaps_Toggle()
-end
-
-function SlashCmdList.GMAPSDEBUG()
-  GoggleMaps:ToggleDebug()
+function SlashCmdList.GMAPS(msg)
+  local cmd, arg1, arg2, arg3 = splitString(msg, ' ')
+  if cmd == "reset" then
+    GoggleMaps:ResetDB()
+    DEFAULT_CHAT_FRAME:AddMessage("DB reset. Type /reloadui to apply.")
+  elseif cmd == "debug" then
+    GoggleMaps:ToggleDebug()
+  else
+    GoggleMaps_Toggle()
+  end
 end
