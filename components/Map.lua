@@ -136,6 +136,8 @@ function GoggleMaps.Map:handleZoom()
   self.scale = math.max(scale + value * scale * .3, self.minScale)
   self.scale = math.min(self.scale, self.maxScale)
 
+  GoggleMapsDB.Map.scale = self.scale
+
   local newX = map.position.x + (x - left - map.size.width / 2) / map.scale
   local newY = map.position.y + (top - y - map.size.height / 2) / map.scale
 
@@ -153,7 +155,6 @@ end
 function GoggleMaps.Map:handleMouseDown(force)
   if force or arg1 == "LeftButton" then
     local effectiveScale = self.frame:GetEffectiveScale()
-    self.effectiveScale = effectiveScale
 
     local x, y = GetCursorPosition()
     x = x / effectiveScale
@@ -250,12 +251,12 @@ function GoggleMaps.Map:MoveMap(xPos, yPos)
     self.position.x = xPos
     self.position.y = yPos
   else
-    self.effectiveScale = self.frame:GetEffectiveScale()
+    local effectiveScale = self.frame:GetEffectiveScale()
 
     local cursorX, cursorY = GetCursorPosition()
 
-    cursorX = cursorX / self.effectiveScale
-    cursorY = cursorY / self.effectiveScale
+    cursorX = cursorX / effectiveScale
+    cursorY = cursorY / effectiveScale
 
     local x = cursorX - self.scroll.x
     local y = cursorY - self.scroll.y
@@ -271,6 +272,7 @@ function GoggleMaps.Map:MoveMap(xPos, yPos)
   end
   GMapsDebug:UpdateItem("Map pos", self.position)
 
+  GoggleMapsDB.Map.position = self.position
   self:MoveContinents()
   self:MoveZones()
 end

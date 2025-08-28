@@ -23,8 +23,29 @@ GoggleMaps.locationLabel = nil
 ---@type FontString
 GoggleMaps.positionLabel = nil
 
+function GoggleMaps:InitDB()
+  local Map = self.Map
+  local Overlay = self.Overlay
+  if not GoggleMapsDB then GoggleMapsDB = {} end
+
+  -- Per‑character defaults
+  if GoggleMapsDB.Map == nil then
+    GoggleMapsDB.Map = {
+      scale = Map.scale,
+      position = Map.position,
+      size = Map.size,
+    }
+  end
+
+  if GoggleMapsDB.Overlay == nil then
+    GoggleMapsDB.Overlay = {
+      maxZonesToDraw = Overlay.options.maxZonesToDraw
+    }
+  end
+end
+
 function GoggleMaps:Start()
-  self.frame = UI:CreateWindow(ADDON_NAME .. "Main", self.Map.size.width, self.Map.size.height, UIParent)
+  self.frame = UI:CreateWindow(ADDON_NAME .. "Main", GoggleMapsDB.Map.size.width, GoggleMapsDB.Map.size.height, UIParent)
   self.frame:SetFrameLevel(self.frameLevels.mainFrame)
   self.frame:SetFrameStrata("HIGH")
   self.frame:RegisterEvent("PLAYER_LOGIN")
@@ -132,6 +153,7 @@ function GoggleMaps:handleSizeChanged()
   local width, height = self.frame:SetContentSize()
   self.Map.size.width = width
   self.Map.size.height = height
+  GoggleMapsDB.Map.size = self.Map.size
   self.Map:MoveMap(self.Map.position.x, self.Map.position.y)
 end
 
@@ -203,4 +225,5 @@ function GoggleMaps:UpdateCurrentMapInfo()
   end
 end
 
+GoggleMaps:InitDB()
 GoggleMaps:Start()
