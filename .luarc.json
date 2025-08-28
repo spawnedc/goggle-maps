@@ -22,7 +22,8 @@
   "type.inferParamType": true,
   "diagnostics.libraryFiles": "Disable",
   "diagnostics.disable": [
-    "need-check-nil"
+    "need-check-nil",
+    "discard-returns"
   ],
   "diagnostics.ignoredFiles": "Disable",
   "workspace.ignoreDir": [
