@@ -3,7 +3,6 @@ setfenv(1, GoggleMaps)
 local UI = GoggleMaps.UI.Window
 local ADDON_NAME = GoggleMaps.name
 
-GoggleMaps.DEBUG_MODE = false
 ---@type Frame
 GoggleMaps.debugFrame = nil
 ---@type Frame
@@ -24,9 +23,19 @@ GoggleMaps.locationLabel = nil
 GoggleMaps.positionLabel = nil
 
 function GoggleMaps:InitDB()
+  Utils.print("InitDB")
   local Map = self.Map
   local Overlay = self.Overlay
-  if not GoggleMapsDB then GoggleMapsDB = {} end
+  local DB = _G.GoggleMapsDB
+  if not DB then
+    Utils.print("skjadhfa")
+    DB = {
+      DEBUG_MODE = false
+    }
+    _G.GoggleMapsDB = DB
+  end
+
+  GoggleMaps.DEBUG_MODE = DB.DEBUG_MODE
 
   -- Per‑character defaults
   if GoggleMapsDB.Map == nil then
@@ -45,7 +54,7 @@ function GoggleMaps:InitDB()
 end
 
 function GoggleMaps:Start()
-  self.frame = UI:CreateWindow(ADDON_NAME .. "Main", GoggleMapsDB.Map.size.width, GoggleMapsDB.Map.size.height, UIParent)
+  self.frame = UI:CreateWindow(ADDON_NAME .. "Main", self.Map.size.width, self.Map.size.height, UIParent)
   self.frame:SetFrameLevel(self.frameLevels.mainFrame)
   self.frame:SetFrameStrata("HIGH")
   self.frame:RegisterEvent("PLAYER_LOGIN")
@@ -101,6 +110,7 @@ end
 
 function GoggleMaps:ToggleDebug()
   self.DEBUG_MODE = not self.DEBUG_MODE
+  GoggleMapsDB.DEBUG_MODE = self.DEBUG_MODE
 
   if self.DEBUG_MODE then
     self.debugFrame:Show()
@@ -110,11 +120,9 @@ function GoggleMaps:ToggleDebug()
 end
 
 function GoggleMaps:Init()
+  self:InitDB()
   self.debugFrame = GMapsDebug:CreateDebugWindow()
-  if not self.DEBUG_MODE then
-    self.debugFrame:Hide()
-  end
-  self.debugFrame:Hide()
+
   self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
   self.frame:SetMinResize(200, 200)
 
@@ -225,5 +233,4 @@ function GoggleMaps:UpdateCurrentMapInfo()
   end
 end
 
-GoggleMaps:InitDB()
 GoggleMaps:Start()

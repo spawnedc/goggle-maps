@@ -6,7 +6,7 @@
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## OptionalDeps: pfQuest
-## SavedVariablesPerCharacter GoggleMapsDB
+## SavedVariablesPerCharacter: GoggleMapsDB
 
 Bindings.lua
 environment.lua

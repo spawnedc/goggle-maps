@@ -77,6 +77,10 @@ function GoggleMaps.Map:Init(parentFrame)
   GMapsDebug:AddItem("Map pos", self.position, Utils.positionFormatter)
   GMapsDebug:AddItem("Map size", self.size, Utils.sizeFormatter)
 
+  self.scale = GoggleMapsDB.Map.scale
+  self.position = GoggleMapsDB.Map.position
+  self.size = GoggleMapsDB.Map.size
+
   self.frame = parentFrame
   self.frame:EnableMouse(true)
   self.frame:EnableMouseWheel(true)
