@@ -80,6 +80,7 @@ function GoggleMaps.compat.pfQuest:handleUpdate()
       pin:SetPoint("TopLeft", adjustedX, -adjustedY)
       pin:SetWidth(clampedWidth)
       pin:SetHeight(clampedHeight)
+      pin:Show()
     end
   end
   self.frame:SetFrameLevel(GoggleMaps.frameLevels.pfQuest)
