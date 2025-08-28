@@ -172,8 +172,13 @@ function GoggleMaps:ToggleDebug()
   GoggleMapsDB.DEBUG_MODE = self.DEBUG_MODE
 
   if self.DEBUG_MODE then
+    Utils.debug("Debug mode ON")
     self.debugFrame:Show()
   else
+    -- let it print one more debug messasge before going offline...
+    self.DEBUG_MODE = true
+    Utils.debug("Debug mode OFF")
+    self.DEBUG_MODE = false
     self.debugFrame:Hide()
   end
 end
@@ -203,6 +208,7 @@ function GoggleMaps:Init()
   self.frame:SetScript("OnSizeChanged", function() self:handleSizeChanged() end)
 
   self:handleSizeChanged()
+  self.frame:Show()
   Utils.print("READY!")
 end
 
