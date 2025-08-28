@@ -6,10 +6,13 @@
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## OptionalDeps: pfQuest
+## SavedVariablesPerCharacter: GoggleMapsDB
 
 Bindings.lua
 environment.lua
 utils.lua
+
+components\Player.lua
 
 components\UI.lua
 components\UI.Window.lua
@@ -25,8 +28,6 @@ components\Minimap.lua
 
 data\Map.Hotspots.lua
 components\Hotspots.lua
-
-components\Player.lua
 
 components\POI.lua
 

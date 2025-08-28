@@ -70,12 +70,27 @@ GoggleMaps.Map = {
   continentZoneToMapId = {}
 }
 
+function GoggleMaps.Map:InitDB(force)
+  if GoggleMapsDB.Map == nil then
+    GoggleMapsDB.Map = {
+      scale = 0.5,
+    }
+  end
+  self.scale = GoggleMapsDB.Map.scale
+
+  if force then
+    self:MoveToPlayer()
+  end
+end
+
 ---Initialises the map
 ---@param parentFrame Frame
 function GoggleMaps.Map:Init(parentFrame)
   GMapsDebug:AddItem("zoom", self.scale, Utils.numberFormatter(2))
   GMapsDebug:AddItem("Map pos", self.position, Utils.positionFormatter)
   GMapsDebug:AddItem("Map size", self.size, Utils.sizeFormatter)
+
+  self:InitDB()
 
   self.frame = parentFrame
   self.frame:EnableMouse(true)
@@ -136,6 +151,8 @@ function GoggleMaps.Map:handleZoom()
   self.scale = math.max(scale + value * scale * .3, self.minScale)
   self.scale = math.min(self.scale, self.maxScale)
 
+  GoggleMapsDB.Map.scale = self.scale
+
   local newX = map.position.x + (x - left - map.size.width / 2) / map.scale
   local newY = map.position.y + (top - y - map.size.height / 2) / map.scale
 
@@ -153,7 +170,6 @@ end
 function GoggleMaps.Map:handleMouseDown(force)
   if force or arg1 == "LeftButton" then
     local effectiveScale = self.frame:GetEffectiveScale()
-    self.effectiveScale = effectiveScale
 
     local x, y = GetCursorPosition()
     x = x / effectiveScale
@@ -250,12 +266,12 @@ function GoggleMaps.Map:MoveMap(xPos, yPos)
     self.position.x = xPos
     self.position.y = yPos
   else
-    self.effectiveScale = self.frame:GetEffectiveScale()
+    local effectiveScale = self.frame:GetEffectiveScale()
 
     local cursorX, cursorY = GetCursorPosition()
 
-    cursorX = cursorX / self.effectiveScale
-    cursorY = cursorY / self.effectiveScale
+    cursorX = cursorX / effectiveScale
+    cursorY = cursorY / effectiveScale
 
     local x = cursorX - self.scroll.x
     local y = cursorY - self.scroll.y
@@ -329,16 +345,21 @@ function GoggleMaps.Map:MoveZoneTiles(mapId, frames)
   end
 end
 
+function GoggleMaps.Map:MoveToPlayer()
+  local player = GoggleMaps.Player
+  local playerPos = player.position
+  local worldX, worldY = Utils.GetWorldPos(self.realMapId, playerPos.x, playerPos.y)
+
+  self:MoveMap(worldX, worldY)
+end
+
 function GoggleMaps.Map:handleUpdate()
   if self.isDragging then
     self:MoveMap()
   else
     local player = GoggleMaps.Player
     if player.isMoving then
-      local playerPos = player.position
-      local worldX, worldY = Utils.GetWorldPos(self.realMapId, playerPos.x, playerPos.y)
-
-      self:MoveMap(worldX, worldY)
+      self:MoveToPlayer()
     end
 
     local winx, winy = Utils.getMouseOverPos(self.frame)

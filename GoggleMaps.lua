@@ -3,7 +3,6 @@ setfenv(1, GoggleMaps)
 local UI = GoggleMaps.UI.Window
 local ADDON_NAME = GoggleMaps.name
 
-GoggleMaps.DEBUG_MODE = false
 ---@type Frame
 GoggleMaps.debugFrame = nil
 ---@type Frame
@@ -23,8 +22,44 @@ GoggleMaps.locationLabel = nil
 ---@type FontString
 GoggleMaps.positionLabel = nil
 
+function GoggleMaps:InitDB(force)
+  Utils.print("InitDB")
+  local DB = _G.GoggleMapsDB
+  if not DB or force then
+    DB = {
+      DEBUG_MODE = false,
+      position = { -- center
+        x = 0,
+        y = 0,
+      },
+      size = {
+        width = 1024,
+        height = 768
+      }
+    }
+    _G.GoggleMapsDB = DB
+  end
+
+  if force then
+    self.frame:ClearAllPoints()
+    self.frame:SetPoint("Center", UIParent, "Center", DB.position.x, DB.position.y)
+    self.frame:SetWidth(DB.size.width)
+    self.frame:SetHeight(DB.size.height)
+  end
+
+  self.DEBUG_MODE = DB.DEBUG_MODE
+end
+
+function GoggleMaps:ResetDB()
+  _G.GoggleMapsDB = nil
+
+  self:InitDB(true)
+  self.Map:InitDB(true)
+  self.Overlay:InitDB()
+end
+
 function GoggleMaps:Start()
-  self.frame = UI:CreateWindow(ADDON_NAME .. "Main", self.Map.size.width, self.Map.size.height, UIParent)
+  self.frame = UI:CreateWindow(ADDON_NAME .. "Main", 1024, 768, UIParent)
   self.frame:SetFrameLevel(self.frameLevels.mainFrame)
   self.frame:SetFrameStrata("HIGH")
   self.frame:RegisterEvent("PLAYER_LOGIN")
@@ -80,6 +115,7 @@ end
 
 function GoggleMaps:ToggleDebug()
   self.DEBUG_MODE = not self.DEBUG_MODE
+  GoggleMapsDB.DEBUG_MODE = self.DEBUG_MODE
 
   if self.DEBUG_MODE then
     self.debugFrame:Show()
@@ -89,13 +125,12 @@ function GoggleMaps:ToggleDebug()
 end
 
 function GoggleMaps:Init()
+  self:InitDB()
   self.debugFrame = GMapsDebug:CreateDebugWindow()
-  if not self.DEBUG_MODE then
-    self.debugFrame:Hide()
-  end
-  self.debugFrame:Hide()
+
   self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
   self.frame:SetMinResize(200, 200)
+  self.frame:SetClampedToScreen(true)
 
   local contentFrame = self.frame.Content
 
@@ -129,6 +164,8 @@ function GoggleMaps:OnEvent()
 end
 
 function GoggleMaps:handleSizeChanged()
+  GoggleMapsDB.size.width = self.frame:GetWidth()
+  GoggleMapsDB.size.height = self.frame:GetHeight()
   local width, height = self.frame:SetContentSize()
   self.Map.size.width = width
   self.Map.size.height = height

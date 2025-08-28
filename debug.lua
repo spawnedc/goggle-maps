@@ -101,6 +101,8 @@ function GMapsDebug:CreateDebugWindow()
 
   table.insert(UISpecialFrames, "GMapsDebug")
 
+  debugFrame:Hide()
+
   return debugFrame
 end
 
