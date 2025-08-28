@@ -21,6 +21,7 @@ GoggleMaps.frameLevels = {
 GoggleMaps.locationLabel = nil
 ---@type FontString
 GoggleMaps.positionLabel = nil
+GoggleMaps.wasDragging = false
 
 function GoggleMaps:InitDB(force)
   Utils.print("InitDB")
@@ -28,6 +29,7 @@ function GoggleMaps:InitDB(force)
   if not DB or force then
     DB = {
       DEBUG_MODE = false,
+      isMini = false,
       position = { -- center
         x = 0,
         y = 0,
@@ -35,10 +37,20 @@ function GoggleMaps:InitDB(force)
       size = {
         width = 1024,
         height = 768
+      },
+      miniPosition = {
+        x = 0,
+        y = 0
+      },
+      miniSize = {
+        width = 200,
+        height = 200
       }
     }
     _G.GoggleMapsDB = DB
   end
+
+  self.isMini = DB.isMini
 
   if force then
     self.frame:ClearAllPoints()
@@ -72,8 +84,6 @@ function GoggleMaps:Start()
 
   self.frame:SetScript("OnEvent", function() GoggleMaps:OnEvent() end)
   self.frame:Hide()
-
-  table.insert(UISpecialFrames, ADDON_NAME .. "Main")
 end
 
 function GoggleMaps:InitCurrentMapInfo()
@@ -102,14 +112,58 @@ function GoggleMaps:InitCurrentMapInfo()
 end
 
 function GoggleMaps:Toggle()
-  if self.frame:IsVisible() then
-    self.frame:Hide()
-    self.debugFrame:Hide()
-  else
+  if not self.frame:IsVisible() then
+    -- just show the frame without touching isMini
     self.frame:Show()
     if self.DEBUG_MODE then
       self.debugFrame:Show()
     end
+  else
+    -- toggle between mini and maxi
+    self.isMini = not self.isMini
+    GoggleMapsDB.isMini = self.isMini
+
+    local x = self.isMini and GoggleMapsDB.miniPosition.x or GoggleMapsDB.position.x
+    local y = self.isMini and GoggleMapsDB.miniPosition.y or GoggleMapsDB.position.y
+
+    local w = self.isMini and GoggleMapsDB.miniSize.width or GoggleMapsDB.size.width
+    local h = self.isMini and GoggleMapsDB.miniSize.height or GoggleMapsDB.size.height
+
+    Utils.debug("Restoring size: isMini=%s %.2f, %.2f", tostring(self.isMini), w, h)
+    self.frame:SetWidth(w)
+    self.frame:SetHeight(h)
+
+    Utils.debug("Restoring position: isMini=%s %.2f, %.2f", tostring(self.isMini), x, y)
+    self.frame:ClearAllPoints()
+    self.frame:SetPoint("Center", UIParent, "Center", x, y)
+  end
+end
+
+function GoggleMaps:UpdateDBSize()
+  local w = self.frame:GetWidth()
+  local h = self.frame:GetHeight()
+  Utils.debug("UpdateDBSize isMini=%s %.2f, %.2f", tostring(self.isMini), w, h)
+  if self.isMini then
+    GoggleMapsDB.miniSize.width = w
+    GoggleMapsDB.miniSize.height = h
+  else
+    GoggleMapsDB.size.width = w
+    GoggleMapsDB.size.height = h
+  end
+end
+
+function GoggleMaps:UpdateDBPos()
+  local cx, cy = self.frame:GetCenter()
+  local px, py = self.frame:GetParent():GetCenter()
+  local x = cx - px
+  local y = cy - py
+  Utils.debug("UpdateDBPos isMini=%s %.2f, %.2f", tostring(self.isMini), x, y)
+  if self.isMini then
+    GoggleMapsDB.miniPosition.x = x
+    GoggleMapsDB.miniPosition.y = y
+  else
+    GoggleMapsDB.position.x = x
+    GoggleMapsDB.position.y = y
   end
 end
 
@@ -164,8 +218,7 @@ function GoggleMaps:OnEvent()
 end
 
 function GoggleMaps:handleSizeChanged()
-  GoggleMapsDB.size.width = self.frame:GetWidth()
-  GoggleMapsDB.size.height = self.frame:GetHeight()
+  self:UpdateDBSize()
   local width, height = self.frame:SetContentSize()
   self.Map.size.width = width
   self.Map.size.height = height
@@ -173,6 +226,12 @@ function GoggleMaps:handleSizeChanged()
 end
 
 function GoggleMaps:handleUpdate()
+  if self.wasDragging and not self.frame.isDragging then
+    self.wasDragging = false
+    self:UpdateDBPos()
+  elseif not self.wasDragging and self.frame.isDragging then
+    self.wasDragging = true
+  end
   self.Map:handleUpdate()
   self.Overlay:handleUpdate()
   self.POI:handleUpdate()

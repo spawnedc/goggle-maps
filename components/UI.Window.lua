@@ -37,8 +37,14 @@ local function CreateBaseWindow(name, width, height, parent)
   title:SetPoint("TopRight", frame, "TopRight", -INSET, -INSET)
   title:SetHeight(18)
   title:EnableMouse(true)
-  title:SetScript("OnMouseDown", function() frame:StartMoving() end)
-  title:SetScript("OnMouseUp", function() frame:StopMovingOrSizing() end)
+  title:SetScript("OnMouseDown", function()
+    frame.isDragging = true
+    frame:StartMoving()
+  end)
+  title:SetScript("OnMouseUp", function()
+    frame.isDragging = false
+    frame:StopMovingOrSizing()
+  end)
 
   local titleTex = title:CreateTexture(nil, "BACKGROUND")
   titleTex:SetAllPoints(title)
