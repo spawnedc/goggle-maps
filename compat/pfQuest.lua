@@ -58,19 +58,28 @@ function GoggleMaps.compat.pfQuest:handleUpdate()
   local pin
   local x, y, w, h
   local worldX, worldY
+  local clampedWidth, clampedHeight
+  local adjustedX, adjustedY
   for _, p in ipairs(self.pins) do
     pin = p
     if pin:IsShown() then
       worldX, worldY = Utils.GetWorldPos(mapId, pin.originalX, pin.originalY)
 
-      x              = (worldX - Map.position.x) * scale + clipW / 2
-      y              = (worldY - Map.position.y) * scale + clipH / 2
-      w              = math.min(pin.originalW, pin.originalW * scale)
-      h              = math.min(pin.originalH, pin.originalH * scale)
+      w = pin.originalW * scale
+      h = pin.originalH * scale
 
-      pin:SetPoint("TopLeft", x, -y)
-      pin:SetWidth(w)
-      pin:SetHeight(h)
+      clampedWidth = math.min(pin.originalW, w)
+      clampedHeight = math.min(pin.originalH, h)
+
+      x = (worldX - Map.position.x - (pin.originalW / 2)) * scale + clipW / 2
+      y = (worldY - Map.position.y - (pin.originalH / 2)) * scale + clipH / 2
+
+      adjustedX = x + (w - clampedWidth) / 2
+      adjustedY = y + (h - clampedHeight) / 2
+
+      pin:SetPoint("TopLeft", adjustedX, -adjustedY)
+      pin:SetWidth(clampedWidth)
+      pin:SetHeight(clampedHeight)
     end
   end
   self.frame:SetFrameLevel(GoggleMaps.frameLevels.pfQuest)
