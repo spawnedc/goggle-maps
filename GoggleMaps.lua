@@ -50,7 +50,11 @@ function GoggleMaps:InitDB(force)
     _G.GoggleMapsDB = DB
   end
 
+  Utils.print(tostring(DB.miniPosition.x))
+
+  self.DEBUG_MODE = DB.DEBUG_MODE
   self.isMini = DB.isMini
+  self:RestoreSizeAndPosition()
 
   if force then
     self.frame:ClearAllPoints()
@@ -58,8 +62,6 @@ function GoggleMaps:InitDB(force)
     self.frame:SetWidth(DB.size.width)
     self.frame:SetHeight(DB.size.height)
   end
-
-  self.DEBUG_MODE = DB.DEBUG_MODE
 end
 
 function GoggleMaps:ResetDB()
@@ -123,20 +125,24 @@ function GoggleMaps:Toggle()
     self.isMini = not self.isMini
     GoggleMapsDB.isMini = self.isMini
 
-    local x = self.isMini and GoggleMapsDB.miniPosition.x or GoggleMapsDB.position.x
-    local y = self.isMini and GoggleMapsDB.miniPosition.y or GoggleMapsDB.position.y
-
-    local w = self.isMini and GoggleMapsDB.miniSize.width or GoggleMapsDB.size.width
-    local h = self.isMini and GoggleMapsDB.miniSize.height or GoggleMapsDB.size.height
-
-    Utils.debug("Restoring size: isMini=%s %.2f, %.2f", tostring(self.isMini), w, h)
-    self.frame:SetWidth(w)
-    self.frame:SetHeight(h)
-
-    Utils.debug("Restoring position: isMini=%s %.2f, %.2f", tostring(self.isMini), x, y)
-    self.frame:ClearAllPoints()
-    self.frame:SetPoint("Center", UIParent, "Center", x, y)
+    self:RestoreSizeAndPosition()
   end
+end
+
+function GoggleMaps:RestoreSizeAndPosition()
+  local x = self.isMini and GoggleMapsDB.miniPosition.x or GoggleMapsDB.position.x
+  local y = self.isMini and GoggleMapsDB.miniPosition.y or GoggleMapsDB.position.y
+
+  local w = self.isMini and GoggleMapsDB.miniSize.width or GoggleMapsDB.size.width
+  local h = self.isMini and GoggleMapsDB.miniSize.height or GoggleMapsDB.size.height
+
+  Utils.debug("Restoring size: isMini=%s %.2f, %.2f", tostring(self.isMini), w, h)
+  self.frame:SetWidth(w)
+  self.frame:SetHeight(h)
+
+  Utils.debug("Restoring position: isMini=%s %.2f, %.2f", tostring(self.isMini), x, y)
+  self.frame:ClearAllPoints()
+  self.frame:SetPoint("Center", UIParent, "Center", x, y)
 end
 
 function GoggleMaps:UpdateDBSize()
@@ -187,7 +193,6 @@ function GoggleMaps:Init()
   self:InitDB()
   self.debugFrame = GMapsDebug:CreateDebugWindow()
 
-  self.frame:SetPoint("Center", UIParent, "Center", 0, 0)
   self.frame:SetMinResize(200, 200)
   self.frame:SetClampedToScreen(true)
 
