@@ -259,19 +259,25 @@ function GoggleMaps:handleUpdate()
 end
 
 function GoggleMaps:UpdateLocationText()
-  if not self.Map.realMapId then
-    return
+  local fontObj = GameFontNormalSmall
+
+  if self.Map.realMapId then
+    fontObj = Utils.getlocationFontObject(self.Map.realMapId)
   end
 
-  local fontObj = Utils.getlocationFontObject(self.Map.realMapId)
   self.locationLabel:SetFontObject(fontObj)
   self.locationLabel:SetText(GetRealZoneText())
-  local playerPos = self.Player.position
-  self.positionLabel:SetText(string.format("%.1f, %.1f", playerPos.x, playerPos.y))
+  if not IsInInstance() then
+    local playerPos = self.Player.position
+    self.positionLabel:SetText(string.format("%.1f, %.1f", playerPos.x, playerPos.y))
+    self.positionLabel:Show()
+  else
+    self.positionLabel:Hide()
+  end
 end
 
 function GoggleMaps:UpdateCurrentMapInfo()
-  if self.Map.mapId == self.Map.realMapId then
+  if IsInInstance() or self.Map.mapId == self.Map.realMapId then
     self.currentMapInfoFrame:Hide()
   else
     local mapId = self.Map.mapId
