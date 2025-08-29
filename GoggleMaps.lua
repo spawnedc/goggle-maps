@@ -50,8 +50,6 @@ function GoggleMaps:InitDB(force)
     _G.GoggleMapsDB = DB
   end
 
-  Utils.print(tostring(DB.miniPosition.x))
-
   self.DEBUG_MODE = DB.DEBUG_MODE
   self.isMini = DB.isMini
   self:RestoreSizeAndPosition()
@@ -205,6 +203,7 @@ function GoggleMaps:Init()
   self.Map:InitZones()
 
   GoggleMaps.compat.pfQuest:Init(self.frame.Content)
+  GoggleMaps.compat.atlas:Init(self.frame.Content)
 
   self.Player:Init(contentFrame)
   self.Hotspots:Init()
@@ -224,6 +223,10 @@ function GoggleMaps:OnEvent()
 
     if pfMap then
       GoggleMaps.compat.pfQuest:Start()
+    end
+
+    if AtlasMap then
+      GoggleMaps.compat.atlas:Start()
     end
   end
 end
