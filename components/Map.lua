@@ -232,6 +232,9 @@ end
 
 function GoggleMaps.Map:UpdateZoneTextures()
   local mapFileName = GetMapInfo()
+  if not mapFileName then
+    return
+  end
   for i = 1, 12 do
     self.zoneFrames[i].texture:SetTexture("Interface\\WorldMap\\" .. mapFileName .. "\\" .. mapFileName .. i)
   end

@@ -119,6 +119,9 @@ end
 ---@return number height height of the zone
 ---@return number zoneScale scale of the zone
 function Utils.GetWorldZoneInfo(mapId)
+  if not mapId then
+    return '?', 1, 0, 0, 1024, 768
+  end
   local continentIndex = Utils.getContinentId(mapId)
   local worldInfo = GoggleMaps.Map.MapInfo[continentIndex]
   if not worldInfo then
@@ -156,7 +159,6 @@ end
 ---@return number
 function Utils.GetWorldPos(mapId, mapX, mapY)
   if not mapId then
-    Utils.debug("No map id provided")
     return 0, 0
   end
   local continentIndex = Utils.getContinentId(mapId)
@@ -185,6 +187,9 @@ end
 ---@return number
 ---@return number
 function Utils.GetZonePosFromWorldPos(mapId, worldX, worldY)
+  if not mapId then
+    return 0, 0
+  end
   local continentIndex = Utils.getContinentId(mapId)
   local worldInfo = GoggleMaps.Map.MapInfo[continentIndex]
   if not worldInfo then

@@ -267,6 +267,10 @@ function GoggleMaps:UpdateCurrentMapInfo()
     self.currentMapInfoFrame:Hide()
   else
     local mapId = self.Map.mapId
+
+    if not mapId then
+      return
+    end
     local frame = self.currentMapInfoFrame
     --- @type FontString
     local continentLabel = frame.continentLabel
