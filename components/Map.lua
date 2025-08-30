@@ -93,15 +93,10 @@ function GoggleMaps.Map:Init(parentFrame)
   self:InitDB()
 
   self.frame = parentFrame
-  self.frame:EnableMouse(true)
-  self.frame:EnableMouseWheel(true)
-
   self.frame:RegisterEvent("PLAYER_ENTERING_WORLD")
   self.frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 
-  self.frame:SetScript("OnMouseWheel", function() self:handleZoom() end)
-  self.frame:SetScript("OnMouseDown", function() self:handleMouseDown() end)
-  self.frame:SetScript("OnMouseUp", function() self.isDragging = false end)
+  self:EnableInteraction()
   self.frame:SetScript("OnEvent", function() self:handleEvent() end)
 
   self:InitTables()
@@ -120,6 +115,24 @@ function GoggleMaps.Map:Init(parentFrame)
   GMapsDebug:AddItem("Mouse zone pos", { x = 0, y = 0 }, Utils.positionFormatter)
 
   self:InitContinents()
+end
+
+function GoggleMaps.Map:EnableInteraction()
+  self.frame:EnableMouse(true)
+  self.frame:EnableMouseWheel(true)
+
+  self.frame:SetScript("OnMouseWheel", function() self:handleZoom() end)
+  self.frame:SetScript("OnMouseDown", function() self:handleMouseDown() end)
+  self.frame:SetScript("OnMouseUp", function() self.isDragging = false end)
+end
+
+function GoggleMaps.Map:DisableInteraction()
+  self.frame:EnableMouse(false)
+  self.frame:EnableMouseWheel(false)
+
+  self.frame:SetScript("OnMouseWheel", nil)
+  self.frame:SetScript("OnMouseDown", nil)
+  self.frame:SetScript("OnMouseUp", nil)
 end
 
 function GoggleMaps.Map:InitTables()
