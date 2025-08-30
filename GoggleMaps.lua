@@ -246,14 +246,16 @@ function GoggleMaps:handleUpdate()
   elseif not self.wasDragging and self.frame.isDragging then
     self.wasDragging = true
   end
-  self.Map:handleUpdate()
-  self.Overlay:handleUpdate()
-  self.POI:handleUpdate()
-  self.Minimap:handleUpdate()
-  if self.compat.pfQuest.initialised then
-    self.compat.pfQuest:handleUpdate()
+  if not IsInInstance() then
+    self.Map:handleUpdate()
+    self.Overlay:handleUpdate()
+    self.POI:handleUpdate()
+    self.Minimap:handleUpdate()
+    if self.compat.pfQuest.initialised then
+      self.compat.pfQuest:handleUpdate()
+    end
+    self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
   end
-  self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
   self:UpdateLocationText()
   self:UpdateCurrentMapInfo()
 end
