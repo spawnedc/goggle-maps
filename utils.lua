@@ -390,5 +390,8 @@ function Utils.FramePosToWorldPos(x, y)
 end
 
 function Utils.IsInstanceMap(mapId)
+  if not mapId then
+    return false
+  end
   return mapId >= 50000 and mapId <= 60000
 end
