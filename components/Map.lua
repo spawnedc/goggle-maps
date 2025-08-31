@@ -42,7 +42,8 @@ GoggleMaps.Map = {
   isDragging = false,
   isZooming = false,
   scale = 0.5,
-  maxScale = 10,
+  previousScale = 0.5,
+  maxScale = 300,
   minScale = 0.1,
   effectiveScale = 0.5,
   position = {
@@ -62,18 +63,18 @@ GoggleMaps.Map = {
   mapId = 0,
   --- Map id of the zone that player is in.
   realMapId = 0,
-  --- For easy access to map ids from a zone name. This is useful when getting the player's zone's map id using GetRealZoneText()
+  --- For easy access to map ids from a zone name. This is useful when getting the player's zone's map id using GetZoneText()
   --- @type table<number>
   zoneNameToMapId = {},
-  --- Used for getting a zone's mapId from continent id and its index
-  --- @type table<table<number>>
-  continentZoneToMapId = {}
+
+  previousZone = 0
 }
 
 function GoggleMaps.Map:InitDB(force)
   if GoggleMapsDB.Map == nil then
     GoggleMapsDB.Map = {
       scale = 0.5,
+      previousScale = 0.5
     }
   end
   self.scale = GoggleMapsDB.Map.scale
@@ -87,32 +88,28 @@ end
 ---@param parentFrame Frame
 function GoggleMaps.Map:Init(parentFrame)
   GMapsDebug:AddItem("zoom", self.scale, Utils.numberFormatter(2))
+  GMapsDebug:AddItem("zoom (ex)", self.previousScale, Utils.numberFormatter(2))
   GMapsDebug:AddItem("Map pos", self.position, Utils.positionFormatter)
   GMapsDebug:AddItem("Map size", self.size, Utils.sizeFormatter)
 
   self:InitDB()
 
   self.frame = parentFrame
-  self.frame:EnableMouse(true)
-  self.frame:EnableMouseWheel(true)
-
   self.frame:RegisterEvent("PLAYER_ENTERING_WORLD")
   self.frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 
-  self.frame:SetScript("OnMouseWheel", function() self:handleZoom() end)
-  self.frame:SetScript("OnMouseDown", function() self:handleMouseDown() end)
-  self.frame:SetScript("OnMouseUp", function() self.isDragging = false end)
+  self:EnableInteraction()
   self.frame:SetScript("OnEvent", function() self:handleEvent() end)
 
   self:InitTables()
 
-  self.mapId = self.zoneNameToMapId[GetRealZoneText()]
+  self.mapId = self.zoneNameToMapId[GetZoneText()]
   self.realMapId = self.mapId
 
   GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
   GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.mapId)
 
-  GMapsDebug:AddItem("Current zone", GetRealZoneText())
+  GMapsDebug:AddItem("Current zone", GetZoneText())
   GMapsDebug:AddItem("Current mapId", self.realMapId)
   GMapsDebug:AddItem("Fake mapId", self.mapId)
   GMapsDebug:AddItem("Mouse winpos", { x = 0, y = 0 }, Utils.positionFormatter)
@@ -122,9 +119,27 @@ function GoggleMaps.Map:Init(parentFrame)
   self:InitContinents()
 end
 
+function GoggleMaps.Map:EnableInteraction()
+  self.frame:EnableMouse(true)
+  self.frame:EnableMouseWheel(true)
+
+  self.frame:SetScript("OnMouseWheel", function() self:handleZoom() end)
+  self.frame:SetScript("OnMouseDown", function() self:handleMouseDown() end)
+  self.frame:SetScript("OnMouseUp", function() self.isDragging = false end)
+end
+
+function GoggleMaps.Map:DisableInteraction()
+  self.frame:EnableMouse(false)
+  self.frame:EnableMouseWheel(false)
+
+  self.frame:SetScript("OnMouseWheel", nil)
+  self.frame:SetScript("OnMouseDown", nil)
+  self.frame:SetScript("OnMouseUp", nil)
+end
+
 function GoggleMaps.Map:InitTables()
   Utils.debug("InitTables")
-  self.zoneNameToMapId, self.continentZoneToMapId = Utils.GetZoneNameToMapId()
+  self.zoneNameToMapId = Utils.GetZoneNameToMapId()
 end
 
 function GoggleMaps.Map:handleZoom()
@@ -160,6 +175,7 @@ function GoggleMaps.Map:handleZoom()
   map.position.y = map.position.y + originalY - newY
 
   GMapsDebug:UpdateItem("zoom", scale)
+  GMapsDebug:UpdateItem("zoom (ex)", self.previousScale)
   GMapsDebug:UpdateItem("Map pos", self.position)
 
   self:MoveMap()
@@ -181,14 +197,28 @@ function GoggleMaps.Map:handleMouseDown(force)
   end
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 function GoggleMaps.Map:handleEvent()
   if event == "ZONE_CHANGED_NEW_AREA" or event == "PLAYER_ENTERING_WORLD" then
     Utils.debug('ZONE_CHANGED_NEW_AREA')
-    self.realMapId = self.zoneNameToMapId[GetRealZoneText()]
+    self.realMapId = self.zoneNameToMapId[GetZoneText()]
     self.mapId = self.realMapId
-    Utils.setCurrentMap(self.realMapId)
+    Utils.debug("Name: %s, mapId: %s", GetZoneText(), tostring(self.realMapId))
+    Utils.setCurrentMap(self.realMapId, "ZONE_CHANGED_NEW_AREA")
+
+    if self.realMapId ~= self.previousZone then
+      self.previousZone = self.realMapId
+      if Utils.IsInstanceMap(self.realMapId) then
+        self.previousScale = self.scale + 0.000001 - 0.000001
+        self.scale = 300
+      else
+        self.scale = self.previousScale + 0.000001 - 0.000001
+      end
+    end
     GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
-    GMapsDebug:UpdateItem("Current zone", GetRealZoneText())
+    GMapsDebug:UpdateItem("zoom", self.scale)
+    GMapsDebug:UpdateItem("zoom (ex)", self.previousScale)
+    GMapsDebug:UpdateItem("Current zone", GetZoneText())
     GMapsDebug:UpdateItem("Current mapId", self.realMapId)
     GMapsDebug:UpdateItem("Fake mapId", self.mapId)
   end
@@ -232,6 +262,9 @@ end
 
 function GoggleMaps.Map:UpdateZoneTextures()
   local mapFileName = GetMapInfo()
+  if not mapFileName then
+    return
+  end
   for i = 1, 12 do
     self.zoneFrames[i].texture:SetTexture("Interface\\WorldMap\\" .. mapFileName .. "\\" .. mapFileName .. i)
   end
@@ -301,8 +334,8 @@ function GoggleMaps.Map:MoveZones()
   if not self.mapId then
     return
   end
-  local isCity = GoggleMaps.Map.Area[self.mapId].isCity
-  if isCity then
+  local area = GoggleMaps.Map.Area[self.mapId]
+  if area.isCity or area.isInstance or area.isRaid then
     self:MoveZoneTiles(self.mapId, self.zoneFrames)
   else
     for i = 1, 12 do
@@ -379,7 +412,7 @@ function GoggleMaps.Map:handleUpdate()
     elseif self.mapId ~= self.realMapId then
       -- User is not hovering over the map. Let's revert to realMapId and move the map
       self.mapId = self.realMapId
-      Utils.setCurrentMap(self.mapId)
+      Utils.setCurrentMap(self.realMapId)
       GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
     end
     self:UpdateZoneTextures()
@@ -388,7 +421,7 @@ function GoggleMaps.Map:handleUpdate()
 
 
   GMapsDebug:UpdateItem("Map size", self.size)
-  GMapsDebug:UpdateItem("Current zone", GetRealZoneText())
+  GMapsDebug:UpdateItem("Current zone", GetZoneText())
   GMapsDebug:UpdateItem("Current mapId", self.realMapId)
   GMapsDebug:UpdateItem("Fake mapId", self.mapId)
 end

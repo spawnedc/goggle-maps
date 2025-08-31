@@ -602,5 +602,10 @@ GoggleMaps.Map.Overlay = {
 		direforgehill = "507,115,256,250",
 		raptorridge = "628,176,190,160",
 		grimbatol = "611,230,350,360"
+	},
+	alteracvalley = {
+		dunbaldar = "348,13,270,240",
+		icebloodgarrison = "335,172,300,300",
+		frostwolfkeep = "399,375,235,290"
 	}
 }

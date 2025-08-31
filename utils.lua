@@ -74,15 +74,12 @@ end
 
 ---Constructs the zone name to mapId table
 ---@return table<number> zoneNameToMapId
----@return table<table<number>> continentZoneToMapId
 function Utils.GetZoneNameToMapId()
   local continents = Utils.GetContinents()
   local zoneNameToMapId = {}
-  local continentZoneToMapId = {}
 
   for continentIndex, continentName in ipairs(continents) do
     local mapNames = { GetMapZones(continentIndex) }
-    continentZoneToMapId[continentIndex] = {}
 
     for n = 1, 99 do
       local mapId = continentIndex * 1000 + n
@@ -92,7 +89,6 @@ function Utils.GetZoneNameToMapId()
           if mapName == zoneInfo.name then
             zoneNameToMapId[mapName] = mapId
             zoneInfo.Zone = i
-            continentZoneToMapId[continentIndex][i] = mapId
             break
           end
         end
@@ -100,7 +96,15 @@ function Utils.GetZoneNameToMapId()
     end
   end
 
-  return zoneNameToMapId, continentZoneToMapId
+  local areas = GoggleMaps.Map.Area
+
+  for mapId, area in pairs(areas) do
+    if mapId > 10000 then
+      zoneNameToMapId[area.name] = mapId
+    end
+  end
+
+  return zoneNameToMapId
 end
 
 ---Returns the continent id for a zoneId
@@ -108,6 +112,45 @@ end
 ---@return integer
 function Utils.getContinentId(zoneId)
   return math.floor(zoneId / 1000)
+end
+
+function Utils.GetWorldInfo(mapId)
+  if not mapId then
+    return nil
+  end
+
+  local zoneInfo = GoggleMaps.Map.Area[mapId]
+
+  -- self:GetWorldPos (entryMapId, entryX, entryY)
+
+  if not zoneInfo.isInstance then
+    local continentIndex = Utils.getContinentId(mapId)
+    return GoggleMaps.Map.MapInfo[continentIndex]
+  end
+
+  local instanceInfo = GoggleMaps.Map.InstanceInfo[mapId]
+  if not instanceInfo then
+    return nil
+  end
+
+  mapId = instanceInfo.ownerMapId
+
+  if not mapId then
+    return nil
+  end
+
+  local ownerZoneInfo = GoggleMaps.Map.Area[instanceInfo.ownerMapId]
+
+  local posX, posY = Utils.GetWorldPos(instanceInfo.ownerMapId, instanceInfo.entryX, instanceInfo.entryY)
+
+  local newWorldInfo = {
+    Name = ownerZoneInfo.Name,
+    FileName = ownerZoneInfo.FileName,
+    X = posX - zoneInfo.x,
+    Y = posY - zoneInfo.y
+  }
+
+  return newWorldInfo
 end
 
 ---Gets the world zone information
@@ -119,15 +162,17 @@ end
 ---@return number height height of the zone
 ---@return number zoneScale scale of the zone
 function Utils.GetWorldZoneInfo(mapId)
-  local continentIndex = Utils.getContinentId(mapId)
-  local worldInfo = GoggleMaps.Map.MapInfo[continentIndex]
+  if not mapId then
+    return '?', 1, 0, 0, 1002, 668
+  end
+  local worldInfo = Utils.GetWorldInfo(mapId)
   if not worldInfo then
-    return '?', 1, 0, 0, 1024, 768
+    return '?', 1, 0, 0, 1002, 668
   end
 
   local zoneInfo = GoggleMaps.Map.Area[mapId]
   if not zoneInfo then
-    return '?', 1, 0, 0, 1024, 768
+    return '?', 1, 0, 0, 1002, 668
   end
 
   local x = worldInfo.X + zoneInfo.x
@@ -156,13 +201,11 @@ end
 ---@return number
 function Utils.GetWorldPos(mapId, mapX, mapY)
   if not mapId then
-    Utils.debug("No map id provided")
     return 0, 0
   end
-  local continentIndex = Utils.getContinentId(mapId)
-  local worldInfo = GoggleMaps.Map.MapInfo[continentIndex]
+  local worldInfo = Utils.GetWorldInfo(mapId)
   if not worldInfo then
-    Utils.debug("worldInfo not found for" .. mapId)
+    Utils.debug("GetWorldPos: worldInfo not found for" .. mapId)
     return 0, 0
   end
 
@@ -185,10 +228,12 @@ end
 ---@return number
 ---@return number
 function Utils.GetZonePosFromWorldPos(mapId, worldX, worldY)
-  local continentIndex = Utils.getContinentId(mapId)
-  local worldInfo = GoggleMaps.Map.MapInfo[continentIndex]
+  if not mapId then
+    return 0, 0
+  end
+  local worldInfo = Utils.GetWorldInfo(mapId)
   if not worldInfo then
-    Utils.debug("worldInfo not found for" .. mapId)
+    Utils.debug("GetZonePosFromWorldPos: worldInfo not found for" .. mapId)
     return 0, 0
   end
 
@@ -268,12 +313,16 @@ end
 ---@param reason string|nil
 function Utils.setCurrentMap(mapId, reason)
   if mapId then
-    local continent = Utils.getContinentId(mapId)
-    local zone = GoggleMaps.Map.Area[mapId].Zone
-    if reason then
-      Utils.log(string.format("Map change reason: %s", reason))
+    if Utils.IsInstanceMap(mapId) then
+      SetMapToCurrentZone()
+    else
+      local continent = Utils.getContinentId(mapId)
+      local zone = GoggleMaps.Map.Area[mapId].Zone
+      if reason then
+        Utils.log(string.format("Map change reason: %s", reason))
+      end
+      SetMapZoom(continent, zone)
     end
-    SetMapZoom(continent, zone)
   end
 end
 
@@ -338,4 +387,8 @@ function Utils.FramePosToWorldPos(x, y)
   x = Map.position.x + (x - Map.size.width / 2) / Map.scale
   y = Map.position.y + (y - Map.size.height / 2) / Map.scale
   return x, y
+end
+
+function Utils.IsInstanceMap(mapId)
+  return mapId >= 50000 and mapId <= 60000
 end

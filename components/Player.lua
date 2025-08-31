@@ -77,8 +77,7 @@ function GoggleMaps.Player:handleUpdate(isRealMap)
 
   GMapsDebug:UpdateItem("Player pos", self.position)
 
-
-  Utils.ClipFrame(self.frame, x, y, 30, 30, clipW, clipH)
+  self.frame:SetPoint("TopLeft", x, -y)
 
   local co = math.cos(direction)
   local si = math.sin(direction)
