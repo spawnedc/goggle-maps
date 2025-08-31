@@ -141,12 +141,12 @@ function GoggleMaps.Overlay:UpdateOverlay(mapId)
     Utils.debug("Zone not found: %s", mapId)
     return
   end
-  if zone.isCity then
+  if zone.isCity or zone.isInstance or zone.isRaid then
     return
   end
   local overlays = GoggleMaps.Map.Overlay[zone.overlay]
   if overlays == nil then
-    Utils.log(string.format("Zone overlay not found: %s %s", zone.name, zone.overlay))
+    Utils.debug(string.format("Zone overlay not found: %s %s", zone.name, zone.overlay))
     return
   end
   local TEXTURE_SIZE = 256

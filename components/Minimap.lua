@@ -40,7 +40,11 @@ function GoggleMaps.Minimap:GetMinimapInfo(mapId)
   local continentId = Utils.getContinentId(mapId)
   local block = self.Blocks[continentId]
 
-  return block, block.x, block.y
+  if block then
+    return block, block.x, block.y
+  end
+
+  return nil
 end
 
 function GoggleMaps.Minimap:HideMiniFrames()

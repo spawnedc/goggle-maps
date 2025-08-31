@@ -54,6 +54,10 @@ function GoggleMaps:InitDB(force)
   self.isMini = DB.isMini
   self:RestoreSizeAndPosition()
 
+  if self.DEBUG_MODE then
+    self.debugFrame:Show()
+  end
+
   if force then
     self.frame:ClearAllPoints()
     self.frame:SetPoint("Center", UIParent, "Center", DB.position.x, DB.position.y)
@@ -188,10 +192,10 @@ function GoggleMaps:ToggleDebug()
 end
 
 function GoggleMaps:Init()
-  self:InitDB()
   self.debugFrame = GMapsDebug:CreateDebugWindow()
+  self:InitDB()
 
-  self.frame:SetMinResize(200, 200)
+  self.frame:SetMinResize(200, 218) -- so that the content can keep 1:1 aspect ratio
   self.frame:SetClampedToScreen(true)
 
   local contentFrame = self.frame.Content
@@ -246,16 +250,14 @@ function GoggleMaps:handleUpdate()
   elseif not self.wasDragging and self.frame.isDragging then
     self.wasDragging = true
   end
-  if not IsInInstance() then
-    self.Map:handleUpdate()
-    self.Overlay:handleUpdate()
-    self.POI:handleUpdate()
-    self.Minimap:handleUpdate()
-    if self.compat.pfQuest.initialised then
-      self.compat.pfQuest:handleUpdate()
-    end
-    self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
+  self.Map:handleUpdate()
+  self.Overlay:handleUpdate()
+  self.POI:handleUpdate()
+  self.Minimap:handleUpdate()
+  if self.compat.pfQuest.initialised then
+    self.compat.pfQuest:handleUpdate()
   end
+  self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
   self:UpdateLocationText()
   self:UpdateCurrentMapInfo()
 end

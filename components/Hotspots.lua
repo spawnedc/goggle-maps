@@ -36,7 +36,7 @@ function GoggleMaps.Hotspots:Init()
       local worldX, worldY, worldX2, worldY2
 
       -- pre-calculate positions
-      if zoneInfo.isCity then
+      if zoneInfo.isCity or zoneInfo.isInstance or zoneInfo.isRaid then
         Utils.debug("%s %sx %s", contName, contX, contY)
         worldX = mapX + contX
         worldY = contY - (mapY + height)

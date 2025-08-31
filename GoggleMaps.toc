@@ -19,6 +19,7 @@ components\UI.Window.lua
 
 components\Map.lua
 data\Map.Area.lua
+data\Map.InstanceInfo.lua
 
 data\Map.Overlay.lua
 components\Overlay.lua

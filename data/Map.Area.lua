@@ -477,5 +477,38 @@ GoggleMaps.Map.Area = {
 		y = 429.5833,
 		overlay = "wetlands",
 		faction = 0
+	},
+	[70001] = {
+		name = "Alterac Valley",
+		areaId = 2597,
+		mapId = 401,
+		scale = 0.04,
+		x = -356.25,
+		y = -217.0833,
+		overlay = "alteracvalley",
+		faction = 0,
+		isBattleground = true
+	},
+	[70002] = {
+		name = "Arathi Basin",
+		areaId = 3358,
+		mapId = 461,
+		scale = 0.04,
+		x = -371.6667,
+		y = -301.6667,
+		overlay = "arathibasin",
+		faction = 0,
+		isBattleground = true
+	},
+	[70003] = {
+		name = "Warsong Gulch",
+		areaId = 3277,
+		mapId = 443,
+		scale = 0.04,
+		x = -408.3333,
+		y = -325.4167,
+		overlay = "warsonggulch",
+		faction = 0,
+		isBattleground = true
 	}
 }

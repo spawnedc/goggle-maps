@@ -99,8 +99,6 @@ function GMapsDebug:CreateDebugWindow()
 
   debugFrame:triggerResize()
 
-  table.insert(UISpecialFrames, "GMapsDebug")
-
   debugFrame:Hide()
 
   return debugFrame
