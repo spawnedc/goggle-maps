@@ -204,7 +204,7 @@ function GoggleMaps.Map:handleEvent()
     self.realMapId = self.zoneNameToMapId[GetZoneText()]
     self.mapId = self.realMapId
     Utils.debug("Name: %s, mapId: %s", GetZoneText(), tostring(self.realMapId))
-    Utils.setCurrentMap(self.realMapId)
+    Utils.setCurrentMap(self.realMapId, "ZONE_CHANGED_NEW_AREA")
 
     if self.realMapId ~= self.previousZone then
       self.previousZone = self.realMapId

@@ -68,6 +68,9 @@ function GoggleMaps.compat.atlas:handleEvent(originalHandleEvent)
     return
   end
 
+  -- Force auto detection
+  Atlas_AutoSelect()
+
   GoggleMaps.Map:DisableInteraction()
   GoggleMaps.Player.frame:Hide()
   GoggleMaps.POI.frame:Hide()
