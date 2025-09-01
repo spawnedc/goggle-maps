@@ -47,4 +47,4 @@ jobs:
         allowUpdates: true
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref_name }}
-        artifacts: .release/*
+        artifacts: .release/*.zip
