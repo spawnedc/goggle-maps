@@ -21,17 +21,17 @@ jobs:
       run: |
         addon_name=$(ls *.toc)
         addon_name=$(basename $addon_name .toc)
-        echo "{addon_name}=${addon_name}" >> $GITHUB_OUTPUT
+        echo "addon_name=$addon_name" >> $GITHUB_OUTPUT
 
     - name: Make folder for zips
       run: |
-        mkdir -p .release/${{steps.init.outputs.addon_name}}
-        rsync -r --exclude '.*' . .release/${{steps.init.outputs.addon_name}}
+        mkdir -p .release
+        rsync -r --exclude '.*' . .release
 
     - name: Create zip
       run: |
         cd .release
-        zip -9 -r ${{github.ref_name}}.zip ${{steps.init.outputs.addon_name}}
+        zip -9 -r ${{steps.init.outputs.addon_name}}-${{github.ref_name}}.zip ${{steps.init.outputs.addon_name}}
         cd ..
 
     - name: Update release
