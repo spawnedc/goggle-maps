@@ -28,17 +28,17 @@ jobs:
 
     - name: Make folder for zips
       run: |
-        mkdir -p .release/${{steps.init.outputs.addon_name}}
-        rsync -r --exclude '.*' . .release/${{steps.init.outputs.addon_name}}
+        mkdir -p .release
+        rsync -r --exclude '.*' . .release
 
     - name: Replace TOC version
       run: |
-        sed -i 's/Version: GIT\+/Version: ${{github.ref_name}}/g' .release/${{steps.init.outputs.addon_name}}/${{steps.init.outputs.addon_name}}.toc
+        sed -i 's/Version: GIT\+/Version: ${{github.ref_name}}/g' .release/${{steps.init.outputs.addon_name}}.toc
 
     - name: Create zip
       run: |
         cd .release
-        zip -9 -r ${{steps.init.outputs.addon_name}}-${{github.ref_name}}.zip ${{steps.init.outputs.addon_name}}
+        zip -9 -r ${{steps.init.outputs.addon_name}}.zip .
         cd ..
 
     - name: Update release

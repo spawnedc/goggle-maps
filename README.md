@@ -34,7 +34,7 @@ Want to use this with TurtleWoW? You can use [GoggleMaps-Turtle](https://github.
 
 ## 📦 Installation
 
-1. Download the latest release of **GoggleMaps**
+1. Download the latest release of **GoggleMaps**: <https://github.com/spawnedc/goggle-maps/releases/latest>
 2. Extract the folder into: `<WOW folder>\Interface\AddOns\`
 3. Restart WoW and enable **GoggleMaps** from the AddOns menu at character select.
 
