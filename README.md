@@ -1,4 +1,4 @@
-# <font color="#4285f4">G</font><font color="#ea4335">o</font><font color="#fbbc05">g</font><font color="#4285f4">g</font><font color="#34a853">l</font><font color="#ea4335">e</font>Maps
+# GoggleMaps
 
 **GoggleMaps** is a lightweight map replacement addon for vanilla **World of Warcraft 1.12.1**.
 It brings a Google Maps–style experience to Azeroth, with zooming, dragging, and optional quest integration.
