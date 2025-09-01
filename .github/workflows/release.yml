@@ -1,0 +1,43 @@
+name: Package World of Warcraft addon
+run-name: Release ${{github.ref_name}}
+
+on:
+  workflow_dispatch:
+  release:
+    types:
+      - published
+
+jobs:
+  package:
+    name: Create release
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+
+    - name: Get name of addon
+      id: init
+      run: |
+        addon_name=$(ls *.toc)
+        addon_name=$(basename $addon_name .toc)
+        echo "::set-output name=addon_name::${addon_name}"
+
+    - name: Make folder for zips
+      run: |
+        mkdir -p .release/${{steps.init.outputs.addon_name}}
+        rsync -r --exclude '.*' . .release/${{steps.init.outputs.addon_name}}
+
+    - name: Create zip
+      run: |
+        cd .release
+        zip -9 -r ${{github.ref_name}}.zip ${{steps.init.outputs.addon_name}}
+        cd ..
+
+    - name: Update release
+      uses: ncipollo/release-action@v1.14.0
+      with:
+        allowUpdates: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref_name }}
+        artifacts: .release/*
