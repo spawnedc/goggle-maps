@@ -38,6 +38,10 @@ GoggleMaps.Map = {
   zoneFrame = nil,
   ---@type table<table<Frame>>
   zoneFrames = {},
+  ---@type Frame
+  instanceFrame = nil,
+  ---@type table<table<Frame>>
+  instanceFrames = {},
   initialised = false,
   isDragging = false,
   isZooming = false,
@@ -260,8 +264,30 @@ function GoggleMaps.Map:InitZones()
   end
 end
 
+function GoggleMaps.Map:InitInstances()
+  Utils.debug('InitInstances')
+  self.instanceFrame = CreateFrame("Frame", nil, self.frame)
+  self.instanceFrame:SetAllPoints(self.frame)
+  self.instanceFrame:SetFrameLevel(GoggleMaps.frameLevels.instance)
+  self.instanceFrames = {}
+
+  for i = 1, 12 do
+    self.instanceFrames[i] = self:CreateFrameWithTexture("instance-" .. i, nil, self.instanceFrame)
+  end
+end
+
 function GoggleMaps.Map:UpdateZoneTextures()
-  local mapFileName = GetMapInfo()
+  local mapFileName
+  local area = GoggleMaps.Map.Area[self.mapId]
+  if area.isCity then
+    mapFileName = area.overlay
+  else
+    local realArea = GoggleMaps.Map.Area[self.realMapId]
+    if realArea.isCity then
+      mapFileName = realArea.overlay
+    end
+  end
+
   if not mapFileName then
     return
   end
@@ -269,6 +295,22 @@ function GoggleMaps.Map:UpdateZoneTextures()
     self.zoneFrames[i].texture:SetTexture("Interface\\WorldMap\\" .. mapFileName .. "\\" .. mapFileName .. i)
   end
   self:MoveZones()
+end
+
+function GoggleMaps.Map:UpdateInstanceTextures()
+  local mapFileName
+  local realArea = GoggleMaps.Map.Area[self.realMapId]
+  if realArea.isInstance or realArea.isRaid then
+    mapFileName = realArea.overlay
+  end
+
+  if not mapFileName then
+    return
+  end
+  for i = 1, 12 do
+    self.instanceFrames[i].texture:SetTexture("Interface\\WorldMap\\" .. mapFileName .. "\\" .. mapFileName .. i)
+  end
+  self:MoveInstances()
 end
 
 ---Creates a frame with a texture attached
@@ -322,6 +364,7 @@ function GoggleMaps.Map:MoveMap(xPos, yPos)
 
   self:MoveContinents()
   self:MoveZones()
+  self:MoveInstances()
 end
 
 function GoggleMaps.Map:MoveContinents()
@@ -335,11 +378,30 @@ function GoggleMaps.Map:MoveZones()
     return
   end
   local area = GoggleMaps.Map.Area[self.mapId]
-  if area.isCity or area.isInstance or area.isRaid then
+  if area.isCity then
     self:MoveZoneTiles(self.mapId, self.zoneFrames)
   else
+    local realArea = GoggleMaps.Map.Area[self.realMapId]
+    if realArea.isCity then
+      self:MoveZoneTiles(self.realMapId, self.zoneFrames)
+    else
+      for i = 1, 12 do
+        self.zoneFrames[i]:Hide()
+      end
+    end
+  end
+end
+
+function GoggleMaps.Map:MoveInstances()
+  if not self.mapId then
+    return
+  end
+  local realArea = GoggleMaps.Map.Area[self.realMapId]
+  if realArea.isInstance or realArea.isRaid then
+    self:MoveZoneTiles(self.realMapId, self.instanceFrames)
+  else
     for i = 1, 12 do
-      self.zoneFrames[i]:Hide()
+      self.instanceFrames[i]:Hide()
     end
   end
 end
@@ -417,6 +479,8 @@ function GoggleMaps.Map:handleUpdate()
     end
     self:UpdateZoneTextures()
     self.zoneFrame:SetFrameLevel(GoggleMaps.frameLevels.city)
+    self:UpdateInstanceTextures()
+    self.instanceFrame:SetFrameLevel(GoggleMaps.frameLevels.instance)
   end
 
 

@@ -14,6 +14,7 @@ GoggleMaps.frameLevels = {
   poi = 25,
   minimap = 30,
   city = 40,
+  instance = 41,
   pfQuest = 45,
   player = 100
 }
@@ -205,6 +206,7 @@ function GoggleMaps:Init()
   self.POI:Init(contentFrame)
   self.Minimap:Init(contentFrame)
   self.Map:InitZones()
+  self.Map:InitInstances()
 
   GoggleMaps.compat.pfQuest:Init(self.frame.Content)
   GoggleMaps.compat.atlas:Init(self.frame.Content)
