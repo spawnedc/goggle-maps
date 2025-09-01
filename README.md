@@ -1,4 +1,4 @@
-# GoggleMaps
+# <font color="#4285f4">G</font><font color="#ea4335">o</font><font color="#fbbc05">g</font><font color="#4285f4">g</font><font color="#34a853">l</font><font color="#ea4335">e</font>Maps
 
 **GoggleMaps** is a lightweight map replacement addon for vanilla **World of Warcraft 1.12.1**.
 It brings a Google Maps–style experience to Azeroth, with zooming, dragging, and optional quest integration.
@@ -32,18 +32,6 @@ Want to use this with TurtleWoW? You can use [GoggleMaps-Turtle](https://github.
 
 ---
 
-## 🔧 Planned Features
-
-- Dungeon map support
-- Configurable options panel
-- "Go to" functionality
-- Ability to enable overlays for all zones
-- Support for custom content
-- pfUI skin
-- Display dungeon entrances
-
----
-
 ## 📦 Installation
 
 1. Download the latest release of **GoggleMaps**
@@ -71,6 +59,20 @@ Want to use this with TurtleWoW? You can use [GoggleMaps-Turtle](https://github.
 
 ## 🙌 Thanks
 
-- Inspired by [Carbonite-vanilla](https://gitlab.com/knights-of-sunwell/carbonite-vanilla)
-- pfQuest integration support thanks to [shagu](https://github.com/shagu)
+- Inspired by [Carbonite-vanilla](https://gitlab.com/knights-of-sunwell/carbonite-vanilla), huge thanks to [Ritual](https://gitlab.com/Rltual) for the backport
+- existence of pfQuest, can't thank [shagu](https://github.com/shagu) enough
 - [Turtle WoW wiki addon page](https://turtle-wow.fandom.com/wiki/Addons#For_Addon_Developers) was a massive resource
+
+--
+
+## 🛠️ A Little Backstory
+
+This all began out of curiosity. I’ve always loved **Carbonite** for its mapping features, and when I stumbled upon the [Carbonite Vanilla backport](https://gitlab.com/knights-of-sunwell/carbonite-vanilla) by Ritual, I decided to dive in and see how it worked under the hood.
+
+I spent some time reverse engineering the backport, exploring how it handled maps, overlays, and zooming. It felt like opening a little puzzle box from Vanilla WoW’s past.
+
+From that exploration, I rewrote everything from scratch to create **Goggle Maps**: a lightweight, mapping-only addon for Vanilla and Turtle WoW. The goal was simple: fast, clean, and functional maps, with optional integration for addons like pfQuest and support for Turtle’s custom zones.
+
+To make this possible, I also built a **toolkit** that automates the heavy lifting: extracting data from MPQ files, parsing DBCs, and generating the datasets that drive Goggle Maps. You can check it out here: [Goggle Maps Tools](https://github.com/spawnedc/goggle-maps-tools/). Just because I wrote too much Lua, I switched to my main language of choice: Javascript.
+
+So while Carbonite inspired the journey, every line of **Goggle Maps** code is original.
