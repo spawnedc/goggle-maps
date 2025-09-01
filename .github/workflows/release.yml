@@ -33,7 +33,7 @@ jobs:
 
     - name: Replace TOC version
       run: |
-        sed -i 's/Version: GIT\+/Version: ${{github.ref_name}}/g' .releases/${{steps.init.outputs.addon_name}}/${{steps.init.outputs.addon_name}}.toc
+        sed -i 's/Version: GIT\+/Version: ${{github.ref_name}}/g' .release/${{steps.init.outputs.addon_name}}/${{steps.init.outputs.addon_name}}.toc
 
     - name: Create zip
       run: |
