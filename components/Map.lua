@@ -279,11 +279,11 @@ end
 function GoggleMaps.Map:UpdateZoneTextures()
   local mapFileName
   local area = GoggleMaps.Map.Area[self.mapId]
-  if area.isCity then
+  if area and area.isCity then
     mapFileName = area.overlay
   else
     local realArea = GoggleMaps.Map.Area[self.realMapId]
-    if realArea.isCity then
+    if realArea and realArea.isCity then
       mapFileName = realArea.overlay
     end
   end
@@ -300,7 +300,7 @@ end
 function GoggleMaps.Map:UpdateInstanceTextures()
   local mapFileName
   local realArea = GoggleMaps.Map.Area[self.realMapId]
-  if realArea.isInstance or realArea.isRaid then
+  if realArea and (realArea.isInstance or realArea.isRaid) then
     mapFileName = realArea.overlay
   end
 
