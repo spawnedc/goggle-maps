@@ -53,7 +53,7 @@ function GoggleMaps.Minimap:HideMiniFrames()
   end
 end
 
-function GoggleMaps.Minimap:handleUpdate()
+function GoggleMaps.Minimap:Refresh()
   local mapId = GoggleMaps.Map.mapId
 
   if not mapId then
@@ -106,9 +106,12 @@ function GoggleMaps.Minimap:handleUpdate()
         frameY = col * baseHeight + y
 
         if Utils.ClipFrame(f, frameX, frameY, baseWidth, baseHeight, clipW, clipH) then
-          f.texture:SetVertexColor(1, 1, 1, 1)
           txname = "Textures\\Minimap\\" .. txname
-          f.texture:SetTexture(txname)
+          if f.lastTexturePath ~= txname then
+            f.texture:SetVertexColor(1, 1, 1, 1)
+            f.texture:SetTexture(txname)
+            f.lastTexturePath = txname
+          end
           f:SetFrameLevel(GoggleMaps.frameLevels.minimap)
         end
       else

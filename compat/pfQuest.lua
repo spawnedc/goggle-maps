@@ -47,7 +47,7 @@ function GoggleMaps.compat.pfQuest:UpdateNodes(newPins)
   self.initialised = true
 end
 
-function GoggleMaps.compat.pfQuest:handleUpdate()
+function GoggleMaps.compat.pfQuest:Refresh()
   local Map = GoggleMaps.Map
   local mapId = Map.mapId
   local scale = Map.scale

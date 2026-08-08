@@ -114,6 +114,10 @@ function Utils.getContinentId(zoneId)
   return math.floor(zoneId / 1000)
 end
 
+--- Cache of computed world info for instance maps, keyed by mapId.
+--- Safe to cache indefinitely: derived purely from static data (Map.Area, Map.InstanceInfo).
+Utils._worldInfoCache = {}
+
 function Utils.GetWorldInfo(mapId)
   if not mapId then
     return nil
@@ -128,20 +132,25 @@ function Utils.GetWorldInfo(mapId)
     return GoggleMaps.Map.MapInfo[continentIndex]
   end
 
+  local cached = Utils._worldInfoCache[mapId]
+  if cached then
+    return cached
+  end
+
   local instanceInfo = GoggleMaps.Map.InstanceInfo[mapId]
   if not instanceInfo then
     return nil
   end
 
-  mapId = instanceInfo.ownerMapId
+  local ownerMapId = instanceInfo.ownerMapId
 
-  if not mapId then
+  if not ownerMapId then
     return nil
   end
 
-  local ownerZoneInfo = GoggleMaps.Map.Area[instanceInfo.ownerMapId]
+  local ownerZoneInfo = GoggleMaps.Map.Area[ownerMapId]
 
-  local posX, posY = Utils.GetWorldPos(instanceInfo.ownerMapId, instanceInfo.entryX, instanceInfo.entryY)
+  local posX, posY = Utils.GetWorldPos(ownerMapId, instanceInfo.entryX, instanceInfo.entryY)
 
   local newWorldInfo = {
     Name = ownerZoneInfo.Name,
@@ -149,6 +158,8 @@ function Utils.GetWorldInfo(mapId)
     X = posX - zoneInfo.x,
     Y = posY - zoneInfo.y
   }
+
+  Utils._worldInfoCache[mapId] = newWorldInfo
 
   return newWorldInfo
 end

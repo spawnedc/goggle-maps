@@ -35,6 +35,10 @@ function GoggleMaps.Player:Init(parentFrame)
 
   self.frame = playerFrame
 
+  -- Minimap's children are static once created; caching this avoids rebuilding
+  -- the varargs table on every OnUpdate tick.
+  self.minimapRotateFrame = ({ _G['Minimap']:GetChildren() })[9]
+
   GMapsDebug:AddItem("Player pos", self.position, Utils.positionFormatter)
 end
 
@@ -63,7 +67,7 @@ function GoggleMaps.Player:handleUpdate(isRealMap)
 
 
   local x, y = Utils.GetWorldPos(GoggleMaps.Map.realMapId, playerZoneX, playerZoneY)
-  local direction = ({ _G['Minimap']:GetChildren() })[9]:GetFacing() * -1
+  local direction = self.minimapRotateFrame:GetFacing() * -1
 
   local scale = GoggleMaps.Map.scale
   local clipW = GoggleMaps.Map.size.width
