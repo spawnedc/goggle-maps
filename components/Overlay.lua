@@ -11,7 +11,10 @@ GoggleMaps.Overlay = {
   --- The list of zone mapIds to draw. Shouldn't exceed options.maxZonesToDraw
   zonesToDraw = {},
   zonesToClear = {},
-  textureBases = {}
+  textureBases = {},
+  --- Cache of parsed overlayData strings ("offsetX,offsetY,width,height" -> {offsetX, offsetY, width, height}),
+  --- keyed by the raw overlayData string. overlayData is static per zone/texture so this never needs invalidating.
+  parsedOverlayCache = {}
 }
 
 function GoggleMaps.Overlay:InitDB()
@@ -31,10 +34,6 @@ function GoggleMaps.Overlay:Init(parentFrame)
   self.frame = CreateFrame("Frame", "overlayFrame", parentFrame)
   self.frame:SetAllPoints()
   self.frame:SetFrameLevel(GoggleMaps.frameLevels.overlay)
-  self:UpdateOverlays()
-end
-
-function GoggleMaps.Overlay:handleUpdate()
   self:UpdateOverlays()
 end
 
@@ -156,12 +155,18 @@ function GoggleMaps.Overlay:UpdateOverlay(mapId)
   local zoneScale = zone.scale / 10
 
   for textureName, overlayData in pairs(overlays) do
-    local offsetX, offsetY, fullTextureWidth, fullTextureHeight = Utils.splitString(overlayData, ",")
-
-    offsetX = tonumber(offsetX) or 0
-    offsetY = tonumber(offsetY) or 0
-    fullTextureWidth = tonumber(fullTextureWidth) or 0
-    fullTextureHeight = tonumber(fullTextureHeight) or 0
+    local parsed = self.parsedOverlayCache[overlayData]
+    if not parsed then
+      local offsetX, offsetY, fullTextureWidth, fullTextureHeight = Utils.splitString(overlayData, ",")
+      parsed = {
+        tonumber(offsetX) or 0,
+        tonumber(offsetY) or 0,
+        tonumber(fullTextureWidth) or 0,
+        tonumber(fullTextureHeight) or 0
+      }
+      self.parsedOverlayCache[overlayData] = parsed
+    end
+    local offsetX, offsetY, fullTextureWidth, fullTextureHeight = parsed[1], parsed[2], parsed[3], parsed[4]
 
     local numTextureCols = math.ceil(fullTextureWidth / TEXTURE_SIZE)
     local numTextureRows = math.ceil(fullTextureHeight / TEXTURE_SIZE)
@@ -208,7 +213,10 @@ function GoggleMaps.Overlay:UpdateOverlay(mapId)
 
         if self:ClipFrame(f, wx, wy, width, height) then
           local finalTexturePath = self.GetFullTexturePath(zone.overlay, textureName, textureIndex)
-          f.texture:SetTexture(finalTexturePath)
+          if f.lastTexturePath ~= finalTexturePath then
+            f.texture:SetTexture(finalTexturePath)
+            f.lastTexturePath = finalTexturePath
+          end
         end
 
         textureIndex = textureIndex + 1

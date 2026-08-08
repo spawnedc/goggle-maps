@@ -220,6 +220,10 @@ function GoggleMaps.Map:handleEvent()
       end
     end
     GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
+    self:UpdateZoneTextures()
+    self:UpdateInstanceTextures()
+    GoggleMaps.Overlay:UpdateOverlays()
+    GoggleMaps.Minimap:Refresh()
     GMapsDebug:UpdateItem("zoom", self.scale)
     GMapsDebug:UpdateItem("zoom (ex)", self.previousScale)
     GMapsDebug:UpdateItem("Current zone", GetZoneText())
@@ -365,6 +369,11 @@ function GoggleMaps.Map:MoveMap(xPos, yPos)
   self:MoveContinents()
   self:MoveZones()
   self:MoveInstances()
+  GoggleMaps.Overlay:UpdateOverlays()
+  GoggleMaps.Minimap:Refresh()
+  if GoggleMaps.compat.pfQuest.initialised then
+    GoggleMaps.compat.pfQuest:Refresh()
+  end
 end
 
 function GoggleMaps.Map:MoveContinents()
@@ -466,6 +475,10 @@ function GoggleMaps.Map:handleUpdate()
         Utils.setCurrentMap(self.mapId)
         GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
         GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.mapId)
+        self:UpdateZoneTextures()
+        self:UpdateInstanceTextures()
+        GoggleMaps.Overlay:UpdateOverlays()
+        GoggleMaps.Minimap:Refresh()
       end
       local zoneX, zoneY = Utils.GetZonePosFromWorldPos(self.mapId, worldX, worldY)
       GMapsDebug:UpdateItem("Mouse winpos", { x = winx, y = winy })
@@ -476,10 +489,12 @@ function GoggleMaps.Map:handleUpdate()
       self.mapId = self.realMapId
       Utils.setCurrentMap(self.realMapId)
       GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
+      self:UpdateZoneTextures()
+      self:UpdateInstanceTextures()
+      GoggleMaps.Overlay:UpdateOverlays()
+      GoggleMaps.Minimap:Refresh()
     end
-    self:UpdateZoneTextures()
     self.zoneFrame:SetFrameLevel(GoggleMaps.frameLevels.city)
-    self:UpdateInstanceTextures()
     self.instanceFrame:SetFrameLevel(GoggleMaps.frameLevels.instance)
   end
 

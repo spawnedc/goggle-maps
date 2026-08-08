@@ -208,6 +208,8 @@ function GoggleMaps:Init()
   self.Minimap:Init(contentFrame)
   self.Map:InitZones()
   self.Map:InitInstances()
+  self.Map:UpdateZoneTextures()
+  self.Map:UpdateInstanceTextures()
 
   GoggleMaps.compat.pfQuest:Init(self.frame.Content)
   GoggleMaps.compat.atlas:Init(self.frame.Content)
@@ -254,12 +256,7 @@ function GoggleMaps:handleUpdate()
     self.wasDragging = true
   end
   self.Map:handleUpdate()
-  self.Overlay:handleUpdate()
   self.POI:handleUpdate()
-  self.Minimap:handleUpdate()
-  if self.compat.pfQuest.initialised then
-    self.compat.pfQuest:handleUpdate()
-  end
   self.Player:handleUpdate(self.Map.mapId == self.Map.realMapId)
   self:UpdateLocationText()
   self:UpdateCurrentMapInfo()
