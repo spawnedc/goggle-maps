@@ -73,6 +73,7 @@ function GoggleMaps:ResetDB()
   self:InitDB(true)
   self.Map:InitDB(true)
   self.Overlay:InitDB()
+  self.Options:InitDB()
 end
 
 function GoggleMaps:Start()
@@ -81,6 +82,15 @@ function GoggleMaps:Start()
   self.frame:SetFrameStrata("HIGH")
   self.frame:RegisterEvent("PLAYER_LOGIN")
   table.insert(UISpecialFrames, self.frame:GetName())
+
+  local optionsButton = CreateFrame("Button", ADDON_NAME .. "OptionsButton", self.frame.TitleBar)
+  optionsButton:SetPoint("TopRight", self.frame.TitleBar, "TopRight", -24, 0)
+  optionsButton:SetWidth(18)
+  optionsButton:SetHeight(18)
+  optionsButton:SetNormalTexture("Interface\\Buttons\\UI-OptionsButton")
+  optionsButton:SetScript("OnClick", function() GoggleMaps.Options:Toggle() end)
+  self.optionsButton = optionsButton
+
   self.locationLabel = self.frame.TitleBar:CreateFontString("location", "OVERLAY", "GameFontNormalSmall")
   self.positionLabel = self.frame.TitleBar:CreateFontString("position", "OVERLAY", "GameFontNormalSmall")
   self.locationLabel:SetPoint("Left", self.frame.TitleBar, "Left", 4, 0)
@@ -216,6 +226,7 @@ function GoggleMaps:Init()
 
   self.Player:Init(contentFrame)
   self.Hotspots:Init()
+  self.Options:Init()
 
   self.frame:SetScript("OnUpdate", function() self:handleUpdate() end)
   self.frame:SetScript("OnSizeChanged", function() self:handleSizeChanged() end)

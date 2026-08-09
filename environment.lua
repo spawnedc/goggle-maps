@@ -57,6 +57,8 @@ function SlashCmdList.GMAPS(msg)
     DEFAULT_CHAT_FRAME:AddMessage("DB reset. Type /reloadui to apply.")
   elseif cmd == "debug" then
     GoggleMaps:ToggleDebug()
+  elseif cmd == "options" then
+    GoggleMaps.Options:Toggle()
   else
     GoggleMaps_Toggle()
   end

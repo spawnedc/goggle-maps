@@ -16,6 +16,7 @@ components\Player.lua
 
 components\UI.lua
 components\UI.Window.lua
+components\Options.lua
 
 components\Map.lua
 data\Map.Area.lua
