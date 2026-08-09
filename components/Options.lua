@@ -23,14 +23,14 @@ end
 -- since FrameXML may reference HideUIPanel via a local/upvalue internally.
 -- Patch the real global (not a sandboxed copy) so the keybinding dispatcher sees the override.
 local Blizzard_ToggleGameMenu = _G.ToggleGameMenu
-_G.ToggleGameMenu = function(...)
+_G.ToggleGameMenu = function()
   if GoggleMaps.frame and GoggleMaps.frame:IsShown() and GoggleMaps.Options.minimizeOnEscape and not GoggleMaps.isMini then
     GoggleMaps.isMini = true
     GoggleMapsDB.isMini = true
     GoggleMaps:RestoreSizeAndPosition()
     return
   end
-  Blizzard_ToggleGameMenu(...)
+  Blizzard_ToggleGameMenu()
 end
 
 function GoggleMaps.Options:Init()
