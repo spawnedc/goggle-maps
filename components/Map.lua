@@ -71,7 +71,8 @@ GoggleMaps.Map = {
   --- @type table<number>
   zoneNameToMapId = {},
 
-  previousZone = 0
+  previousZone = 0,
+  wasInInstance = false
 }
 
 function GoggleMaps.Map:InitDB(force)
@@ -212,12 +213,14 @@ function GoggleMaps.Map:handleEvent()
 
     if self.realMapId ~= self.previousZone then
       self.previousZone = self.realMapId
-      if Utils.IsInstanceMap(self.realMapId) then
+      local isInstance = Utils.IsInstanceMap(self.realMapId)
+      if isInstance and not self.wasInInstance then
         self.previousScale = self.scale + 0.000001 - 0.000001
         self.scale = 300
-      else
+      elseif not isInstance and self.wasInInstance then
         self.scale = self.previousScale + 0.000001 - 0.000001
       end
+      self.wasInInstance = isInstance
     end
     GoggleMaps.Overlay:AddMapIdToZonesToDraw(self.realMapId)
     self:UpdateZoneTextures()
