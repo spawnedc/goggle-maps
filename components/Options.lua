@@ -24,13 +24,13 @@ end
 -- Patch the real global (not a sandboxed copy) so the keybinding dispatcher sees the override.
 local Blizzard_ToggleGameMenu = _G.ToggleGameMenu
 _G.ToggleGameMenu = function()
-  if GoggleMaps.frame and GoggleMaps.frame:IsShown() and GoggleMaps.Options.minimizeOnEscape then
-    if not GoggleMaps.isMini then
-      GoggleMaps.isMini = true
-      GoggleMapsDB.isMini = true
-      GoggleMaps:RestoreSizeAndPosition()
-    end
-    -- already minimized: swallow Escape instead of closing the map
+  -- Our frame is in UISpecialFrames, so Escape always targets it first while it's shown at
+  -- all (mini or not) - there's no other way to reach the real game menu via Escape. So a
+  -- second Escape on an already-minimized map has to close it, same as any other UI panel.
+  if GoggleMaps.frame and GoggleMaps.frame:IsShown() and GoggleMaps.Options.minimizeOnEscape and not GoggleMaps.isMini then
+    GoggleMaps.isMini = true
+    GoggleMapsDB.isMini = true
+    GoggleMaps:RestoreSizeAndPosition()
     return
   end
   Blizzard_ToggleGameMenu()
