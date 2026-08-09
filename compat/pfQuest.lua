@@ -45,6 +45,7 @@ function GoggleMaps.compat.pfQuest:UpdateNodes(newPins)
     end
   end
   self.initialised = true
+  self:Refresh()
 end
 
 function GoggleMaps.compat.pfQuest:Refresh()
