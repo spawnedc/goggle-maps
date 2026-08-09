@@ -17,17 +17,20 @@ function GoggleMaps.Options:InitDB()
   self.minimizeOnEscape = GoggleMapsDB.Options.minimizeOnEscape
 end
 
--- Escape normally hides frames listed in UISpecialFrames via the real global HideUIPanel.
--- Patch the real global (not a sandboxed copy) so FrameXML's ToggleGameMenu sees the override.
-local Blizzard_HideUIPanel = _G.HideUIPanel
-_G.HideUIPanel = function(frame)
-  if frame == GoggleMaps.frame and GoggleMaps.Options.minimizeOnEscape and not GoggleMaps.isMini then
+-- The ESCAPE keybinding calls the real global ToggleGameMenu() directly (see Bindings.xml),
+-- which is where FrameXML decides to hide whichever UISpecialFrame is on top. Hooking here,
+-- right at the keybinding dispatch point, is more reliable than hooking HideUIPanel itself,
+-- since FrameXML may reference HideUIPanel via a local/upvalue internally.
+-- Patch the real global (not a sandboxed copy) so the keybinding dispatcher sees the override.
+local Blizzard_ToggleGameMenu = _G.ToggleGameMenu
+_G.ToggleGameMenu = function(...)
+  if GoggleMaps.frame and GoggleMaps.frame:IsShown() and GoggleMaps.Options.minimizeOnEscape and not GoggleMaps.isMini then
     GoggleMaps.isMini = true
     GoggleMapsDB.isMini = true
     GoggleMaps:RestoreSizeAndPosition()
     return
   end
-  Blizzard_HideUIPanel(frame)
+  Blizzard_ToggleGameMenu(...)
 end
 
 function GoggleMaps.Options:Init()

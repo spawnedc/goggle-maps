@@ -84,10 +84,12 @@ function GoggleMaps:Start()
   table.insert(UISpecialFrames, self.frame:GetName())
 
   local optionsButton = CreateFrame("Button", ADDON_NAME .. "OptionsButton", self.frame.TitleBar)
-  optionsButton:SetPoint("TopRight", self.frame.TitleBar, "TopRight", -24, 0)
-  optionsButton:SetWidth(18)
-  optionsButton:SetHeight(18)
-  optionsButton:SetNormalTexture("Interface\\Buttons\\UI-OptionsButton")
+  optionsButton:SetPoint("TopRight", self.frame.TitleBar, "TopRight", -22, -1)
+  optionsButton:SetFrameStrata("HIGH")
+  optionsButton:SetFrameLevel(self.frame:GetFrameLevel() + 2)
+  optionsButton:SetWidth(16)
+  optionsButton:SetHeight(16)
+  optionsButton:SetNormalTexture("Interface\\Icons\\INV_Misc_Gear_01")
   optionsButton:SetScript("OnClick", function() GoggleMaps.Options:Toggle() end)
   self.optionsButton = optionsButton
 
